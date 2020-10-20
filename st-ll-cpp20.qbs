@@ -7,7 +7,7 @@ CppApplication {
     cpp.compilerFrameworkPaths:[""]
     cpp.compilerLibraryPaths:[""]
 
-    files: ["*.c", "*.s", "*.cmake", "CMakeLists.txt"]
+    files: ["*.[ch]", "*.cpp", "*.s", "*.cmake", "CMakeLists.txt"]
 
     Group {     // Properties for the produced executable
         fileTagsFilter: "application"
@@ -23,7 +23,7 @@ StaticLibrary {
     name: "st_ll"
     Depends { name: "cpp" }
 
-    files: ["STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/*.c"]
+    files: ["STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/*.c", "STM32CubeL4/CMakeLists.txt"]
 
     cpp.includePaths: [
         "STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Inc",

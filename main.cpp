@@ -35,41 +35,21 @@
   *
   ******************************************************************************
   */
-/* Includes ------------------------------------------------------------------*/
+
+extern "C" {
 #include "main.h"
 
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE BEGIN PV */
-/* Private variables ---------------------------------------------------------*/
-
-/* USER CODE END PV */
-
-/* Private function prototypes -----------------------------------------------*/
 static void LL_Init(void);
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-
-/* USER CODE BEGIN PFP */
-/* Private function prototypes -----------------------------------------------*/
-
-/* USER CODE END PFP */
-
-/* USER CODE BEGIN 0 */
-
-/* USER CODE END 0 */
+}
 
 /**
   * @brief  The application entry point.
   *
   * @retval None
   */
-int main(void)
-{
+int main() {
   /* USER CODE BEGIN 1 */
 
   /* USER CODE END 1 */
@@ -224,7 +204,7 @@ static void MX_GPIO_Init(void)
   * @param  line: The line in file as a number.
   * @retval None
   */
-void _Error_Handler(char *file, int line)
+void _Error_Handler([[maybe_unused]] const char *file, [[maybe_unused]] int line)
 {
   /* USER CODE BEGIN Error_Handler_Debug */
   /* User can add his own implementation to report the HAL error return state */

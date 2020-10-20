@@ -8,7 +8,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 enable_language(C ASM)
 
 set(SRCS
-        main.c
+        main.cpp
         stm32l4xx_it.c
         system_stm32l4xx.c
         startup_stm32l452xx.s)
@@ -40,11 +40,14 @@ target_compile_options(${EXECUTABLE} PRIVATE
         -fdata-sections
         -ffunction-sections
         -Wall
+        -Wextra
         -fmessage-length=0
+        -fno-exceptions
         $<$<CONFIG:Debug>:-Og>
         )
 
 target_link_options(${EXECUTABLE} PRIVATE
+        -static
         -T../STM32L452RETx_FLASH.ld
         -mcpu=cortex-m4
         -mthumb
@@ -52,6 +55,7 @@ target_link_options(${EXECUTABLE} PRIVATE
         -mfloat-abi=hard
         -specs=nano.specs
         -lc
+        -lstdc++
         -lm
         -lnosys
         -Wl,-Map=${PROJECT_NAME}.map,--cref
