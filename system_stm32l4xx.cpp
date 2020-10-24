@@ -93,19 +93,8 @@
   ******************************************************************************
   */
 
-/** @addtogroup CMSIS
-  * @{
-  */
-
-/** @addtogroup stm32l4xx_system
-  * @{
-  */
-
-/** @addtogroup STM32L4xx_System_Private_Includes
-  * @{
-  */
-
 #include "stm32l4xx.h"
+#include "system_control_block.h"
 
 #if !defined  (HSE_VALUE)
   #define HSE_VALUE    8000000U  /*!< Value of the External oscillator in Hz */
@@ -119,44 +108,15 @@
   #define HSI_VALUE    16000000U /*!< Value of the Internal oscillator in Hz*/
 #endif /* HSI_VALUE */
 
-/**
-  * @}
-  */
-
-/** @addtogroup STM32L4xx_System_Private_TypesDefinitions
-  * @{
-  */
-
-/**
-  * @}
-  */
-
-/** @addtogroup STM32L4xx_System_Private_Defines
-  * @{
-  */
-
 /************************* Miscellaneous Configuration ************************/
 /*!< Uncomment the following line if you need to relocate your vector Table in
      Internal SRAM. */
 /* #define VECT_TAB_SRAM */
-#define VECT_TAB_OFFSET  0x00 /*!< Vector Table base offset field.
-                                   This value must be a multiple of 0x200. */
+// Vector Table base offset field.
+// This value must be a multiple of 0x200.
+constexpr uint32_t kVectTabOffset = 0x00u;
 /******************************************************************************/
-/**
-  * @}
-  */
 
-/** @addtogroup STM32L4xx_System_Private_Macros
-  * @{
-  */
-
-/**
-  * @}
-  */
-
-/** @addtogroup STM32L4xx_System_Private_Variables
-  * @{
-  */
   /* The SystemCoreClock variable is updated in three ways:
       1) by calling CMSIS function SystemCoreClockUpdate()
       2) by calling HAL API function HAL_RCC_GetHCLKFreq()
@@ -167,32 +127,17 @@
   */
   uint32_t SystemCoreClock = 4000000U;
 
-  const uint8_t  AHBPrescTable[16] = {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
-  const uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
-  const uint32_t MSIRangeTable[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, \
+  constexpr uint8_t  AHBPrescTable[16] = {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
+  constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
+  constexpr uint32_t MSIRangeTable[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, \
                                       4000000U, 8000000U, 16000000U, 24000000U, 32000000U, 48000000U};
-/**
-  * @}
-  */
-
-/** @addtogroup STM32L4xx_System_Private_FunctionPrototypes
-  * @{
-  */
-
-/**
-  * @}
-  */
-
-/** @addtogroup STM32L4xx_System_Private_Functions
-  * @{
-  */
-
 /**
   * @brief  Setup the microcontroller system.
   * @param  None
   * @retval None
   */
 
+extern "C" {
 void SystemInit(void)
 {
   /* FPU settings ------------------------------------------------------------*/
@@ -221,9 +166,11 @@ void SystemInit(void)
 
   /* Configure the Vector Table location add offset address ------------------*/
 #ifdef VECT_TAB_SRAM
-  SCB->VTOR = SRAM_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal SRAM */
+  SCB->VTOR = SRAM_BASE | kVectTabOffset; /* Vector Table Relocation in Internal SRAM */
 #else
-  SCB->VTOR = FLASH_BASE | VECT_TAB_OFFSET; /* Vector Table Relocation in Internal FLASH */
+  auto S = new SystemControlBlock {};
+  S->VTOR = FLASH_BASE | kVectTabOffset;
+  SCB->VTOR = FLASH_BASE | kVectTabOffset; /* Vector Table Relocation in Internal FLASH */
 #endif
 }
 
@@ -336,18 +283,5 @@ void SystemCoreClockUpdate(void)
   /* HCLK clock frequency */
   SystemCoreClock >>= tmp;
 }
-
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
+} // extern "C"
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

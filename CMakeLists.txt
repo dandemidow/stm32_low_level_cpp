@@ -10,7 +10,7 @@ enable_language(C ASM)
 set(SRCS
         main.cpp
         stm32l4xx_it.c
-        system_stm32l4xx.c
+        system_stm32l4xx.cpp
         startup_stm32l452xx.s)
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)

@@ -7153,6 +7153,10 @@ typedef struct
 /*                                                                            */
 /******************************************************************************/
 /*******************  Bits definition for FLASH_ACR register  *****************/
+//constexpr uint32_t kFlashAcrLatencyPos  = 0u;
+//constexpr uint32_t kFlashAcrLatencyMsk  = 0x7UL << kFlashAcrLatencyPos;
+//constexpr uint32_t kFlashAcrLatency = kFlashAcrLatencyMsk;
+
 #define FLASH_ACR_LATENCY_Pos             (0U)
 #define FLASH_ACR_LATENCY_Msk             (0x7UL << FLASH_ACR_LATENCY_Pos)     /*!< 0x00000007 */
 #define FLASH_ACR_LATENCY                 FLASH_ACR_LATENCY_Msk

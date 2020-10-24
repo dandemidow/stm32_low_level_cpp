@@ -23,6 +23,9 @@ StaticLibrary {
     name: "st_ll"
     Depends { name: "cpp" }
 
+
+    cpp.cxxLanguageVersion: "c++20"
+
     files: ["STM32CubeL4/Drivers/STM32L4xx_HAL_Driver/Src/*.c", "STM32CubeL4/CMakeLists.txt"]
 
     cpp.includePaths: [
@@ -38,6 +41,7 @@ StaticLibrary {
             "STM32CubeL4/Drivers/CMSIS/Include"
         ]
         cpp.defines: ["STM32L452xx", "USE_FULL_LL_DRIVER"]
+        cpp.cxxLanguageVersion: "c++20"
     }
 }
 

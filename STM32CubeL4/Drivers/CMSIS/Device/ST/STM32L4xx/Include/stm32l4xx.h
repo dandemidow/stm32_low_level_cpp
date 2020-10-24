@@ -224,6 +224,10 @@ typedef enum
 
 #define MODIFY_REG(REG, CLEARMASK, SETMASK)  WRITE_REG((REG), (((READ_REG(REG)) & (~(CLEARMASK))) | (SETMASK)))
 
+//constexpr void ModifyReg(volatile uint32_t &reg, uint32_t clear_mask, uint32_t set_mask) {
+//  reg = (reg & (~clear_mask)) | set_mask;
+//}
+
 #define POSITION_VAL(VAL)     (__CLZ(__RBIT(VAL)))
 
 
