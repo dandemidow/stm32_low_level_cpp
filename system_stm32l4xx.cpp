@@ -93,8 +93,8 @@
   ******************************************************************************
   */
 
-#include "stm32l4xx.h"
 #include "system_control_block.h"
+#include "reset_clock_control.h"
 
 #if !defined  (HSE_VALUE)
   #define HSE_VALUE    8000000U  /*!< Value of the External oscillator in Hz */
@@ -125,53 +125,130 @@ constexpr uint32_t kVectTabOffset = 0x00u;
                is no need to call the 2 first functions listed above, since SystemCoreClock
                variable is updated automatically.
   */
-  uint32_t SystemCoreClock = 4000000U;
+uint32_t SystemCoreClock = 4000000U;
 
-  constexpr uint8_t  AHBPrescTable[16] = {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
-  constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
-  constexpr uint32_t MSIRangeTable[12] = {100000U,   200000U,   400000U,   800000U,  1000000U,  2000000U, \
-                                      4000000U, 8000000U, 16000000U, 24000000U, 32000000U, 48000000U};
+static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
+
+uint32_t GetMsiRangeFrequency() {
+  constexpr std::array<uint32_t, 12u> MSIRangeTable {100000U,
+                                                     200000U,
+                                                     400000U,
+                                                     800000U,
+                                                     1000000U,
+                                                     2000000U,
+                                                     4000000U,
+                                                     8000000U,
+                                                     16000000U,
+                                                     24000000U,
+                                                     32000000U,
+                                                     48000000U};
+  uint32_t msirange;
+  auto &rcc = *new ResetClockControl {};
+  /* Get MSI Range frequency--------------------------------------------------*/
+  if(rcc.And<rcc::CR>(kRccCrMsiRgSel) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
+    msirange = rcc.And<rcc::CSR>(kRccCsrMsiSRange) >> 8U;
+  } else { /* MSIRANGE from RCC_CR applies */
+    msirange = rcc.And<rcc::CR>(kRccCrMsiRange) >> 4U;
+  }
+  /*MSI frequency range in HZ*/
+  return MSIRangeTable[msirange];
+}
+
+uint32_t GetSysClkSource(uint32_t msirange) {
+  uint32_t result;
+  uint32_t pllm = 2u;
+  uint32_t pllvco = 0u;
+  uint32_t pllr = 2u;
+
+  auto &rcc = *new ResetClockControl {};
+  switch (rcc.And<rcc::CFGR>(kRccCfgrSws)) {
+    case 0x00:  /* MSI used as system clock source */
+      result = msirange;
+      break;
+
+    case 0x04:  /* HSI used as system clock source */
+      result = HSI_VALUE;
+      break;
+
+    case 0x08:  /* HSE used as system clock source */
+      result = HSE_VALUE;
+      break;
+
+    case 0x0C:  /* PLL used as system clock  source */
+      /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI_VALUE/ PLLM) * PLLN
+         SYSCLK = PLL_VCO / PLLR
+         */
+      pllm = (rcc.And<rcc::PLLCFGR>(kRccPllCfgrPllM) >> 4U) + 1U ;
+
+      switch (rcc.And<rcc::PLLCFGR>(kRccPllCfgrPllSrc)) {
+        case 0x02:  /* HSI used as PLL clock source */
+          pllvco = (HSI_VALUE / pllm);
+          break;
+
+        case 0x03:  /* HSE used as PLL clock source */
+          pllvco = (HSE_VALUE / pllm);
+          break;
+
+        default:    /* MSI used as PLL clock source */
+          pllvco = (msirange / pllm);
+          break;
+      }
+      pllvco = pllvco * (rcc.And<rcc::PLLCFGR>(kRccPllCfgrPllN) >> 8U);
+      pllr = ((rcc.And<rcc::PLLCFGR>(kRccPllCfgrPllR) >> 25U) + 1U) * 2U;
+      result = pllvco/pllr;
+      break;
+
+    default:
+      result = msirange;
+      break;
+  }
+  return result;
+}
+
 /**
   * @brief  Setup the microcontroller system.
   * @param  None
   * @retval None
   */
 
-extern "C" {
-void SystemInit(void)
-{
-  /* FPU settings ------------------------------------------------------------*/
-  #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
-    SCB->CPACR |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
+void SystemInitialization() {
+    auto &rcc = *new ResetClockControl {};
+    auto &scb = *new SystemControlBlock {};
+    /* FPU settings ------------------------------------------------------------*/
+    #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+      scb.get<scb::CPACR>() |= ((3UL << 10*2)|(3UL << 11*2));  /* set CP10 and CP11 Full Access */
+    #endif
+
+    /* Reset the RCC clock configuration to the default reset state ------------*/
+    /* Set MSION bit */
+    rcc.get<rcc::CR>() |= kRccCrMsiOn;
+
+    /* Reset CFGR register */
+    rcc.set<rcc::CFGR>(0x00000000U);
+
+    /* Reset HSEON, CSSON , HSION, and PLLON bits */
+    rcc.get<rcc::CR>() &= 0xEAF6FFFFU;
+
+    /* Reset PLLCFGR register */
+    rcc.set<rcc::PLLCFGR>(0x00001000U);
+
+    /* Reset HSEBYP bit */
+    rcc.get<rcc::CR>() &= 0xFFFBFFFFU;
+
+    /* Disable all interrupts */
+    rcc.set<rcc::CIER>(0x00000000U);
+
+    /* Configure the Vector Table location add offset address ------------------*/
+  #ifdef VECT_TAB_SRAM
+    scb.set<scb::VTOR>(kSramBase | kVectTabOffset); /* Vector Table Relocation in Internal SRAM */
+  #else
+    scb.set<scb::VTOR>(kFlashBase | kVectTabOffset); /* Vector Table Relocation in Internal FLASH */
   #endif
+}
 
-  /* Reset the RCC clock configuration to the default reset state ------------*/
-  /* Set MSION bit */
-  RCC->CR |= RCC_CR_MSION;
-
-  /* Reset CFGR register */
-  RCC->CFGR = 0x00000000U;
-
-  /* Reset HSEON, CSSON , HSION, and PLLON bits */
-  RCC->CR &= 0xEAF6FFFFU;
-
-  /* Reset PLLCFGR register */
-  RCC->PLLCFGR = 0x00001000U;
-
-  /* Reset HSEBYP bit */
-  RCC->CR &= 0xFFFBFFFFU;
-
-  /* Disable all interrupts */
-  RCC->CIER = 0x00000000U;
-
-  /* Configure the Vector Table location add offset address ------------------*/
-#ifdef VECT_TAB_SRAM
-  SCB->VTOR = SRAM_BASE | kVectTabOffset; /* Vector Table Relocation in Internal SRAM */
-#else
-  auto S = new SystemControlBlock {};
-  S->VTOR = FLASH_BASE | kVectTabOffset;
-  SCB->VTOR = FLASH_BASE | kVectTabOffset; /* Vector Table Relocation in Internal FLASH */
-#endif
+extern "C" {
+void SystemInit(void) {
+  SystemInitialization();
 }
 
 /**
@@ -216,70 +293,19 @@ void SystemInit(void)
   * @param  None
   * @retval None
   */
-void SystemCoreClockUpdate(void)
-{
-  uint32_t tmp = 0U, msirange = 0U, pllvco = 0U, pllr = 2U, pllsource = 0U, pllm = 2U;
+void SystemCoreClockUpdate(void) {
+  constexpr std::array<uint8_t, 16u> AHBPrescTable {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
+  auto &rcc = *new ResetClockControl {};
 
-  /* Get MSI Range frequency--------------------------------------------------*/
-  if((RCC->CR & RCC_CR_MSIRGSEL) == RESET)
-  { /* MSISRANGE from RCC_CSR applies */
-    msirange = (RCC->CSR & RCC_CSR_MSISRANGE) >> 8U;
-  }
-  else
-  { /* MSIRANGE from RCC_CR applies */
-    msirange = (RCC->CR & RCC_CR_MSIRANGE) >> 4U;
-  }
   /*MSI frequency range in HZ*/
-  msirange = MSIRangeTable[msirange];
+  uint32_t msirange = GetMsiRangeFrequency();
 
   /* Get SYSCLK source -------------------------------------------------------*/
-  switch (RCC->CFGR & RCC_CFGR_SWS)
-  {
-    case 0x00:  /* MSI used as system clock source */
-      SystemCoreClock = msirange;
-      break;
+  SystemCoreClock = GetSysClkSource(msirange);
 
-    case 0x04:  /* HSI used as system clock source */
-      SystemCoreClock = HSI_VALUE;
-      break;
-
-    case 0x08:  /* HSE used as system clock source */
-      SystemCoreClock = HSE_VALUE;
-      break;
-
-    case 0x0C:  /* PLL used as system clock  source */
-      /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI_VALUE/ PLLM) * PLLN
-         SYSCLK = PLL_VCO / PLLR
-         */
-      pllsource = (RCC->PLLCFGR & RCC_PLLCFGR_PLLSRC);
-      pllm = ((RCC->PLLCFGR & RCC_PLLCFGR_PLLM) >> 4U) + 1U ;
-
-      switch (pllsource)
-      {
-        case 0x02:  /* HSI used as PLL clock source */
-          pllvco = (HSI_VALUE / pllm);
-          break;
-
-        case 0x03:  /* HSE used as PLL clock source */
-          pllvco = (HSE_VALUE / pllm);
-          break;
-
-        default:    /* MSI used as PLL clock source */
-          pllvco = (msirange / pllm);
-          break;
-      }
-      pllvco = pllvco * ((RCC->PLLCFGR & RCC_PLLCFGR_PLLN) >> 8U);
-      pllr = (((RCC->PLLCFGR & RCC_PLLCFGR_PLLR) >> 25U) + 1U) * 2U;
-      SystemCoreClock = pllvco/pllr;
-      break;
-
-    default:
-      SystemCoreClock = msirange;
-      break;
-  }
   /* Compute HCLK clock frequency --------------------------------------------*/
   /* Get HCLK prescaler */
-  tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4U)];
+  uint32_t tmp = AHBPrescTable[(rcc.And<rcc::CFGR>(kRccCfgrHpre) >> 4U)];
   /* HCLK clock frequency */
   SystemCoreClock >>= tmp;
 }
