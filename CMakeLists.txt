@@ -11,7 +11,7 @@ set(SRCS
         main.cpp
         stm32l4xx_it.c
         system_stm32l4xx.cpp
-        startup_stm32l452xx.s)
+        startup.cpp)
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)
 

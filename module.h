@@ -12,24 +12,19 @@ class Module {
 
     template <std::size_t... I>
     static constexpr size_t SumSize(std::index_sequence<I...>) {
-      return (sizeof(RegType<I>) + ...);
+      return (sizeof(RegType<I>) + ... + 0u);
     }
     static constexpr size_t kSize = SumSize(std::index_sequence_for<Regs...>{});
 
     template <size_t Index>
-    static constexpr size_t GetOffsetFor() {
-      if constexpr (Index > 0u) {
-        return SumSize(std::index_sequence<Index - 1u>{});
-      }
-      return 0u;
-    }
+    static constexpr size_t kOffsetFor = SumSize(std::make_index_sequence<Index>());
 
   public:
     size_t size() const { return kSize; }
 
     template <size_t I>
     RegType<I>& get() {
-      auto &reg = *reinterpret_cast<RegType<I>*>(this + GetOffsetFor<I>());
+      auto &reg = *reinterpret_cast<RegType<I>*>(this + kOffsetFor<I>);
       return reg;
     }
 
@@ -40,7 +35,7 @@ class Module {
 
     template <size_t I, typename ValueType>
     void set(ValueType value) {
-      auto &reg = *reinterpret_cast<RegType<I>*>(this + GetOffsetFor<I>());
+      auto &reg = *reinterpret_cast<RegType<I>*>(this + kOffsetFor<I>);
       reg = value;
     }
 

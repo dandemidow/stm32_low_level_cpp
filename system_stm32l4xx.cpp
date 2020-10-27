@@ -127,7 +127,7 @@ constexpr uint32_t kVectTabOffset = 0x00u;
   */
 uint32_t SystemCoreClock = 4000000U;
 
-static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
+[[maybe_unused]] static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
 
 uint32_t GetMsiRangeFrequency() {
   constexpr std::array<uint32_t, 12u> MSIRangeTable {100000U,
