@@ -4,15 +4,18 @@
 #include <array>
 #include <cstring>
 
+extern int main ();
+
 extern "C" {
 extern void SystemInit(void);
+extern void __libc_init_array(void);
 extern uint32_t _estack;
 extern uint32_t _sidata;
 extern uint32_t _sdata;
 extern uint32_t _edata;
 extern uint32_t _sbss;
 extern uint32_t _ebss;
-void Reset_Handler() {
+[[noreturn]] void Reset_Handler() {
   SystemInit();
   auto data_size = static_cast<size_t>(&_edata - &_sdata);
   if (data_size) {
@@ -22,6 +25,9 @@ void Reset_Handler() {
   if (bss_size) {
     std::memset(&_sbss, 0x00, bss_size);
   }
+  __libc_init_array();
+  main();
+  while(true){}
 }
 }
 

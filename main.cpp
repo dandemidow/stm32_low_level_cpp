@@ -64,14 +64,12 @@ int main() {
 
   /* Infinite loop */
   /* Toggle IO in an infinite loop */
-  while (1)
-  {
+  while (true) {
     LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
 
     /* Insert delay 250 ms */
     LL_mDelay(250);
   }
-
 }
 
 static void LL_Init(void) {
