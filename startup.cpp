@@ -2,10 +2,27 @@
   */
 
 #include <array>
+#include <cstring>
 
 extern "C" {
-void Reset_Handler() {}
+extern void SystemInit(void);
 extern uint32_t _estack;
+extern uint32_t _sidata;
+extern uint32_t _sdata;
+extern uint32_t _edata;
+extern uint32_t _sbss;
+extern uint32_t _ebss;
+void Reset_Handler() {
+  SystemInit();
+  auto data_size = static_cast<size_t>(&_edata - &_sdata);
+  if (data_size) {
+    std::memcpy(&_sdata, &_sidata, data_size);
+  }
+  auto bss_size = static_cast<size_t>(&_ebss - &_sbss);
+  if (bss_size) {
+    std::memset(&_sbss, 0x00, bss_size);
+  }
+}
 }
 
 [[noreturn]] void Default_Handler() {

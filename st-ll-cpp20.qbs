@@ -7,7 +7,7 @@ CppApplication {
     cpp.compilerFrameworkPaths:[""]
     cpp.compilerLibraryPaths:[""]
 
-    files: ["*.[ch]", "*.cpp", "*.s", "*.cmake", "CMakeLists.txt"]
+    files: ["*.[ch]", "*.cpp", "*.s", "*.ld", "*.cmake", "CMakeLists.txt"]
 
     Group {     // Properties for the produced executable
         fileTagsFilter: "application"
