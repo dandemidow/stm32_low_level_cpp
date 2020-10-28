@@ -46,9 +46,11 @@ target_compile_options(${EXECUTABLE} PRIVATE
         $<$<CONFIG:Debug>:-Og>
         )
 
+set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/STM32L452RETx_FLASH.ld")
+
 target_link_options(${EXECUTABLE} PRIVATE
         -static
-        -T../STM32L452RETx_FLASH.ld
+        -T${LINKER_SCRIPT}
         -mcpu=cortex-m4
         -mthumb
         -mfpu=fpv4-sp-d16
