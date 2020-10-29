@@ -9,7 +9,7 @@ enable_language(C ASM)
 
 set(SRCS
         main.cpp
-        stm32l4xx_it.c
+        stm32l4xx_it.cpp
         system_stm32l4xx.cpp
         startup.cpp)
 

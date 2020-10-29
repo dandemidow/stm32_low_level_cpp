@@ -1,7 +1,7 @@
 /**
   ******************************************************************************
-  * @file    stm32l4xx_it.h
-  * @brief   This file contains the headers of the interrupt handlers.
+  * @file    stm32l4xx_it.cpp
+  * @brief   Interrupt Service Routines.
   ******************************************************************************
   *
   * COPYRIGHT(c) 2020 STMicroelectronics
@@ -31,20 +31,69 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32L4xx_IT_H
-#define __STM32L4xx_IT_H
+#include "stm32l4xx_it.h"
 
-void NMI_Handler(void);
-void HardFault_Handler(void);
-void MemManage_Handler(void);
-void BusFault_Handler(void);
-void UsageFault_Handler(void);
-void SVC_Handler(void);
-void DebugMon_Handler(void);
-void PendSV_Handler(void);
-void SysTick_Handler(void);
+/**
+ * @brief This function handles Non maskable interrupt.
+ */
+void NMI_Handler(void) {
+}
 
-#endif /* __STM32L4xx_IT_H */
+/**
+ * @brief This function handles Hard fault interrupt.
+ */
+void HardFault_Handler(void) {
+  while (1) {
+  }
+}
 
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+/**
+ * @brief This function handles Memory management fault.
+ */
+void MemManage_Handler(void) {
+  while (1) {
+  }
+}
+
+/**
+ * @brief This function handles Prefetch fault, memory access fault.
+ */
+void BusFault_Handler(void) {
+  while (1) {
+  }
+}
+
+/**
+ * @brief This function handles Undefined instruction or illegal state.
+ */
+void UsageFault_Handler(void) {
+  while (1) {
+  }
+}
+
+/**
+ * @brief This function handles System service call via SWI instruction.
+ */
+void SVC_Handler(void) {
+
+}
+
+/**
+ * @brief This function handles Debug monitor.
+ */
+void DebugMon_Handler(void) {
+
+}
+
+/**
+ * @brief This function handles Pendable request for system service.
+ */
+void PendSV_Handler(void) {
+}
+
+/**
+ * @brief This function handles System tick timer.
+ */
+void SysTick_Handler(void) {
+
+}
