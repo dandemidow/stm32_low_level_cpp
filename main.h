@@ -54,22 +54,16 @@
 #include "stm32l4xx.h"
 #include "stm32l4xx_ll_gpio.h"
 
-/* USER CODE BEGIN Includes */
-
-/* USER CODE END Includes */
-
-/* Private define ------------------------------------------------------------*/
-
 #ifndef NVIC_PRIORITYGROUP_0
-#define NVIC_PRIORITYGROUP_0         ((uint32_t)0x00000007) /*!< 0 bit  for pre-emption priority,
+constexpr uint32_t kNvicPriorityGroup0 = 0x00000007; /*!< 0 bit  for pre-emption priority,
                                                                  4 bits for subpriority */
-#define NVIC_PRIORITYGROUP_1         ((uint32_t)0x00000006) /*!< 1 bit  for pre-emption priority,
+constexpr uint32_t kNvicPriorityGroup1 = 0x00000006; /*!< 1 bit  for pre-emption priority,
                                                                  3 bits for subpriority */
-#define NVIC_PRIORITYGROUP_2         ((uint32_t)0x00000005) /*!< 2 bits for pre-emption priority,
+constexpr uint32_t kNvicPriorityGroup2 = 0x00000005; /*!< 2 bits for pre-emption priority,
                                                                  2 bits for subpriority */
-#define NVIC_PRIORITYGROUP_3         ((uint32_t)0x00000004) /*!< 3 bits for pre-emption priority,
+constexpr uint32_t kNvicPriorityGroup3 = 0x00000004; /*!< 3 bits for pre-emption priority,
                                                                  1 bit  for subpriority */
-#define NVIC_PRIORITYGROUP_4         ((uint32_t)0x00000003) /*!< 4 bits for pre-emption priority,
+constexpr uint32_t kNvicPriorityGroup4 = 0x00000003; /*!< 4 bits for pre-emption priority,
                                                                  0 bit  for subpriority */
 #endif
 
@@ -79,10 +73,6 @@
   *        HAL drivers code
   */
 /* #define USE_FULL_ASSERT    1U */
-
-/* USER CODE BEGIN Private defines */
-
-/* USER CODE END Private defines */
 
 #ifdef __cplusplus
  extern "C" {

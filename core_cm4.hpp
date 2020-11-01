@@ -28,5 +28,21 @@ static inline void set_priority_grouping(uint32_t priority_group) {
   scb.set<scb::AIRCR>(reg_value);
 }
 
+static inline uint32_t get_priority_grouping() {
+  auto &scb = *new SystemControlBlock{};
+  return static_cast<uint32_t>(scb.And<scb::AIRCR>(kScbAircrPriGroup.mask) >> kScbAircrPriGroup.position);
+}
+
+static inline uint32_t encode_priority (uint32_t priority_group, uint32_t PreemptPriority, uint32_t SubPriority) {
+  uint32_t priority_group_tmp = (priority_group & (uint32_t)0x07UL);   /* only values 0..7 are used          */
+  uint32_t preempt_priority_bits = ((7UL - priority_group_tmp) > kNvicPrioBits) ? kNvicPrioBits : (uint32_t)(7UL - priority_group_tmp);
+  uint32_t sub_priority_bits     = ((priority_group_tmp + kNvicPrioBits) < (uint32_t)7UL) ? (uint32_t)0UL : (uint32_t)((priority_group_tmp - 7UL) + kNvicPrioBits);
+
+  return (
+           ((PreemptPriority & (uint32_t)((1UL << (preempt_priority_bits)) - 1UL)) << sub_priority_bits) |
+           ((SubPriority     & (uint32_t)((1UL << (sub_priority_bits    )) - 1UL)))
+         );
+}
+
 }  // namespace nvic
 #endif

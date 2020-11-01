@@ -70,8 +70,8 @@ int main() {
   while (true) {
     LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
 
-    /* Insert delay 250 ms */
-    LL_mDelay(250);
+    /* Insert delay 1000 ms */
+    LL_mDelay(1000);
   }
 }
 
@@ -79,24 +79,23 @@ static void LL_Init(void) {
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
-  nvic::set_priority_grouping(NVIC_PRIORITYGROUP_4);
+  nvic::set_priority_grouping(kNvicPriorityGroup4);
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */
-  nvic::set_priority(MemoryManagement_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(MemoryManagement_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
   /* BusFault_IRQn interrupt configuration */
-  nvic::set_priority(BusFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(BusFault_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
   /* UsageFault_IRQn interrupt configuration */
-  nvic::set_priority(UsageFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(UsageFault_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
   /* SVCall_IRQn interrupt configuration */
-  nvic::set_priority(SVCall_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(SVCall_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
   /* DebugMonitor_IRQn interrupt configuration */
-  nvic::set_priority(DebugMonitor_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(DebugMonitor_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
   /* PendSV_IRQn interrupt configuration */
-  nvic::set_priority(PendSV_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(PendSV_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
   /* SysTick_IRQn interrupt configuration */
-  nvic::set_priority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
-
+  nvic::set_priority(SysTick_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
 }
 
 /**
@@ -146,7 +145,7 @@ void SystemClock_Config(void) {
   LL_SetSystemCoreClock(4000000);
 
   /* SysTick_IRQn interrupt configuration */
-  nvic::set_priority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(SysTick_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
 }
 
 /** Configure pins as
@@ -192,23 +191,6 @@ void _Error_Handler([[maybe_unused]] const char *file, [[maybe_unused]] int line
   }
   /* USER CODE END Error_Handler_Debug */
 }
-
-#ifdef  USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t* file, uint32_t line)
-{
-  /* USER CODE BEGIN 6 */
-  /* User can add his own implementation to report the file name and line number,
-     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-  /* USER CODE END 6 */
-}
-#endif /* USE_FULL_ASSERT */
 
 /**
   * @}
