@@ -36,6 +36,7 @@
   ******************************************************************************
   */
 
+
 extern "C" {
 #include "main.h"
 
@@ -43,6 +44,8 @@ static void LL_Init(void);
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 }
+
+#include "core_cm4.hpp"
 
 /**
   * @brief  The application entry point.
@@ -76,23 +79,23 @@ static void LL_Init(void) {
   LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
   LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
-  NVIC_SetPriorityGrouping(NVIC_PRIORITYGROUP_4);
+  nvic::set_priority_grouping(NVIC_PRIORITYGROUP_4);
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */
-  NVIC_SetPriority(MemoryManagement_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(MemoryManagement_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   /* BusFault_IRQn interrupt configuration */
-  NVIC_SetPriority(BusFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(BusFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   /* UsageFault_IRQn interrupt configuration */
-  NVIC_SetPriority(UsageFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(UsageFault_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   /* SVCall_IRQn interrupt configuration */
-  NVIC_SetPriority(SVCall_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(SVCall_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   /* DebugMonitor_IRQn interrupt configuration */
-  NVIC_SetPriority(DebugMonitor_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(DebugMonitor_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   /* PendSV_IRQn interrupt configuration */
-  NVIC_SetPriority(PendSV_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(PendSV_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
   /* SysTick_IRQn interrupt configuration */
-  NVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
 
 }
 
@@ -143,7 +146,7 @@ void SystemClock_Config(void) {
   LL_SetSystemCoreClock(4000000);
 
   /* SysTick_IRQn interrupt configuration */
-  NVIC_SetPriority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
+  nvic::set_priority(SysTick_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),0, 0));
 }
 
 /** Configure pins as

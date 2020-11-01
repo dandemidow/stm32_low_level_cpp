@@ -62,4 +62,7 @@ static_assert(std::is_standard_layout<SystemControlBlock>::value);
 constexpr uint32_t kFlashBase = 0x08000000u;           /*!< FLASH(up to 512 KB) base address */
 constexpr uint32_t kSramBase  = 0x20000000u;           /*!< SRAM1(up to 128 KB) base address */
 
+constexpr auto kScbAircrVectKey = Flag<0xfffful, 16u>{};
+constexpr auto kScbAircrPriGroup = Flag<7ul, 8u>{};
+
 #endif

@@ -11,6 +11,8 @@ using ReadOnlyRegister = volatile uint32_t const;
 
 template <uint32_t Mask, size_t Position>
 struct Flag {
+static constexpr uint32_t mask = Mask;
+static constexpr size_t   position = Position;
 static constexpr uint32_t value = (Mask << Position);
 };
 
