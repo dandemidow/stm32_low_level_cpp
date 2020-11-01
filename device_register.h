@@ -22,6 +22,14 @@ enum {
   SET = !RESET
 };
 
+inline void set(Register &reg, uint32_t mask) {
+  reg |= mask;
+}
+
+inline uint32_t read(ReadOnlyRegister &reg, uint32_t mask) {
+  return (reg & mask);
+}
+
 }  // namespace bit
 
 #endif

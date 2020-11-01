@@ -39,13 +39,14 @@
 
 extern "C" {
 #include "main.h"
-
-static void LL_Init(void);
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 }
 
 #include "core_cm4.hpp"
+#include "ll_bus.hpp"
+
+static void LL_Init(void);
 
 /**
   * @brief  The application entry point.
@@ -76,8 +77,8 @@ int main() {
 }
 
 static void LL_Init(void) {
-  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
-  LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
+  ll::Apb2Grp1EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+  ll::Apb2Grp1EnableClock(LL_APB1_GRP1_PERIPH_PWR);
 
   nvic::set_priority_grouping(kNvicPriorityGroup4);
 
