@@ -45,6 +45,7 @@ static void MX_GPIO_Init(void);
 
 #include "core_cm4.hpp"
 #include "ll_bus.hpp"
+#include "ll_power.hpp"
 #include "ll_system.hpp"
 
 static void LL_Init(void);
@@ -111,7 +112,7 @@ void SystemClock_Config(void) {
   if(ll::flash_get_latency() != ll::kFlashAcrLatency0) {
   Error_Handler();
   }
-  LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE1);
+  ll::power::set_regul_voltage_scaling(ll::power::kReguVoltageScale1);
 
   LL_RCC_MSI_Enable();
 
