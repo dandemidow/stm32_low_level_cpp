@@ -148,7 +148,7 @@ uint32_t GetMsiRangeFrequency() {
   if(rcc.And<rcc::CR>(kRccCrMsiRgSel) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
     msirange = rcc.And<rcc::CSR>(kRccCsrMsiSRange) >> 8U;
   } else { /* MSIRANGE from RCC_CR applies */
-    msirange = rcc.And<rcc::CR>(kRccCrMsiRange) >> 4U;
+    msirange = rcc.And<rcc::CR>(kRccCrMsiRange.value) >> 4U;
   }
   /*MSI frequency range in HZ*/
   return MSIRangeTable[msirange];

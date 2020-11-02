@@ -105,8 +105,13 @@ constexpr uint32_t kRccCrMsiOn = Flag<0x1u, 0u>::value;                  /*!< In
 constexpr uint32_t kRccCrMsiRdy = Flag<0x1u, 1u>::value;                 /*!< Internal Multi Speed oscillator (MSI) clock ready flag */
 constexpr uint32_t kRccCrMsiPllEn = Flag<0x1u, 2u>::value;               /*!< Internal Multi Speed oscillator (MSI) PLL enable */
 constexpr uint32_t kRccCrMsiRgSel = Flag<0x1u, 3u>::value;               /*!< Internal Multi Speed oscillator (MSI) range selection */
-constexpr uint32_t kRccCrMsiRange = Flag<0xfu, 4u>::value;               /*!< Internal Multi Speed oscillator (MSI) clock Range */
+constexpr auto kRccCrMsiRange = Flag<0xfu, 4u>{};               /*!< Internal Multi Speed oscillator (MSI) clock Range */
 constexpr uint32_t kRccCsrMsiSRange = Flag<0xfu, 8u>::value;
+
+constexpr auto kRccCfgrSw = Flag<0x3u, 0u>{};
+constexpr uint32_t kRccCfgrSw0 = Flag<0x1u, kRccCfgrSw.position>::value;
+constexpr uint32_t kRccCfgrSw1 = Flag<0x2u, kRccCfgrSw.position>::value;
+
 constexpr uint32_t kRccCfgrSws = Flag<0x3u, 2u>::value;                  /*!< SWS[1:0] bits (System Clock Switch Status) */
 
 constexpr uint32_t kRccPllCfgrPllSrc = Flag<0x3u, 0u>::value;
@@ -115,5 +120,26 @@ constexpr uint32_t kRccPllCfgrPllN = Flag<0x7fu, 8u>::value;
 constexpr uint32_t kRccPllCfgrPllR = Flag<0x3u, 25u>::value;
 
 constexpr uint32_t kRccCfgrHpre = Flag<0xfu, 4u>::value;                 /*!< HPRE[3:0] bits (AHB prescaler) */
+
+constexpr uint32_t kRccCfgrSwMsi = 0x00000000u;  // MSI oscillator selection as system clock
+constexpr uint32_t kRccCfgrSwHsi = 0x00000001u;  // HSI16 oscillator selection as system clock
+constexpr uint32_t kRccCfgrSwHse = 0x00000002u;  // HSE oscillator selection as system clock
+constexpr uint32_t kRccCfgrSwPll = 0x00000003u;  // PLL selection as system clock
+enum RccCfgrSws : uint32_t {
+    Msi = 0x00000000u,
+    Hsi = 0x00000004u,
+    Hse = 0x00000008u,
+    Pll = 0x0000000cu,
+};
+
+template <uint32_t Index>
+constexpr uint32_t GetRccCrMsiRange() {
+  constexpr uint32_t Lower = 0x0u;
+  constexpr uint32_t Upper = 0xbu;
+  static_assert ((Index >= Lower) && (Index <= Upper));
+  return Flag<Index, kRccCrMsiRange.position>::value;
+}
+
+constexpr auto kRccIcsCrMsiTrim = Flag<0xffu, 8u>{};
 
 #endif

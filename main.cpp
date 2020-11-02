@@ -121,19 +121,18 @@ void SystemClock_Config(void) {
   while(ll::rcc_msi_is_ready() != true) {
   }
 
-  LL_RCC_MSI_EnableRangeSelection();
+  ll::rcc_msi_enable_range_selection();
 
-  LL_RCC_MSI_SetRange(LL_RCC_MSIRANGE_6);
+  ll::rcc_msi_set_range(GetRccCrMsiRange<6>());
 
-  LL_RCC_MSI_SetCalibTrimming(0);
+  ll::rcc_msi_set_calib_trimming(0);
 
-  LL_RCC_SetSysClkSource(LL_RCC_SYS_CLKSOURCE_MSI);
+  ll::rcc_set_sys_clk_source(ll::kSysClkSourceMsi);
 
    /* Wait till System clock is ready */
-  while(LL_RCC_GetSysClkSource() != LL_RCC_SYS_CLKSOURCE_STATUS_MSI)
-  {
-
+  while(ll::rcc_get_sys_clk_source() != ll::RccSysClkSourceStatus::Msi) {
   }
+
   LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
 
   LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
