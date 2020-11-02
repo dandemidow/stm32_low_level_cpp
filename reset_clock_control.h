@@ -1,11 +1,10 @@
 #if !defined(RESET_CLOCK_CONTROL_H_)
 #define RESET_CLOCK_CONTROL_H_
 
+#include "addresses.h"
 #include "device_register.h"
 #include "module.h"
 
-constexpr uint32_t kPeriphBaseAddress = 0x40000000UL; /*!< Peripheral base address */
-constexpr uint32_t kAhb1periphBaseAddress = kPeriphBaseAddress + 0x00020000UL;
 constexpr uint32_t kRccBaseAddress = kAhb1periphBaseAddress + 0x1000UL;
 
 namespace rcc {
@@ -97,6 +96,9 @@ Register
 >;
 
 static_assert(std::is_standard_layout<ResetClockControl>::value);
+
+constexpr uint32_t kRccApb2EnrSysCfgEn = Flag<0x1u, 0u>::value;
+constexpr uint32_t kRccApb1Enr1PwrEn = Flag<0x1u, 28u>::value;
 
 /********************  Bit definition for RCC_CR register  ********************/
 constexpr uint32_t kRccCrMsiOn = Flag<0x1u, 0u>::value;                  /*!< Internal Multi Speed oscillator (MSI) clock enable */

@@ -16,6 +16,12 @@ static constexpr size_t   position = Position;
 static constexpr uint32_t value = (Mask << Position);
 };
 
+namespace reg {
+inline void modify(Register &r, uint32_t clear_mask, uint32_t set_mask) {
+  r = (r & (~clear_mask)) | set_mask;
+}
+}  // namespace reg
+
 namespace bit {
 enum {
   RESET = 0,

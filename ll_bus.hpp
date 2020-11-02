@@ -12,6 +12,10 @@ static inline void Apb2Grp1EnableClock(uint32_t periphs) {
   bit::read(rcc.get<rcc::APB2ENR>(), periphs);
 }
 
+constexpr uint32_t kApb2Grp1PeriphAll = 0xFFFFFFFFu;
+constexpr uint32_t kApb2Grp1PeriphSysCfg = kRccApb2EnrSysCfgEn;
+constexpr uint32_t kApb1Grp1PeriphPwr = kRccApb1Enr1PwrEn;
+
 }  // namespace ll
 
 #endif

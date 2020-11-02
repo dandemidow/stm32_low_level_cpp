@@ -45,6 +45,7 @@ static void MX_GPIO_Init(void);
 
 #include "core_cm4.hpp"
 #include "ll_bus.hpp"
+#include "ll_system.hpp"
 
 static void LL_Init(void);
 
@@ -77,8 +78,8 @@ int main() {
 }
 
 static void LL_Init(void) {
-  ll::Apb2Grp1EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
-  ll::Apb2Grp1EnableClock(LL_APB1_GRP1_PERIPH_PWR);
+  ll::Apb2Grp1EnableClock(ll::kApb2Grp1PeriphSysCfg);
+  ll::Apb2Grp1EnableClock(ll::kApb1Grp1PeriphPwr);
 
   nvic::set_priority_grouping(kNvicPriorityGroup4);
 
@@ -105,10 +106,9 @@ static void LL_Init(void) {
   */
 void SystemClock_Config(void) {
 
-  LL_FLASH_SetLatency(LL_FLASH_LATENCY_0);
+  ll::flash_set_latency(ll::kFlashAcrLatency0);
 
-  if(LL_FLASH_GetLatency() != LL_FLASH_LATENCY_0)
-  {
+  if(ll::flash_get_latency() != ll::kFlashAcrLatency0) {
   Error_Handler();
   }
   LL_PWR_SetRegulVoltageScaling(LL_PWR_REGU_VOLTAGE_SCALE1);

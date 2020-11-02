@@ -1399,7 +1399,6 @@ __STATIC_INLINE void LL_VREFBUF_SetTrimming(uint32_t Value)
   */
 __STATIC_INLINE void LL_FLASH_SetLatency(uint32_t Latency)
 {
-  //ModifyReg(FLASH->ACR, kFlashAcrLatency, Latency);
   MODIFY_REG(FLASH->ACR, FLASH_ACR_LATENCY, Latency);
 }
 
