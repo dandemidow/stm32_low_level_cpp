@@ -48,6 +48,7 @@ static void MX_GPIO_Init(void);
 #include "ll_power.hpp"
 #include "ll_rcc.hpp"
 #include "ll_system.hpp"
+#include "ll_utils.hpp"
 
 static void LL_Init(void);
 
@@ -139,11 +140,11 @@ void SystemClock_Config(void) {
 
   ll::rcc_set_apb2_prescaler(ll::RccApb2Div::Div1);
 
-  LL_Init1msTick(4000000);
+  ll::init_1ms_tick(4000000);
 
   LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
 
-  LL_SetSystemCoreClock(4000000);
+  ll::set_system_core_clock(4000000);
 
   /* SysTick_IRQn interrupt configuration */
   nvic::set_priority(SysTick_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));

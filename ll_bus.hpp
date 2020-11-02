@@ -1,7 +1,6 @@
 #if !defined(LL_BUS_H_)
 #define LL_BUS_H_
 
-#include "device_register.h"
 #include "reset_clock_control.h"
 
 namespace ll {

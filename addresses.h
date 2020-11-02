@@ -7,4 +7,6 @@ constexpr uint32_t kPeriphBaseAddress = 0x40000000UL;  // Peripheral base addres
 constexpr uint32_t kApb1PeriphBaseAddress = kPeriphBaseAddress;
 constexpr uint32_t kAhb1periphBaseAddress = kPeriphBaseAddress + 0x00020000UL;
 
+constexpr uint32_t kSystemControlSpaceBaseAddress = 0xE000E000ul;
+
 #endif
