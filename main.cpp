@@ -46,6 +46,7 @@ static void MX_GPIO_Init(void);
 #include "core_cm4.hpp"
 #include "ll_bus.hpp"
 #include "ll_power.hpp"
+#include "ll_rcc.hpp"
 #include "ll_system.hpp"
 
 static void LL_Init(void);
@@ -114,13 +115,12 @@ void SystemClock_Config(void) {
   }
   ll::power::set_regul_voltage_scaling(ll::power::kReguVoltageScale1);
 
-  LL_RCC_MSI_Enable();
+  ll::rcc_msi_enable();
 
    /* Wait till MSI is ready */
-  while(LL_RCC_MSI_IsReady() != 1)
-  {
-
+  while(ll::rcc_msi_is_ready() != true) {
   }
+
   LL_RCC_MSI_EnableRangeSelection();
 
   LL_RCC_MSI_SetRange(LL_RCC_MSIRANGE_6);
