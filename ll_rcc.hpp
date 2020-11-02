@@ -5,12 +5,10 @@
 
 namespace ll {
 
-enum class RccSysClkSourceStatus {
-  Msi = RccCfgrSws::Msi,
-  Hsi = RccCfgrSws::Hsi,
-  Hse = RccCfgrSws::Hse,
-  Pll = RccCfgrSws::Pll
-};
+using RccSysClkSourceStatus = rcc::cfgr::Sws;
+using RccSysClkSource = rcc::cfgr::Sw;
+using RccSysClkDiv = rcc::cfgr::HPre;
+using RccApb1Div = rcc::cfgr::PPre;
 
 static inline void rcc_msi_enable() {
   auto &rcc = *new ResetClockControl{};
@@ -37,20 +35,25 @@ static inline void rcc_msi_set_calib_trimming(uint32_t value) {
   reg::modify(rcc.get<rcc::ICSCR>(), kRccIcsCrMsiTrim.value, value << kRccIcsCrMsiTrim.position);
 }
 
-static inline void rcc_set_sys_clk_source(uint32_t source) {
+static inline void rcc_set_sys_clk_source(RccSysClkSource source) {
   auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CFGR>(), kRccCfgrSw.value, source);
+  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kSw.value, static_cast<uint32_t>(source));
 }
 
 static inline RccSysClkSourceStatus rcc_get_sys_clk_source() {
   auto &rcc = *new ResetClockControl{};
-  return static_cast<RccSysClkSourceStatus>(bit::read(rcc.get<rcc::CFGR>(), kRccCfgrSws));
+  return static_cast<RccSysClkSourceStatus>(bit::read(rcc.get<rcc::CFGR>(), rcc::cfgr::kSws));
 }
 
-constexpr uint32_t kSysClkSourceMsi = kRccCfgrSwMsi;
-constexpr uint32_t kSysClkSourceHsi = kRccCfgrSwHsi;
-constexpr uint32_t kSysClkSourceHse = kRccCfgrSwHse;
-constexpr uint32_t kSysClkSourcePll = kRccCfgrSwPll;
+static inline void rcc_set_ahb_prescaler(RccSysClkDiv prescaler) {
+  auto &rcc = *new ResetClockControl{};
+  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
+}
+
+static inline void rcc_set_apb1_prescaler(RccApb1Div prescaler) {
+  auto &rcc = *new ResetClockControl{};
+  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
+}
 
 }  // namespace ll
 

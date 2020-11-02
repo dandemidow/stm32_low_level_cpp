@@ -161,7 +161,7 @@ uint32_t GetSysClkSource(uint32_t msirange) {
   uint32_t pllr = 2u;
 
   auto &rcc = *new ResetClockControl {};
-  switch (rcc.And<rcc::CFGR>(kRccCfgrSws)) {
+  switch (rcc.And<rcc::CFGR>(rcc::cfgr::kSws)) {
     case 0x00:  /* MSI used as system clock source */
       result = msirange;
       break;
@@ -305,7 +305,7 @@ void SystemCoreClockUpdate(void) {
 
   /* Compute HCLK clock frequency --------------------------------------------*/
   /* Get HCLK prescaler */
-  uint32_t tmp = AHBPrescTable[(rcc.And<rcc::CFGR>(kRccCfgrHpre) >> 4U)];
+  uint32_t tmp = AHBPrescTable[(rcc.And<rcc::CFGR>(rcc::cfgr::kHPre) >> 4U)];
   /* HCLK clock frequency */
   SystemCoreClock >>= tmp;
 }

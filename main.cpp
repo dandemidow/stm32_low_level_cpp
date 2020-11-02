@@ -127,15 +127,15 @@ void SystemClock_Config(void) {
 
   ll::rcc_msi_set_calib_trimming(0);
 
-  ll::rcc_set_sys_clk_source(ll::kSysClkSourceMsi);
+  ll::rcc_set_sys_clk_source(ll::RccSysClkSource::Msi);
 
    /* Wait till System clock is ready */
   while(ll::rcc_get_sys_clk_source() != ll::RccSysClkSourceStatus::Msi) {
   }
 
-  LL_RCC_SetAHBPrescaler(LL_RCC_SYSCLK_DIV_1);
+  ll::rcc_set_ahb_prescaler(ll::RccSysClkDiv::Div1);
 
-  LL_RCC_SetAPB1Prescaler(LL_RCC_APB1_DIV_1);
+  ll::rcc_set_apb1_prescaler(ll::RccApb1Div::Div1);
 
   LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
 

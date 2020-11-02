@@ -50,6 +50,55 @@ namespace rcc {
   CRRCR,            /*!< RCC clock recovery RC register,                                          Address offset: 0x98 */
   CCIPR2            /*!< RCC peripherals independent clock configuration register 2,              Address offset: 0x9C */
 };
+
+namespace cfgr {
+enum class HPre {
+  Div1   = 0x00000000u,
+  Div2   = 0x00000080u,
+  Div4   = 0x00000090u,
+  Div8   = 0x000000a0u,
+  Div16  = 0x000000b0u,
+  Div64  = 0x000000c0u,
+  Div128 = 0x000000d0u,
+  Div256 = 0x000000e0u,
+  Div512 = 0x000000f0u,
+};
+
+enum class PPre {
+  Div1   = 0x00000000u,
+  Div2   = 0x00000400u,
+  Div4   = 0x00000500u,
+  Div8   = 0x00000600u,
+  Div16  = 0x00000700u,
+};
+
+constexpr uint32_t kHPre = Flag<0xfu, 4u>::value;
+
+constexpr auto kPPre1 = Flag<0x7u, 8u>{};
+template <uint32_t Index, std::enable_if_t<(Index >= 0 && Index <= 2), int> = 0>
+constexpr uint32_t kPPre1By = Flag<2^Index, kPPre1.position>::value;
+
+enum class Sw: uint32_t {
+  Msi = 0x00000000u,  // MSI oscillator selection as system clock
+  Hsi = 0x00000001u,  // HSI16 oscillator selection as system clock
+  Hse = 0x00000002u,  // HSE oscillator selection as system clock
+  Pll = 0x00000003u   // PLL selection as system clock
+};
+
+constexpr auto kSw = Flag<0x3u, 0u>{};
+constexpr uint32_t kSw0 = Flag<0x1u, kSw.position>::value;
+constexpr uint32_t kSw1 = Flag<0x2u, kSw.position>::value;
+
+enum class Sws : uint32_t {
+    Msi = 0x00000000u,
+    Hsi = 0x00000004u,
+    Hse = 0x00000008u,
+    Pll = 0x0000000cu,
+};
+
+constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
+
+}  // namespace cfgr
 }  // namespace rcc
 
 using ResetClockControl = Module<kRccBaseAddress,
@@ -108,29 +157,10 @@ constexpr uint32_t kRccCrMsiRgSel = Flag<0x1u, 3u>::value;               /*!< In
 constexpr auto kRccCrMsiRange = Flag<0xfu, 4u>{};               /*!< Internal Multi Speed oscillator (MSI) clock Range */
 constexpr uint32_t kRccCsrMsiSRange = Flag<0xfu, 8u>::value;
 
-constexpr auto kRccCfgrSw = Flag<0x3u, 0u>{};
-constexpr uint32_t kRccCfgrSw0 = Flag<0x1u, kRccCfgrSw.position>::value;
-constexpr uint32_t kRccCfgrSw1 = Flag<0x2u, kRccCfgrSw.position>::value;
-
-constexpr uint32_t kRccCfgrSws = Flag<0x3u, 2u>::value;                  /*!< SWS[1:0] bits (System Clock Switch Status) */
-
 constexpr uint32_t kRccPllCfgrPllSrc = Flag<0x3u, 0u>::value;
 constexpr uint32_t kRccPllCfgrPllM = Flag<0x7u, 4u>::value;
 constexpr uint32_t kRccPllCfgrPllN = Flag<0x7fu, 8u>::value;
 constexpr uint32_t kRccPllCfgrPllR = Flag<0x3u, 25u>::value;
-
-constexpr uint32_t kRccCfgrHpre = Flag<0xfu, 4u>::value;                 /*!< HPRE[3:0] bits (AHB prescaler) */
-
-constexpr uint32_t kRccCfgrSwMsi = 0x00000000u;  // MSI oscillator selection as system clock
-constexpr uint32_t kRccCfgrSwHsi = 0x00000001u;  // HSI16 oscillator selection as system clock
-constexpr uint32_t kRccCfgrSwHse = 0x00000002u;  // HSE oscillator selection as system clock
-constexpr uint32_t kRccCfgrSwPll = 0x00000003u;  // PLL selection as system clock
-enum RccCfgrSws : uint32_t {
-    Msi = 0x00000000u,
-    Hsi = 0x00000004u,
-    Hse = 0x00000008u,
-    Pll = 0x0000000cu,
-};
 
 template <uint32_t Index>
 constexpr uint32_t GetRccCrMsiRange() {
