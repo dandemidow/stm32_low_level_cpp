@@ -137,7 +137,7 @@ void SystemClock_Config(void) {
 
   ll::rcc_set_apb1_prescaler(ll::RccApb1Div::Div1);
 
-  LL_RCC_SetAPB2Prescaler(LL_RCC_APB2_DIV_1);
+  ll::rcc_set_apb2_prescaler(ll::RccApb2Div::Div1);
 
   LL_Init1msTick(4000000);
 

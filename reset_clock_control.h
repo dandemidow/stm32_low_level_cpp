@@ -64,7 +64,9 @@ enum class HPre {
   Div512 = 0x000000f0u,
 };
 
-enum class PPre {
+constexpr uint32_t kHPre = Flag<0xfu, 4u>::value;
+
+enum class PPre1 {
   Div1   = 0x00000000u,
   Div2   = 0x00000400u,
   Div4   = 0x00000500u,
@@ -72,11 +74,19 @@ enum class PPre {
   Div16  = 0x00000700u,
 };
 
-constexpr uint32_t kHPre = Flag<0xfu, 4u>::value;
-
 constexpr auto kPPre1 = Flag<0x7u, 8u>{};
 template <uint32_t Index, std::enable_if_t<(Index >= 0 && Index <= 2), int> = 0>
 constexpr uint32_t kPPre1By = Flag<2^Index, kPPre1.position>::value;
+
+enum class PPre2 {
+  Div1   = 0x00000000u,
+  Div2   = 0x00002000u,
+  Div4   = 0x00002800u,
+  Div8   = 0x00003000u,
+  Div16  = 0x00003800u,
+};
+
+constexpr auto kPPre2 = Flag<0x7u, 11u>{};
 
 enum class Sw: uint32_t {
   Msi = 0x00000000u,  // MSI oscillator selection as system clock

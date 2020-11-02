@@ -8,7 +8,8 @@ namespace ll {
 using RccSysClkSourceStatus = rcc::cfgr::Sws;
 using RccSysClkSource = rcc::cfgr::Sw;
 using RccSysClkDiv = rcc::cfgr::HPre;
-using RccApb1Div = rcc::cfgr::PPre;
+using RccApb1Div = rcc::cfgr::PPre1;
+using RccApb2Div = rcc::cfgr::PPre2;
 
 static inline void rcc_msi_enable() {
   auto &rcc = *new ResetClockControl{};
@@ -53,6 +54,11 @@ static inline void rcc_set_ahb_prescaler(RccSysClkDiv prescaler) {
 static inline void rcc_set_apb1_prescaler(RccApb1Div prescaler) {
   auto &rcc = *new ResetClockControl{};
   reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
+}
+
+static inline void rcc_set_apb2_prescaler(RccApb2Div prescaler) {
+  auto &rcc = *new ResetClockControl{};
+  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
 }
 
 }  // namespace ll
