@@ -50,7 +50,12 @@ static void MX_GPIO_Init(void);
 #include "ll_system.hpp"
 #include "ll_utils.hpp"
 
+//#include <functional>
+
 static void LL_Init(void);
+
+//using Callback = std::function<void()>;
+//static Callback _error {};
 
 /**
   * @brief  The application entry point.
@@ -63,6 +68,11 @@ int main() {
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   LL_Init();
+
+//  _error = [&]{
+//      LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
+//      LL_mDelay(100);
+//  };
 
   /* Configure the system clock */
   SystemClock_Config();
@@ -184,14 +194,10 @@ static void MX_GPIO_Init(void)
   * @param  line: The line in file as a number.
   * @retval None
   */
-void _Error_Handler([[maybe_unused]] const char *file, [[maybe_unused]] int line)
-{
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  while(1)
-  {
+void _Error_Handler([[maybe_unused]] const char *file, [[maybe_unused]] int line) {
+  while(1) {
+//      _error();
   }
-  /* USER CODE END Error_Handler_Debug */
 }
 
 /**

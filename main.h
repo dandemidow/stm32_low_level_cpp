@@ -74,15 +74,9 @@ constexpr uint32_t kNvicPriorityGroup4 = 0x00000003; /*!< 4 bits for pre-emption
   */
 /* #define USE_FULL_ASSERT    1U */
 
-#ifdef __cplusplus
- extern "C" {
-#endif
 void _Error_Handler(const char *, int);
 
 #define Error_Handler() _Error_Handler(__FILE__, __LINE__)
-#ifdef __cplusplus
-}
-#endif
 
 #endif /* __MAIN_H__ */
 

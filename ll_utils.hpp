@@ -3,6 +3,8 @@
 
 #include "system_timer.hpp"
 
+extern uint32_t SystemCoreClock;
+
 namespace ll {
 
 static inline void init_tick(uint32_t HCLKFrequency, uint32_t Ticks) {
@@ -14,13 +16,12 @@ static inline void init_tick(uint32_t HCLKFrequency, uint32_t Ticks) {
 }
 
 
-void init_1ms_tick(uint32_t HCLKFrequency) {
+inline void init_1ms_tick(uint32_t HCLKFrequency) {
   /* Use frequency provided in argument */
   init_tick(HCLKFrequency, 1000U);
 }
 
-void set_system_core_clock(uint32_t HCLKFrequency) {
-  extern uint32_t SystemCoreClock;
+inline void set_system_core_clock(uint32_t HCLKFrequency) {
   /* HCLK clock frequency */
   SystemCoreClock = HCLKFrequency;
 }
