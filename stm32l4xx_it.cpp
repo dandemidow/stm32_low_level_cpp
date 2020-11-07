@@ -43,7 +43,7 @@ void NMI_Handler(void) {
  * @brief This function handles Hard fault interrupt.
  */
 void HardFault_Handler(void) {
-  while (1) {
+  while (true) {
   }
 }
 
@@ -51,7 +51,7 @@ void HardFault_Handler(void) {
  * @brief This function handles Memory management fault.
  */
 void MemManage_Handler(void) {
-  while (1) {
+  while (true) {
   }
 }
 
@@ -59,7 +59,7 @@ void MemManage_Handler(void) {
  * @brief This function handles Prefetch fault, memory access fault.
  */
 void BusFault_Handler(void) {
-  while (1) {
+  while (true) {
   }
 }
 

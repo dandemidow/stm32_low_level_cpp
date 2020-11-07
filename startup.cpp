@@ -27,12 +27,12 @@ extern uint32_t _ebss;
   }
   __libc_init_array();
   main();
-  while(true){}
+  while(true) {}
 }
 }
 
 [[noreturn]] void Default_Handler() {
-  while(1) {}
+  while(true) {}
 }
 
 using Handler = void(*)();
