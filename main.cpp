@@ -50,12 +50,7 @@ static void MX_GPIO_Init(void);
 #include "ll_system.hpp"
 #include "ll_utils.hpp"
 
-//#include <functional>
-
 static void LL_Init(void);
-
-//using Callback = std::function<void()>;
-//static Callback _error {};
 
 /**
   * @brief  The application entry point.
@@ -68,11 +63,6 @@ int main() {
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   LL_Init();
-
-//  _error = [&]{
-//      LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
-//      LL_mDelay(100);
-//  };
 
   /* Configure the system clock */
   SystemClock_Config();
@@ -173,7 +163,7 @@ static void MX_GPIO_Init(void)
   LL_GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
-  LL_AHB2_GRP1_EnableClock(LL_AHB2_GRP1_PERIPH_GPIOA);
+  ll::Ahb2Grp1EnableClock(ll::kAhb2Grp1PeriphGpioA);
 
   /**/
   LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
@@ -196,7 +186,6 @@ static void MX_GPIO_Init(void)
   */
 void _Error_Handler([[maybe_unused]] const char *file, [[maybe_unused]] int line) {
   while(1) {
-//      _error();
   }
 }
 

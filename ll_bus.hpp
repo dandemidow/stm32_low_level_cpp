@@ -11,7 +11,14 @@ static inline void Apb2Grp1EnableClock(uint32_t periphs) {
   bit::read(rcc.get<rcc::APB2ENR>(), periphs);
 }
 
+static inline void Ahb2Grp1EnableClock(uint32_t periphs) {
+  auto &rcc = *new ResetClockControl{};
+  bit::set(rcc.get<rcc::AHB2ENR>(), periphs);
+  bit::read(rcc.get<rcc::AHB2ENR>(), periphs);
+}
+
 constexpr uint32_t kApb2Grp1PeriphAll = 0xFFFFFFFFu;
+constexpr uint32_t kAhb2Grp1PeriphGpioA = Flag<0x1u, 0u>::value;
 constexpr uint32_t kApb2Grp1PeriphSysCfg = kRccApb2EnrSysCfgEn;
 constexpr uint32_t kApb1Grp1PeriphPwr = kRccApb1Enr1PwrEn;
 
