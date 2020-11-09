@@ -6,6 +6,7 @@
 
 static constexpr uint32_t kScsBaseAddress = 0xE000E000UL; // System Control Space Base Address
 static constexpr uint32_t kScbBaseAddress = kScsBaseAddress + 0x0D00UL; // System Control Block Base Address
+using ScbBaseAddress = std::integral_constant<uint32_t, kScbBaseAddress>;
 
 namespace scb {
  enum : uint32_t {
@@ -33,7 +34,7 @@ namespace scb {
 };
 }  // namespace scb
 
-using SystemControlBlock = Module<kScbBaseAddress,
+using SystemControlBlock = Module<ScbBaseAddress,
 ReadOnlyRegister,
 Register,
 Register,

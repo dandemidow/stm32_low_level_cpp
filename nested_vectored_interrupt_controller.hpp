@@ -6,6 +6,7 @@
 #include "module.h"
 
 constexpr uint32_t kNvicBaseAddress = kSystemControlSpaceBaseAddress + 0x0100ul;
+using NvicBaseAddress = std::integral_constant<uint32_t, kNvicBaseAddress>;
 
 namespace nvic {
  enum : uint32_t {
@@ -25,7 +26,7 @@ namespace nvic {
 };
 }  // namespace nvic
 
-using NestedVectoredInterruptController = Module<kNvicBaseAddress,
+using NestedVectoredInterruptController = Module<NvicBaseAddress,
 Register[8u],
 uint32_t[24u],  // 0
 Register[8u],

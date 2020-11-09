@@ -6,6 +6,7 @@
 #include "module.h"
 
 constexpr uint32_t kPowerBaseAddress = kApb1PeriphBaseAddress + 0x7000ul;
+using PowerBaseAddress = std::integral_constant<uint32_t, kPowerBaseAddress>;
 
 namespace pwr {
  enum : uint32_t {
@@ -36,7 +37,7 @@ namespace pwr {
 };
 }  // namespace flash
 
-using PowerControl = Module<kPowerBaseAddress,
+using PowerControl = Module<PowerBaseAddress,
 Register,
 Register,
 Register,

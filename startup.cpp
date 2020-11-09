@@ -2,6 +2,7 @@
   */
 
 #include <array>
+#include <cstdint>
 #include <cstring>
 
 extern int main ();

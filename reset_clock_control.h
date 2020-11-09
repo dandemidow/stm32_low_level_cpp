@@ -6,6 +6,7 @@
 #include "module.h"
 
 constexpr uint32_t kRccBaseAddress = kAhb1periphBaseAddress + 0x1000UL;
+using RccBaseAddress = std::integral_constant<uint32_t, kRccBaseAddress>;
 
 namespace rcc {
  enum : uint32_t {
@@ -111,7 +112,7 @@ constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
 }  // namespace cfgr
 }  // namespace rcc
 
-using ResetClockControl = Module<kRccBaseAddress,
+using ResetClockControl = Module<RccBaseAddress,
 Register,
 Register,
 Register,

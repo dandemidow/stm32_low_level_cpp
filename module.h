@@ -3,8 +3,15 @@
 
 #include <tuple>
 #include <type_traits>
+#include <concepts>
 
-template <uint32_t Address, class ... Regs>
+template<typename T>
+concept Addressable = requires (T x) { { x() } -> std::convertible_to<uint32_t>; };
+
+template<typename T>
+concept MultipleAddressable = std::is_enum<T>::value;
+
+template <typename Address, class ... Regs>
 class Module {
     using RegisterMap = std::tuple<Regs...>;
     template <size_t Index>
@@ -39,8 +46,12 @@ class Module {
       reg = value;
     }
 
-    void *operator new(size_t) {
-      return reinterpret_cast<void *>(Address);
+    void *operator new(size_t) requires Addressable<Address> {
+      return reinterpret_cast<void *>(static_cast<uint32_t>(Address()));
+    }
+
+    void *operator new(size_t, Address mod) requires MultipleAddressable<Address> {
+      return reinterpret_cast<void *>(static_cast<uint32_t>(mod));
     }
 };
 

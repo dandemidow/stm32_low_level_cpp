@@ -6,6 +6,7 @@
 #include "module.h"
 
 constexpr uint32_t kSysTickBaseAddress = kSystemControlSpaceBaseAddress + 0x0010ul;
+using SysTickBaseAddress = std::integral_constant<uint32_t, kSysTickBaseAddress>;
 
 namespace sys_tick {
  enum : uint32_t {
@@ -23,7 +24,7 @@ constexpr auto kEnable = Flag<0x1u, 0u>{};
 }  // namespace ctrl
 }  // namespace sys_tick
 
-using SystemTimer = Module<kSysTickBaseAddress,
+using SystemTimer = Module<SysTickBaseAddress,
 Register,
 Register,
 Register,

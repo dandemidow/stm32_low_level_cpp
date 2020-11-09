@@ -45,6 +45,7 @@ static void MX_GPIO_Init(void);
 
 #include "core_cm4.hpp"
 #include "ll_bus.hpp"
+#include "ll_gpio.hpp"
 #include "ll_power.hpp"
 #include "ll_rcc.hpp"
 #include "ll_system.hpp"
@@ -157,16 +158,15 @@ void SystemClock_Config(void) {
         * EVENT_OUT
         * EXTI
 */
-static void MX_GPIO_Init(void)
-{
-
+static void MX_GPIO_Init(void) {
+  auto &gpio = *new (GpioAddresses::A) GeneralPurposeIO {};
   LL_GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
   ll::Ahb2Grp1EnableClock(ll::kAhb2Grp1PeriphGpioA);
 
   /**/
-  LL_GPIO_ResetOutputPin(GPIOA, LL_GPIO_PIN_5);
+  ll::gpio_reset_output_pin(gpio, gpio::kPin5);
 
   /**/
   GPIO_InitStruct.Pin = LL_GPIO_PIN_5;

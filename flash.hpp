@@ -6,6 +6,7 @@
 #include "module.h"
 
 constexpr uint32_t kFlashBaseAddress = kAhb1periphBaseAddress + 0x2000ul;
+using FlashBaseAddress = std::integral_constant<uint32_t, kFlashBaseAddress>;
 
 namespace flash {
  enum : uint32_t {
@@ -25,7 +26,7 @@ namespace flash {
 };
 }  // namespace flash
 
-using Flash = Module<kFlashBaseAddress,
+using Flash = Module<FlashBaseAddress,
 Register,
 Register,
 Register,
