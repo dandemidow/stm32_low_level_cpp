@@ -159,7 +159,7 @@ void SystemClock_Config(void) {
         * EXTI
 */
 static void MX_GPIO_Init(void) {
-  auto &gpio = *new (GpioAddresses::A) GeneralPurposeIO {};
+  auto &gpio = *new (gpio::port::A) GeneralPurposeIO {};
   LL_GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */

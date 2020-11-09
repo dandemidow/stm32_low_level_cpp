@@ -41,6 +41,7 @@ target_compile_options(${EXECUTABLE} PRIVATE
         -ffunction-sections
         -Wall
         -Wextra
+        -Wno-volatile       #for a while disable this warning
         -fmessage-length=0
         -fno-exceptions
         -fno-rtti
