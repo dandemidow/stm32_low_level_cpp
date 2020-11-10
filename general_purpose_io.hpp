@@ -4,6 +4,7 @@
 #include "addresses.h"
 #include "device_register.h"
 #include "module.h"
+#include <functional>
 
 constexpr uint32_t kGpioABaseAddress = kAhb2PeriphBaseAddress + 0x0000ul;
 
@@ -24,6 +25,12 @@ enum : uint32_t {
   AFR,
   BRR
 };
+
+constexpr uint32_t kModerMode0 = Flag<0x3u, 0u>::value;
+
+constexpr uint32_t kOspeedrOspeed0 = Flag<0x3u, 0u>::value;
+
+constexpr uint32_t kPupdrPupd0 = Flag<0x3u, 0u>::value;
 
 constexpr uint32_t kPin5 = Flag<0x1u, 5>::value;
 }  // namespace flash
