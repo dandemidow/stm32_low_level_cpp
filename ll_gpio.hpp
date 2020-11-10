@@ -1,6 +1,8 @@
 #if !defined(LL_GPIO_H_)
 #define LL_GPIO_H_
 
+#include <cassert>
+
 #include "general_purpose_io.hpp"
 
 namespace ll {
@@ -42,10 +44,13 @@ static inline void gpio_set_af_pin_0_7(gpio::Pin &pin, uint32_t alternate) {
               (alternate << position_pos));
 }
 
-static inline void gpio_set_af_pin_8_15(GPIO_TypeDef *GPIOx, uint32_t Pin, uint32_t Alternate)
-{
-  MODIFY_REG(GPIOx->AFR[1], (GPIO_AFRH_AFSEL8 << (POSITION_VAL(Pin >> 8U) * 4U)),
-             (Alternate << (POSITION_VAL(Pin >> 8U) * 4U)));
+static inline void gpio_set_af_pin_8_15(gpio::Pin &pin, uint32_t alternate) {
+  assert(pin.position() >= 8u);
+  const uint32_t position_pos = (pin.position() - 8u) * 4u;
+  auto &port = pin.port();
+  reg::modify(port.get<gpio::AFR>()[1],
+              (gpio::kAfrlAfsel8 << position_pos),
+              (alternate << position_pos));
 }
 
 }  // namespace ll
