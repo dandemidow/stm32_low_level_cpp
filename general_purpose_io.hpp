@@ -32,6 +32,8 @@ constexpr uint32_t kOspeedrOspeed0 = Flag<0x3u, 0u>::value;
 
 constexpr uint32_t kPupdrPupd0 = Flag<0x3u, 0u>::value;
 
+constexpr uint32_t kAfrlAfsel0 = Flag<0xfu, 0u>::value;
+
 constexpr uint32_t kPin5 = Flag<0x1u, 5u>::value;
 }  // namespace flash
 
