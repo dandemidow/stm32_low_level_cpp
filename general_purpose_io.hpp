@@ -32,7 +32,7 @@ constexpr uint32_t kOspeedrOspeed0 = Flag<0x3u, 0u>::value;
 
 constexpr uint32_t kPupdrPupd0 = Flag<0x3u, 0u>::value;
 
-constexpr uint32_t kPin5 = Flag<0x1u, 5>::value;
+constexpr uint32_t kPin5 = Flag<0x1u, 5u>::value;
 }  // namespace flash
 
 using GeneralPurposeIO = Module<gpio::port,
@@ -50,5 +50,31 @@ Register
 
 static_assert(std::is_standard_layout<GeneralPurposeIO>::value);
 
+namespace gpio {
+class Pin {
+ public:
+  Pin(gpio::port p, uint32_t number)
+    : gpio_ {*new (p) GeneralPurposeIO{}},
+      number_ {number},
+      value_ {0x01u << number} {}
+
+  uint32_t position() const {
+    return number_;
+  }
+
+  uint32_t value() const {
+    return value_;
+  }
+
+  GeneralPurposeIO &port() {
+    return gpio_;
+  }
+
+ private:
+  GeneralPurposeIO &gpio_;
+  const uint32_t number_;
+  const uint32_t value_;
+};
+} // namespace gpio
 
 #endif

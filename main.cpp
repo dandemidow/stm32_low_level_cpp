@@ -159,14 +159,15 @@ void SystemClock_Config(void) {
         * EXTI
 */
 static void MX_GPIO_Init(void) {
-  auto &gpio = *new (gpio::port::A) GeneralPurposeIO {};
   LL_GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
   ll::Ahb2Grp1EnableClock(ll::kAhb2Grp1PeriphGpioA);
 
+  gpio::Pin led {gpio::port::A, 5u};
+
   /**/
-  ll::gpio_reset_output_pin(gpio, gpio::kPin5);
+  ll::gpio_reset_output_pin(led);
 
   /**/
   GPIO_InitStruct.Pin = LL_GPIO_PIN_5;
