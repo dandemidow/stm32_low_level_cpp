@@ -166,7 +166,7 @@ static void MX_GPIO_Init(void) {
 
   gpio::Pin led {gpio::port::A, 5u};
 
-  /**/
+  /*led.reset_output*/
   ll::gpio_reset_output_pin(led);
 
   /**/

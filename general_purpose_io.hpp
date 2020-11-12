@@ -26,7 +26,9 @@ enum : uint32_t {
   BRR
 };
 
-constexpr uint32_t kModerMode0 = Flag<0x3u, 0u>::value;
+constexpr uint32_t kModerMode0  = Flag<0x3u, 0u>::value;
+constexpr uint32_t kModerMode00 = Flag<0x1u, 0u>::value;
+constexpr uint32_t kModerMode01 = Flag<0x2u, 0u>::value;
 
 constexpr uint32_t kOspeedrOspeed0 = Flag<0x3u, 0u>::value;
 
