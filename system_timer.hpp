@@ -22,6 +22,8 @@ constexpr auto kClkSource = Flag<0x1u, 2u>{};
 constexpr auto kTickInt = Flag<0x1u, 1u>{};
 constexpr auto kEnable = Flag<0x1u, 0u>{};
 }  // namespace ctrl
+
+constexpr uint32_t kClkSourceHCLK = ctrl::kClkSource.value;
 }  // namespace sys_tick
 
 using SystemTimer = Module<SysTickBaseAddress,

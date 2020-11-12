@@ -44,6 +44,7 @@ static void MX_GPIO_Init(void);
 }
 
 #include "core_cm4.hpp"
+#include "ll_cortex.hpp"
 #include "ll_bus.hpp"
 #include "ll_gpio.hpp"
 #include "ll_power.hpp"
@@ -143,7 +144,7 @@ void SystemClock_Config(void) {
 
   ll::init_1ms_tick(4000000);
 
-  LL_SYSTICK_SetClkSource(LL_SYSTICK_CLKSOURCE_HCLK);
+  ll::sys_tick_set_clk_source(sys_tick::kClkSourceHCLK);
 
   ll::set_system_core_clock(4000000);
 
