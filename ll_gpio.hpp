@@ -27,6 +27,11 @@ enum class gpio_pull {
   Down = gpio::kPupdrPupd01
 };
 
+enum class gpio_output {
+  PushPull = 0x00,
+  OpenDrain = gpio::kOTypeR0
+};
+
 static inline void gpio_reset_output_pin(gpio::Pin &pin) {
   auto &port = pin.port();
   port.set<gpio::BRR>(pin.value());
@@ -73,26 +78,23 @@ static inline void gpio_set_af_pin_8_15(gpio::Pin &pin, uint32_t alternate) {
               (alternate << position_pos));
 }
 
-static inline void gpio_set_pin_output_type(gpio::Pin &pin, uint32_t pin_mask, uint32_t output_type) {
+static inline void gpio_set_pin_output_type(gpio::Pin &pin, uint32_t pin_mask, gpio_output output_type) {
   auto &port = pin.port();
   reg::modify(port.get<gpio::OTYPER>(),
               pin_mask,
-              (pin_mask * output_type));
+              (pin_mask * static_cast<uint32_t>(output_type)));
 }
 
 struct GPIOInitType {
   uint32_t Pin;
-  gpio_mode  Mode;
-  gpio_speed Speed;
-  uint32_t OutputType;
-  gpio_pull  Pull;
+  gpio_mode   Mode;
+  gpio_speed  Speed;
+  gpio_output OutputType;
+  gpio_pull   Pull;
   uint32_t Alternate;
 };
 
 static bool gpio_init(gpio::Pin &pin, GPIOInitType *GPIO_InitStruct) {
-  const uint32_t pinpos = pin.position();
-  auto &port = pin.port();
-
   /* Pin Mode configuration */
   gpio_set_pin_mode(pin, GPIO_InitStruct->Mode);
 
@@ -114,16 +116,13 @@ static bool gpio_init(gpio::Pin &pin, GPIOInitType *GPIO_InitStruct) {
         }
       }
 
-  if ((GPIO_InitStruct->Mode == LL_GPIO_MODE_OUTPUT) || (GPIO_InitStruct->Mode == LL_GPIO_MODE_ALTERNATE))
-  {
-    /* Check Output mode parameters */
-    assert_param(IS_LL_GPIO_OUTPUT_TYPE(GPIO_InitStruct->OutputType));
-
+  if ((GPIO_InitStruct->Mode == gpio_mode::Output) ||
+      (GPIO_InitStruct->Mode == gpio_mode::Alternate)) {
     /* Output mode configuration*/
-    LL_GPIO_SetPinOutputType(GPIOx, GPIO_InitStruct->Pin, GPIO_InitStruct->OutputType);
+    gpio_set_pin_output_type(pin, GPIO_InitStruct->Pin, GPIO_InitStruct->OutputType);
 
   }
-  return (SUCCESS);
+  return true;
 }
 
 

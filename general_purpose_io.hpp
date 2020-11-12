@@ -42,6 +42,8 @@ constexpr uint32_t kAfrlAfsel0 = Flag<0xfu, 0u>::value;
 
 constexpr uint32_t kAfrlAfsel8 = Flag<0xfu, 0u>::value;
 
+constexpr uint32_t kOTypeR0 = Flag<0x1u, 0u>::value;
+
 constexpr uint32_t kPin5 = Flag<0x1u, 5u>::value;
 constexpr uint32_t kPin8 = Flag<0x1u, 8u>::value;
 }  // namespace flash
