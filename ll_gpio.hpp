@@ -1,8 +1,6 @@
 #if !defined(LL_GPIO_H_)
 #define LL_GPIO_H_
 
-#include <cassert>
-
 #include "general_purpose_io.hpp"
 
 namespace ll {
@@ -89,7 +87,7 @@ static inline void gpio_set_af_pin_0_7(gpio::Pin &pin, gpio_alternate alternate)
 }
 
 static inline void gpio_set_af_pin_8_15(gpio::Pin &pin, gpio_alternate alternate) {
-  assert(pin.position() >= 8u);
+//  assert(pin.position() >= 8u);
   const uint32_t position_pos = (pin.position() - 8u) * 4u;
   auto &port = pin.port();
   reg::modify(port.get<gpio::AFR>()[1],
@@ -105,7 +103,6 @@ static inline void gpio_set_pin_output_type(gpio::Pin &pin, uint32_t pin_mask, g
 }
 
 struct GPIOInitType {
-  uint32_t Pin;
   gpio_mode   Mode;
   gpio_speed  Speed;
   gpio_output OutputType;
@@ -113,7 +110,7 @@ struct GPIOInitType {
   gpio_alternate Alternate;
 };
 
-static bool gpio_init(gpio::Pin &pin, GPIOInitType &init) {
+static bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   /* Pin Mode configuration */
   gpio_set_pin_mode(pin, init.Mode);
 
@@ -138,7 +135,7 @@ static bool gpio_init(gpio::Pin &pin, GPIOInitType &init) {
   if ((init.Mode == gpio_mode::Output) ||
       (init.Mode == gpio_mode::Alternate)) {
     /* Output mode configuration*/
-    gpio_set_pin_output_type(pin, init.Pin, init.OutputType);
+    gpio_set_pin_output_type(pin, pin.value(), init.OutputType);
   }
   return true;
 }
