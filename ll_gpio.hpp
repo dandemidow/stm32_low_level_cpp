@@ -32,6 +32,25 @@ enum class gpio_output {
   OpenDrain = gpio::kOTypeR0
 };
 
+enum class gpio_alternate {
+  kAf0 = 0x00,
+  kAf1,
+  kAf2,
+  kAf3,
+  kAf4,
+  kAf5,
+  kAf6,
+  kAf7,
+  kAf8,
+  kAf9,
+  kAf10,
+  kAf11,
+  kAf12,
+  kAf13,
+  kAf14,
+  kAf15,
+};
+
 static inline void gpio_reset_output_pin(gpio::Pin &pin) {
   auto &port = pin.port();
   port.set<gpio::BRR>(pin.value());
@@ -61,21 +80,21 @@ static inline void gpio_set_pin_pull(gpio::Pin &pin, gpio_pull pull) {
               (static_cast<uint32_t>(pull) << position_pos));
 }
 
-static inline void gpio_set_af_pin_0_7(gpio::Pin &pin, uint32_t alternate) {
+static inline void gpio_set_af_pin_0_7(gpio::Pin &pin, gpio_alternate alternate) {
   const uint32_t position_pos = pin.position() * 4u;
   auto &port = pin.port();
   reg::modify(port.get<gpio::AFR>()[0],
               (gpio::kAfrlAfsel0 << position_pos),
-              (alternate << position_pos));
+              (static_cast<uint32_t>(alternate) << position_pos));
 }
 
-static inline void gpio_set_af_pin_8_15(gpio::Pin &pin, uint32_t alternate) {
+static inline void gpio_set_af_pin_8_15(gpio::Pin &pin, gpio_alternate alternate) {
   assert(pin.position() >= 8u);
   const uint32_t position_pos = (pin.position() - 8u) * 4u;
   auto &port = pin.port();
   reg::modify(port.get<gpio::AFR>()[1],
               (gpio::kAfrlAfsel8 << position_pos),
-              (alternate << position_pos));
+              (static_cast<uint32_t>(alternate) << position_pos));
 }
 
 static inline void gpio_set_pin_output_type(gpio::Pin &pin, uint32_t pin_mask, gpio_output output_type) {
@@ -91,36 +110,35 @@ struct GPIOInitType {
   gpio_speed  Speed;
   gpio_output OutputType;
   gpio_pull   Pull;
-  uint32_t Alternate;
+  gpio_alternate Alternate;
 };
 
-static bool gpio_init(gpio::Pin &pin, GPIOInitType *GPIO_InitStruct) {
+static bool gpio_init(gpio::Pin &pin, GPIOInitType &init) {
   /* Pin Mode configuration */
-  gpio_set_pin_mode(pin, GPIO_InitStruct->Mode);
+  gpio_set_pin_mode(pin, init.Mode);
 
-  if ((GPIO_InitStruct->Mode == gpio_mode::Output) ||
-      (GPIO_InitStruct->Mode == gpio_mode::Analog)) {
+  if ((init.Mode == gpio_mode::Output) ||
+      (init.Mode == gpio_mode::Analog)) {
         /* Speed mode configuration */
-        gpio_set_pin_speed(pin, GPIO_InitStruct->Speed);
-      }
+        gpio_set_pin_speed(pin, init.Speed);
+  }
 
-      /* Pull-up Pull down resistor configuration*/
-      gpio_set_pin_pull(pin, GPIO_InitStruct->Pull);
+  /* Pull-up Pull down resistor configuration*/
+  gpio_set_pin_pull(pin, init.Pull);
 
-      if (GPIO_InitStruct->Mode == gpio_mode::Alternate) {
-        /* Speed mode configuration */
-        if (pin.value() < gpio::kPin8) {
-          gpio_set_af_pin_0_7(pin, GPIO_InitStruct->Alternate);
-        } else {
-          gpio_set_af_pin_8_15(pin, GPIO_InitStruct->Alternate);
-        }
-      }
+  if (init.Mode == gpio_mode::Alternate) {
+    /* Speed mode configuration */
+    if (pin.value() < gpio::kPin8) {
+      gpio_set_af_pin_0_7(pin, init.Alternate);
+    } else {
+      gpio_set_af_pin_8_15(pin, init.Alternate);
+    }
+  }
 
-  if ((GPIO_InitStruct->Mode == gpio_mode::Output) ||
-      (GPIO_InitStruct->Mode == gpio_mode::Alternate)) {
+  if ((init.Mode == gpio_mode::Output) ||
+      (init.Mode == gpio_mode::Alternate)) {
     /* Output mode configuration*/
-    gpio_set_pin_output_type(pin, GPIO_InitStruct->Pin, GPIO_InitStruct->OutputType);
-
+    gpio_set_pin_output_type(pin, init.Pin, init.OutputType);
   }
   return true;
 }
