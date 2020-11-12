@@ -53,6 +53,13 @@ static inline void gpio_set_af_pin_8_15(gpio::Pin &pin, uint32_t alternate) {
               (alternate << position_pos));
 }
 
+static inline void gpio_set_pin_output_type(gpio::Pin &pin, uint32_t pin_mask, uint32_t output_type) {
+  auto &port = pin.port();
+  reg::modify(port.get<gpio::OTYPER>(),
+              pin_mask,
+              (pin_mask * output_type));
+}
+
 }  // namespace ll
 
 #endif
