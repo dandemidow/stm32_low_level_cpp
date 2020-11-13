@@ -39,9 +39,11 @@
 
 extern "C" {
 #include "main.h"
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
 }
+
+static void SystemClock_Config();
+static void MX_GPIO_Init();
+static void LL_Init();
 
 #include "core_cm4.hpp"
 #include "ll_cortex.hpp"
@@ -51,8 +53,6 @@ static void MX_GPIO_Init(void);
 #include "ll_rcc.hpp"
 #include "ll_system.hpp"
 #include "ll_utils.hpp"
-
-static void LL_Init(void);
 
 /**
   * @brief  The application entry point.
