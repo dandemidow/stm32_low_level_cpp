@@ -140,6 +140,12 @@ static bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   return true;
 }
 
+static inline void gpio_toggle_pin(gpio::Pin &pin) {
+  auto &port = pin.port();
+  uint32_t pin_mask = pin.value();
+  uint32_t odr = port.get<gpio::ODR>();
+  port.set<gpio::BSRR>(((odr & pin_mask) << 16u) | (~odr & pin_mask));
+}
 
 }  // namespace ll
 

@@ -41,10 +41,6 @@ extern "C" {
 #include "main.h"
 }
 
-static void SystemClock_Config();
-static void MX_GPIO_Init();
-static void LL_Init();
-
 #include "core_cm4.hpp"
 #include "ll_cortex.hpp"
 #include "ll_bus.hpp"
@@ -53,6 +49,10 @@ static void LL_Init();
 #include "ll_rcc.hpp"
 #include "ll_system.hpp"
 #include "ll_utils.hpp"
+
+static void SystemClock_Config();
+static void MX_GPIO_Init(gpio::Pin &led);
+static void LL_Init();
 
 /**
   * @brief  The application entry point.
@@ -69,13 +69,15 @@ int main() {
   /* Configure the system clock */
   SystemClock_Config();
 
+  gpio::Pin led {gpio::port::A, 5u};
+
   /* Initialize all configured peripherals */
-  MX_GPIO_Init();
+  MX_GPIO_Init(led);
 
   /* Infinite loop */
   /* Toggle IO in an infinite loop */
   while (true) {
-    LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
+    ll::gpio_toggle_pin(led);
 
     /* Insert delay 1000 ms */
     ll::m_delay(1000);
@@ -159,11 +161,9 @@ void SystemClock_Config(void) {
         * EVENT_OUT
         * EXTI
 */
-static void MX_GPIO_Init(void) {
+static void MX_GPIO_Init(gpio::Pin &led) {
   /* GPIO Ports Clock Enable */
   ll::Ahb2Grp1EnableClock(ll::kAhb2Grp1PeriphGpioA);
-
-  gpio::Pin led {gpio::port::A, 5u};
 
   /*led.reset_output*/
   ll::gpio_reset_output_pin(led);
