@@ -78,7 +78,7 @@ int main() {
     LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
 
     /* Insert delay 1000 ms */
-    LL_mDelay(1000);
+    ll::m_delay(1000);
   }
 }
 
