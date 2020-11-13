@@ -37,22 +37,12 @@
   ******************************************************************************
   */
 
-/* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __MAIN_H__
 #define __MAIN_H__
 
-/* Includes ------------------------------------------------------------------*/
-#include "stm32l4xx_ll_crs.h"
-#include "stm32l4xx_ll_rcc.h"
-#include "stm32l4xx_ll_bus.h"
-#include "stm32l4xx_ll_system.h"
-#include "stm32l4xx_ll_exti.h"
-#include "stm32l4xx_ll_cortex.h"
-#include "stm32l4xx_ll_utils.h"
-#include "stm32l4xx_ll_pwr.h"
-#include "stm32l4xx_ll_dma.h"
+#include <cstdint>
+
 #include "stm32l4xx.h"
-#include "stm32l4xx_ll_gpio.h"
 
 #ifndef NVIC_PRIORITYGROUP_0
 constexpr uint32_t kNvicPriorityGroup0 = 0x00000007; /*!< 0 bit  for pre-emption priority,
