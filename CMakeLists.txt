@@ -15,21 +15,7 @@ set(SRCS
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)
 
-add_subdirectory(STM32CubeL4)
-
 add_executable(${EXECUTABLE} ${SRCS})
-
-target_link_libraries(${EXECUTABLE}
-    PUBLIC
-    stlib
-    )
-
-target_include_directories(${EXECUTABLE} PRIVATE
-        BSP/Inc
-        BSP/Drivers/STM32F4xx_HAL_Driver/Inc
-        BSP/Drivers/CMSIS/Device/ST/STM32F4xx/Include
-        BSP/Drivers/CMSIS/Include
-        )
 
 target_compile_options(${EXECUTABLE} PRIVATE
         -march=armv7e-m
