@@ -37,9 +37,7 @@
   */
 
 
-extern "C" {
 #include "main.h"
-}
 
 #include "core_cm4.hpp"
 #include "ll_cortex.hpp"
