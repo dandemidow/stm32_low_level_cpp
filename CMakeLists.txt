@@ -48,6 +48,13 @@ target_link_options(${EXECUTABLE} PRIVATE
         -Wl,--gc-sections
         )
 
+add_subdirectory(ll)
+
+target_link_libraries(${EXECUTABLE}
+  PUBLIC
+    stll
+)
+
 add_custom_command(TARGET ${PROJECT_NAME}.elf
         POST_BUILD
         COMMAND ${CMAKE_OBJCOPY} ARGS -O binary ${PROJECT_NAME}.elf ${PROJECT_NAME}.bin)

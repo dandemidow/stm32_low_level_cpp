@@ -42,7 +42,7 @@
 #include "core_cm4.hpp"
 #include "ll_cortex.hpp"
 #include "ll_bus.hpp"
-#include "ll_gpio.hpp"
+#include "ll/gpio.h"
 #include "ll_power.hpp"
 #include "ll_rcc.hpp"
 #include "ll_system.hpp"
