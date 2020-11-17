@@ -5,13 +5,6 @@
 
 namespace ll {
 
-enum class gpio_mode {
-  Input = 0x00,
-  Output = gpio::kModerMode00,
-  Alternate = gpio::kModerMode01,
-  Analog = gpio::kModerMode0
-};
-
 enum class gpio_speed {
   Low = 0x00,
   Medium = gpio::kOspeedrOspeed00,
@@ -49,15 +42,14 @@ enum class gpio_alternate {
   kAf15,
 };
 
-struct GPIOInitType {
-  gpio_mode   Mode;
-  gpio_speed  Speed;
-  gpio_output OutputType;
-  gpio_pull   Pull;
-  gpio_alternate Alternate;
-};
-
 namespace gpio {
+
+enum class mode {
+  Input = 0x00,
+  Output = gpio::kModerMode00,
+  Alternate = gpio::kModerMode01,
+  Analog = gpio::kModerMode0
+};
 
 class Pin {
  public:
@@ -68,7 +60,7 @@ class Pin {
   GeneralPurposeIO &get_port();
 
   void reset_output();
-  void set_mode(gpio_mode mode);
+  void set_mode(mode mode);
 
  private:
   GeneralPurposeIO &gpio_;
@@ -77,6 +69,14 @@ class Pin {
 };
 
 }  // namespace gpio
+
+struct GPIOInitType {
+  gpio::mode   Mode;
+  gpio_speed  Speed;
+  gpio_output OutputType;
+  gpio_pull   Pull;
+  gpio_alternate Alternate;
+};
 
 static inline void gpio_set_pin_speed(ll::gpio::Pin &pin, gpio_speed  speed) {
   const uint32_t position_pos = pin.position() * 2u;

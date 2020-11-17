@@ -6,8 +6,8 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   /* Pin Mode configuration */
   pin.set_mode(init.Mode);
 
-  if ((init.Mode == gpio_mode::Output) ||
-      (init.Mode == gpio_mode::Analog)) {
+  if ((init.Mode == gpio::mode::Output) ||
+      (init.Mode == gpio::mode::Analog)) {
         /* Speed mode configuration */
         gpio_set_pin_speed(pin, init.Speed);
   }
@@ -15,7 +15,7 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   /* Pull-up Pull down resistor configuration*/
   gpio_set_pin_pull(pin, init.Pull);
 
-  if (init.Mode == gpio_mode::Alternate) {
+  if (init.Mode == gpio::mode::Alternate) {
     /* Speed mode configuration */
     if (pin.value() < gpio::kPin8) {
       gpio_set_af_pin_0_7(pin, init.Alternate);
@@ -24,8 +24,8 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
     }
   }
 
-  if ((init.Mode == gpio_mode::Output) ||
-      (init.Mode == gpio_mode::Alternate)) {
+  if ((init.Mode == gpio::mode::Output) ||
+      (init.Mode == gpio::mode::Alternate)) {
     /* Output mode configuration*/
     gpio_set_pin_output_type(pin, pin.value(), init.OutputType);
   }
@@ -55,7 +55,7 @@ void Pin::reset_output() {
   gpio_.set<BRR>(value_);
 }
 
-void Pin::set_mode(gpio_mode mode) {
+void Pin::set_mode(mode mode) {
   const uint32_t position_pin = number_ * 2u;
   reg::modify(gpio_.get<MODER>(),
               (kModerMode0 << position_pin),
