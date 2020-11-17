@@ -53,13 +53,18 @@ enum class mode {
 
 class Pin {
  public:
-  Pin(port p, uint32_t number);
+  Pin(port p, uint32_t number)
+    : gpio_ {*new (p) GeneralPurposeIO{}},
+      number_ {number},
+      value_ {0x01u << number} {}
 
-  uint32_t position() const;
-  uint32_t value() const;
-  GeneralPurposeIO &get_port();
+  inline uint32_t position() const { return number_; }
+  inline uint32_t value() const { return value_; }
+  inline GeneralPurposeIO &get_port() { return gpio_; }
 
-  void reset_output();
+  inline void reset_output() {
+    gpio_.set<BRR>(value_);
+  }
   void set_mode(mode mode);
 
  private:

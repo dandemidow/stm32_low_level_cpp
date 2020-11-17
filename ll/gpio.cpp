@@ -34,27 +34,6 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
 
 namespace gpio {
 
-Pin::Pin(port p, uint32_t number)
-  : gpio_ {*new (p) GeneralPurposeIO{}},
-    number_ {number},
-    value_ {0x01u << number} {}
-
-uint32_t Pin::position() const {
-  return number_;
-}
-
-uint32_t Pin::value() const {
-  return value_;
-}
-
-GeneralPurposeIO &Pin::get_port() {
-  return gpio_;
-}
-
-void Pin::reset_output() {
-  gpio_.set<BRR>(value_);
-}
-
 void Pin::set_mode(mode mode) {
   const uint32_t position_pin = number_ * 2u;
   reg::modify(gpio_.get<MODER>(),
