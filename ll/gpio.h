@@ -66,7 +66,18 @@ class Pin {
     gpio_.set<BRR>(value_);
   }
   void set_mode(mode mode);
-  void set_speed(speed speed);
+  inline void set_speed(speed speed) {
+    const uint32_t position_pin = number_ * 2u;
+    reg::modify(gpio_.get<OSPEEDR>(),
+                (gpio::kOspeedrOspeed0 << position_pin),
+                (static_cast<uint32_t>(speed) << position_pin));
+  }
+  inline void set_pull(gpio_pull pull) {
+    const uint32_t position_pin = number_ * 2u;
+    reg::modify(gpio_.get<gpio::PUPDR>(),
+                (gpio::kPupdrPupd0 << position_pin),
+                (static_cast<uint32_t>(pull) << position_pin));
+  }
 
  private:
   GeneralPurposeIO &gpio_;
@@ -83,14 +94,6 @@ struct GPIOInitType {
   gpio_pull   Pull;
   gpio_alternate Alternate;
 };
-
-static inline void gpio_set_pin_pull(ll::gpio::Pin &pin, gpio_pull pull) {
-  const uint32_t position_pos = pin.position() * 2u;
-  auto &port = pin.get_port();
-  reg::modify(port.get<gpio::PUPDR>(),
-              (gpio::kPupdrPupd0 << position_pos),
-              (static_cast<uint32_t>(pull) << position_pos));
-}
 
 static inline void gpio_set_af_pin_0_7(ll::gpio::Pin &pin, gpio_alternate alternate) {
   const uint32_t position_pos = pin.position() * 4u;

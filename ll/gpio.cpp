@@ -13,7 +13,7 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   }
 
   /* Pull-up Pull down resistor configuration*/
-  gpio_set_pin_pull(pin, init.Pull);
+  pin.set_pull(init.Pull);
 
   if (init.Mode == gpio::mode::Alternate) {
     /* Speed mode configuration */
@@ -41,12 +41,7 @@ void Pin::set_mode(mode mode) {
               (static_cast<uint32_t>(mode) << position_pin));
 }
 
-void Pin::set_speed(speed speed) {
-  const uint32_t position_pin = number_ * 2u;
-  reg::modify(gpio_.get<OSPEEDR>(),
-              (gpio::kOspeedrOspeed0 << position_pin),
-              (static_cast<uint32_t>(speed) << position_pin));
-}
+
 
 }  // namespace gpio
 
