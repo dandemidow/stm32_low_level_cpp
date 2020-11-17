@@ -67,6 +67,8 @@ class Pin {
   uint32_t value() const;
   GeneralPurposeIO &get_port();
 
+  void reset_output();
+
  private:
   GeneralPurposeIO &gpio_;
   const uint32_t number_;
@@ -74,11 +76,6 @@ class Pin {
 };
 
 }  // namespace gpio
-
-static inline void gpio_reset_output_pin(gpio::Pin &pin) {
-  auto &port = pin.get_port();
-  port.set<gpio::BRR>(pin.value());
-}
 
 static inline void gpio_set_pin_mode(ll::gpio::Pin &pin, gpio_mode mode) {
   const uint32_t position_pin = pin.position() * 2u;

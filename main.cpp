@@ -164,7 +164,7 @@ static void MX_GPIO_Init(ll::gpio::Pin &led) {
   ll::Ahb2Grp1EnableClock(ll::kAhb2Grp1PeriphGpioA);
 
   /*led.reset_output*/
-  ll::gpio_reset_output_pin(led);
+  led.reset_output();
 
   /**/
   ll::GPIOInitType gpio_init {
