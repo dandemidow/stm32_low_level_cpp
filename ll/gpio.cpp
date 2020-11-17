@@ -41,7 +41,7 @@ void Pin::set_mode(mode mode) {
               (static_cast<uint32_t>(mode) << position_pin));
 }
 
-void Pin::set_speed(gpio_speed speed) {
+void Pin::set_speed(speed speed) {
   const uint32_t position_pin = number_ * 2u;
   reg::modify(gpio_.get<OSPEEDR>(),
               (gpio::kOspeedrOspeed0 << position_pin),

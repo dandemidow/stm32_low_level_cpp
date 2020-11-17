@@ -5,13 +5,6 @@
 
 namespace ll {
 
-enum class gpio_speed {
-  Low = 0x00,
-  Medium = gpio::kOspeedrOspeed00,
-  High = gpio::kOspeedrOspeed01,
-  VeryHigh = gpio::kOspeedrOspeed0
-};
-
 enum class gpio_pull {
   No = 0x00,
   Up = gpio::kPupdrPupd00,
@@ -51,6 +44,13 @@ enum class mode {
   Analog = gpio::kModerMode0
 };
 
+enum class speed {
+  Low = 0x00,
+  Medium = gpio::kOspeedrOspeed00,
+  High = gpio::kOspeedrOspeed01,
+  VeryHigh = gpio::kOspeedrOspeed0
+};
+
 class Pin {
  public:
   Pin(port p, uint32_t number)
@@ -66,7 +66,7 @@ class Pin {
     gpio_.set<BRR>(value_);
   }
   void set_mode(mode mode);
-  void set_speed(gpio_speed speed);
+  void set_speed(speed speed);
 
  private:
   GeneralPurposeIO &gpio_;
@@ -78,7 +78,7 @@ class Pin {
 
 struct GPIOInitType {
   gpio::mode   Mode;
-  gpio_speed  Speed;
+  gpio::speed  Speed;
   gpio_output OutputType;
   gpio_pull   Pull;
   gpio_alternate Alternate;
