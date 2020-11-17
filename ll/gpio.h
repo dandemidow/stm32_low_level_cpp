@@ -68,6 +68,7 @@ class Pin {
   GeneralPurposeIO &get_port();
 
   void reset_output();
+  void set_mode(gpio_mode mode);
 
  private:
   GeneralPurposeIO &gpio_;
@@ -76,14 +77,6 @@ class Pin {
 };
 
 }  // namespace gpio
-
-static inline void gpio_set_pin_mode(ll::gpio::Pin &pin, gpio_mode mode) {
-  const uint32_t position_pin = pin.position() * 2u;
-  auto &port = pin.get_port();
-  reg::modify(port.get<gpio::MODER>(),
-              (gpio::kModerMode0 << position_pin),
-              (static_cast<uint32_t>(mode) << position_pin));
-}
 
 static inline void gpio_set_pin_speed(ll::gpio::Pin &pin, gpio_speed  speed) {
   const uint32_t position_pos = pin.position() * 2u;

@@ -4,7 +4,7 @@ namespace ll {
 
 bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   /* Pin Mode configuration */
-  gpio_set_pin_mode(pin, init.Mode);
+  pin.set_mode(init.Mode);
 
   if ((init.Mode == gpio_mode::Output) ||
       (init.Mode == gpio_mode::Analog)) {
@@ -53,6 +53,13 @@ GeneralPurposeIO &Pin::get_port() {
 
 void Pin::reset_output() {
   gpio_.set<BRR>(value_);
+}
+
+void Pin::set_mode(gpio_mode mode) {
+  const uint32_t position_pin = number_ * 2u;
+  reg::modify(gpio_.get<MODER>(),
+              (kModerMode0 << position_pin),
+              (static_cast<uint32_t>(mode) << position_pin));
 }
 
 }  // namespace gpio
