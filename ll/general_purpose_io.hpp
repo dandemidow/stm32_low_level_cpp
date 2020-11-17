@@ -4,13 +4,12 @@
 #include "addresses.h"
 #include "device_register.h"
 #include "module.h"
-#include <functional>
 
 constexpr uint32_t kGpioABaseAddress = kAhb2PeriphBaseAddress + 0x0000ul;
 
-namespace gpio {
+namespace ll::gpio {
 enum class port : uint32_t {
-  A =  kGpioABaseAddress
+  A = kGpioABaseAddress
 };
 
 enum : uint32_t {
@@ -46,9 +45,9 @@ constexpr uint32_t kOTypeR0 = Flag<0x1u, 0u>::value;
 
 constexpr uint32_t kPin5 = Flag<0x1u, 5u>::value;
 constexpr uint32_t kPin8 = Flag<0x1u, 8u>::value;
-}  // namespace flash
+}  // namespace ll::gpio
 
-using GeneralPurposeIO = Module<gpio::port,
+using GeneralPurposeIO = Module<ll::gpio::port,
 Register,
 Register,
 Register,
@@ -62,32 +61,5 @@ Register
 >;
 
 static_assert(std::is_standard_layout<GeneralPurposeIO>::value);
-
-namespace gpio {
-class Pin {
- public:
-  Pin(gpio::port p, uint32_t number)
-    : gpio_ {*new (p) GeneralPurposeIO{}},
-      number_ {number},
-      value_ {0x01u << number} {}
-
-  uint32_t position() const {
-    return number_;
-  }
-
-  uint32_t value() const {
-    return value_;
-  }
-
-  GeneralPurposeIO &port() {
-    return gpio_;
-  }
-
- private:
-  GeneralPurposeIO &gpio_;
-  const uint32_t number_;
-  const uint32_t value_;
-};
-} // namespace gpio
 
 #endif

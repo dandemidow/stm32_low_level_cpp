@@ -49,7 +49,7 @@
 #include "ll_utils.hpp"
 
 static void SystemClock_Config();
-static void MX_GPIO_Init(gpio::Pin &led);
+static void MX_GPIO_Init(ll::gpio::Pin &led);
 static void LL_Init();
 
 /**
@@ -67,7 +67,7 @@ int main() {
   /* Configure the system clock */
   SystemClock_Config();
 
-  gpio::Pin led {gpio::port::A, 5u};
+  ll::gpio::Pin led {ll::gpio::port::A, 5u};
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init(led);
@@ -159,7 +159,7 @@ void SystemClock_Config(void) {
         * EVENT_OUT
         * EXTI
 */
-static void MX_GPIO_Init(gpio::Pin &led) {
+static void MX_GPIO_Init(ll::gpio::Pin &led) {
   /* GPIO Ports Clock Enable */
   ll::Ahb2Grp1EnableClock(ll::kAhb2Grp1PeriphGpioA);
 

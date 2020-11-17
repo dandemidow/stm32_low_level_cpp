@@ -32,5 +32,22 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   return true;
 }
 
+ll::gpio::Pin::Pin(port p, uint32_t number)
+  : gpio_ {*new (p) GeneralPurposeIO{}},
+    number_ {number},
+    value_ {0x01u << number} {}
+
+uint32_t ll::gpio::Pin::position() const {
+  return number_;
+}
+
+uint32_t ll::gpio::Pin::value() const {
+  return value_;
+}
+
+GeneralPurposeIO &ll::gpio::Pin::get_port() {
+  return gpio_;
+}
+
 }  // namespace ll
 
