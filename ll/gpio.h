@@ -99,6 +99,11 @@ class Pin {
                 (pin_mask * static_cast<uint32_t>(output_type)));
   }
 
+  inline void toggle() {
+    uint32_t odr = gpio_.get<ODR>();
+    gpio_.set<BSRR>(((odr & value_) << 16u) | (~odr & value_));
+  }
+
  private:
   GeneralPurposeIO &gpio_;
   const uint32_t number_;
@@ -114,13 +119,6 @@ struct GPIOInitType {
   gpio::pull   Pull;
   gpio::alternate Alternate;
 };
-
-static inline void gpio_toggle_pin(ll::gpio::Pin &pin) {
-  auto &port = pin.get_port();
-  uint32_t pin_mask = pin.value();
-  uint32_t odr = port.get<gpio::ODR>();
-  port.set<gpio::BSRR>(((odr & pin_mask) << 16u) | (~odr & pin_mask));
-}
 
 bool gpio_init(ll::gpio::Pin &pin, const GPIOInitType &init);
 

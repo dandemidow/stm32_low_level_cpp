@@ -75,7 +75,7 @@ int main() {
   /* Infinite loop */
   /* Toggle IO in an infinite loop */
   while (true) {
-    ll::gpio_toggle_pin(led);
+    led.toggle();
 
     /* Insert delay 1000 ms */
     ll::m_delay(1000);
