@@ -10,25 +10,6 @@ enum class gpio_output {
   OpenDrain = gpio::kOTypeR0
 };
 
-enum class gpio_alternate {
-  kAf0 = 0x00,
-  kAf1,
-  kAf2,
-  kAf3,
-  kAf4,
-  kAf5,
-  kAf6,
-  kAf7,
-  kAf8,
-  kAf9,
-  kAf10,
-  kAf11,
-  kAf12,
-  kAf13,
-  kAf14,
-  kAf15,
-};
-
 namespace gpio {
 
 enum class mode {
@@ -50,6 +31,26 @@ enum class pull {
   Up = gpio::kPupdrPupd00,
   Down = gpio::kPupdrPupd01
 };
+
+enum class alternate {
+  kAf0 = 0x00,
+  kAf1,
+  kAf2,
+  kAf3,
+  kAf4,
+  kAf5,
+  kAf6,
+  kAf7,
+  kAf8,
+  kAf9,
+  kAf10,
+  kAf11,
+  kAf12,
+  kAf13,
+  kAf14,
+  kAf15,
+};
+
 
 class Pin {
  public:
@@ -78,7 +79,7 @@ class Pin {
                 (gpio::kPupdrPupd0 << position_pin),
                 (static_cast<uint32_t>(pull) << position_pin));
   }
-  inline void set_af(gpio_alternate alternate) {
+  inline void set_af(alternate alternate) {
     uint32_t position_pin = number_ * 4u;
     if (value_ < kPin8) {
       reg::modify(gpio_.get<gpio::AFR>()[0],
@@ -92,9 +93,8 @@ class Pin {
     }
   }
 
-  inline void gpio_set_pin_output_type(ll::gpio::Pin &pin, uint32_t pin_mask, gpio_output output_type) {
-    auto &port = pin.get_port();
-    reg::modify(port.get<gpio::OTYPER>(),
+  inline void set_output_type(uint32_t pin_mask, gpio_output output_type) {
+    reg::modify(gpio_.get<gpio::OTYPER>(),
                 pin_mask,
                 (pin_mask * static_cast<uint32_t>(output_type)));
   }
