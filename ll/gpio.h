@@ -5,11 +5,6 @@
 
 namespace ll {
 
-enum class gpio_output {
-  PushPull = 0x00,
-  OpenDrain = gpio::kOTypeR0
-};
-
 namespace gpio {
 
 enum class mode {
@@ -51,6 +46,11 @@ enum class alternate {
   kAf15,
 };
 
+enum class output {
+  PushPull = 0x00,
+  OpenDrain = gpio::kOTypeR0
+};
+
 
 class Pin {
  public:
@@ -86,14 +86,14 @@ class Pin {
                   (kAfrlAfsel0 << position_pin),
                   (static_cast<uint32_t>(alternate) << position_pin));
     } else {
-        position_pin = position_pin - 8u * 4u;
-        reg::modify(gpio_.get<gpio::AFR>()[1],
-                    (kAfrlAfsel8 << position_pin),
-                    (static_cast<uint32_t>(alternate) << position_pin));
+      position_pin = position_pin - 8u * 4u;
+      reg::modify(gpio_.get<gpio::AFR>()[1],
+                  (kAfrlAfsel8 << position_pin),
+                  (static_cast<uint32_t>(alternate) << position_pin));
     }
   }
 
-  inline void set_output_type(uint32_t pin_mask, gpio_output output_type) {
+  inline void set_output_type(uint32_t pin_mask, output output_type) {
     reg::modify(gpio_.get<gpio::OTYPER>(),
                 pin_mask,
                 (pin_mask * static_cast<uint32_t>(output_type)));
@@ -110,9 +110,9 @@ class Pin {
 struct GPIOInitType {
   gpio::mode   Mode;
   gpio::speed  Speed;
-  gpio_output OutputType;
+  gpio::output OutputType;
   gpio::pull   Pull;
-  gpio_alternate Alternate;
+  gpio::alternate Alternate;
 };
 
 static inline void gpio_toggle_pin(ll::gpio::Pin &pin) {

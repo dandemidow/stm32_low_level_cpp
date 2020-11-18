@@ -23,7 +23,7 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   if ((init.Mode == gpio::mode::Output) ||
       (init.Mode == gpio::mode::Alternate)) {
     /* Output mode configuration*/
-    gpio_set_pin_output_type(pin, pin.value(), init.OutputType);
+    pin.set_output_type(pin.value(), init.OutputType);
   }
   return true;
 }

@@ -170,9 +170,9 @@ static void MX_GPIO_Init(ll::gpio::Pin &led) {
   ll::GPIOInitType gpio_init {
     .Mode = ll::gpio::mode::Output,
     .Speed = ll::gpio::speed::VeryHigh,
-    .OutputType = ll::gpio_output::PushPull,
-    .Pull = ll::gpio_pull::Up,
-    .Alternate = ll::gpio_alternate::kAf0
+    .OutputType = ll::gpio::output::PushPull,
+    .Pull = ll::gpio::pull::Up,
+    .Alternate = ll::gpio::alternate::kAf0
   };
   ll::gpio_init(led, gpio_init);
 }
