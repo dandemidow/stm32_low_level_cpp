@@ -78,20 +78,18 @@ class Pin {
                 (gpio::kPupdrPupd0 << position_pin),
                 (static_cast<uint32_t>(pull) << position_pin));
   }
-  inline void set_af_0_7(ll::gpio::Pin &pin, gpio_alternate alternate) {
-    const uint32_t position_pos = pin.position() * 4u;
-    auto &port = pin.get_port();
-    reg::modify(port.get<gpio::AFR>()[0],
-                (gpio::kAfrlAfsel0 << position_pos),
-                (static_cast<uint32_t>(alternate) << position_pos));
-  }
-  inline void set_af(ll::gpio::Pin &pin, gpio_alternate alternate) {
-  //  assert(pin.position() >= 8u);
-    const uint32_t position_pos = (pin.position() - 8u) * 4u;
-    auto &port = pin.get_port();
-    reg::modify(port.get<gpio::AFR>()[1],
-                (gpio::kAfrlAfsel8 << position_pos),
-                (static_cast<uint32_t>(alternate) << position_pos));
+  inline void set_af(gpio_alternate alternate) {
+    uint32_t position_pin = number_ * 4u;
+    if (value_ < kPin8) {
+      reg::modify(gpio_.get<gpio::AFR>()[0],
+                  (kAfrlAfsel0 << position_pin),
+                  (static_cast<uint32_t>(alternate) << position_pin));
+    } else {
+        position_pin = position_pin - 8u * 4u;
+        reg::modify(gpio_.get<gpio::AFR>()[1],
+                    (kAfrlAfsel8 << position_pin),
+                    (static_cast<uint32_t>(alternate) << position_pin));
+    }
   }
 
   inline void gpio_set_pin_output_type(ll::gpio::Pin &pin, uint32_t pin_mask, gpio_output output_type) {

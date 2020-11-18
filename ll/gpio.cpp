@@ -17,11 +17,7 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
 
   if (init.Mode == gpio::mode::Alternate) {
     /* Speed mode configuration */
-    if (pin.value() < gpio::kPin8) {
-      gpio_set_af_pin_0_7(pin, init.Alternate);
-    } else {
-      gpio_set_af_pin_8_15(pin, init.Alternate);
-    }
+      pin.set_af(init.Alternate);
   }
 
   if ((init.Mode == gpio::mode::Output) ||
