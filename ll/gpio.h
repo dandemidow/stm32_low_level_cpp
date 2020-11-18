@@ -5,12 +5,6 @@
 
 namespace ll {
 
-enum class gpio_pull {
-  No = 0x00,
-  Up = gpio::kPupdrPupd00,
-  Down = gpio::kPupdrPupd01
-};
-
 enum class gpio_output {
   PushPull = 0x00,
   OpenDrain = gpio::kOTypeR0
@@ -51,6 +45,12 @@ enum class speed {
   VeryHigh = gpio::kOspeedrOspeed0
 };
 
+enum class pull {
+  No = 0x00,
+  Up = gpio::kPupdrPupd00,
+  Down = gpio::kPupdrPupd01
+};
+
 class Pin {
  public:
   Pin(port p, uint32_t number)
@@ -72,11 +72,33 @@ class Pin {
                 (gpio::kOspeedrOspeed0 << position_pin),
                 (static_cast<uint32_t>(speed) << position_pin));
   }
-  inline void set_pull(gpio_pull pull) {
+  inline void set_pull(pull pull) {
     const uint32_t position_pin = number_ * 2u;
     reg::modify(gpio_.get<gpio::PUPDR>(),
                 (gpio::kPupdrPupd0 << position_pin),
                 (static_cast<uint32_t>(pull) << position_pin));
+  }
+  inline void set_af_0_7(ll::gpio::Pin &pin, gpio_alternate alternate) {
+    const uint32_t position_pos = pin.position() * 4u;
+    auto &port = pin.get_port();
+    reg::modify(port.get<gpio::AFR>()[0],
+                (gpio::kAfrlAfsel0 << position_pos),
+                (static_cast<uint32_t>(alternate) << position_pos));
+  }
+  inline void set_af(ll::gpio::Pin &pin, gpio_alternate alternate) {
+  //  assert(pin.position() >= 8u);
+    const uint32_t position_pos = (pin.position() - 8u) * 4u;
+    auto &port = pin.get_port();
+    reg::modify(port.get<gpio::AFR>()[1],
+                (gpio::kAfrlAfsel8 << position_pos),
+                (static_cast<uint32_t>(alternate) << position_pos));
+  }
+
+  inline void gpio_set_pin_output_type(ll::gpio::Pin &pin, uint32_t pin_mask, gpio_output output_type) {
+    auto &port = pin.get_port();
+    reg::modify(port.get<gpio::OTYPER>(),
+                pin_mask,
+                (pin_mask * static_cast<uint32_t>(output_type)));
   }
 
  private:
@@ -91,33 +113,9 @@ struct GPIOInitType {
   gpio::mode   Mode;
   gpio::speed  Speed;
   gpio_output OutputType;
-  gpio_pull   Pull;
+  gpio::pull   Pull;
   gpio_alternate Alternate;
 };
-
-static inline void gpio_set_af_pin_0_7(ll::gpio::Pin &pin, gpio_alternate alternate) {
-  const uint32_t position_pos = pin.position() * 4u;
-  auto &port = pin.get_port();
-  reg::modify(port.get<gpio::AFR>()[0],
-              (gpio::kAfrlAfsel0 << position_pos),
-              (static_cast<uint32_t>(alternate) << position_pos));
-}
-
-static inline void gpio_set_af_pin_8_15(ll::gpio::Pin &pin, gpio_alternate alternate) {
-//  assert(pin.position() >= 8u);
-  const uint32_t position_pos = (pin.position() - 8u) * 4u;
-  auto &port = pin.get_port();
-  reg::modify(port.get<gpio::AFR>()[1],
-              (gpio::kAfrlAfsel8 << position_pos),
-              (static_cast<uint32_t>(alternate) << position_pos));
-}
-
-static inline void gpio_set_pin_output_type(ll::gpio::Pin &pin, uint32_t pin_mask, gpio_output output_type) {
-  auto &port = pin.get_port();
-  reg::modify(port.get<gpio::OTYPER>(),
-              pin_mask,
-              (pin_mask * static_cast<uint32_t>(output_type)));
-}
 
 static inline void gpio_toggle_pin(ll::gpio::Pin &pin) {
   auto &port = pin.get_port();
