@@ -1,33 +1,33 @@
 #include "gpio.h"
 
 namespace ll {
+namespace gpio {
 
-bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
+bool Pin::init(const init_cfg &init) {
   /* Pin Mode configuration */
-  pin.set_mode(init.Mode);
+  set_mode(init.Mode);
 
   if ((init.Mode == gpio::mode::Output) ||
       (init.Mode == gpio::mode::Analog)) {
         /* Speed mode configuration */
-        pin.set_speed(init.Speed);
+        set_speed(init.Speed);
   }
 
   /* Pull-up Pull down resistor configuration*/
-  pin.set_pull(init.Pull);
+  set_pull(init.Pull);
 
   switch(init.Mode) {
   case gpio::mode::Alternate:
-    pin.set_af(init.Alternate);
+    set_af(init.Alternate);
     [[fallthrough]];
   case gpio::mode::Output:
-    pin.set_output_type(pin.value(), init.OutputType);
+    set_output_type(value_, init.OutputType);
     break;
   default: break;
   }
   return true;
 }
 
-namespace gpio {
 
 void Pin::set_mode(mode mode) {
   const uint32_t position_pin = number_ * 2u;

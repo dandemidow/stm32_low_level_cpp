@@ -51,6 +51,14 @@ enum class output {
   OpenDrain = gpio::kOTypeR0
 };
 
+struct init_cfg {
+  gpio::mode   Mode;
+  gpio::speed  Speed;
+  gpio::output OutputType;
+  gpio::pull   Pull;
+  gpio::alternate Alternate;
+};
+
 
 class Pin {
  public:
@@ -104,6 +112,8 @@ class Pin {
     gpio_.set<BSRR>(((odr & value_) << 16u) | (~odr & value_));
   }
 
+  bool init(const init_cfg &init);
+
  private:
   GeneralPurposeIO &gpio_;
   const uint32_t number_;
@@ -111,16 +121,6 @@ class Pin {
 };
 
 }  // namespace gpio
-
-struct GPIOInitType {
-  gpio::mode   Mode;
-  gpio::speed  Speed;
-  gpio::output OutputType;
-  gpio::pull   Pull;
-  gpio::alternate Alternate;
-};
-
-bool gpio_init(ll::gpio::Pin &pin, const GPIOInitType &init);
 
 }  // namespace ll
 
