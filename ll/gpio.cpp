@@ -15,15 +15,14 @@ bool gpio_init(gpio::Pin &pin, const GPIOInitType &init) {
   /* Pull-up Pull down resistor configuration*/
   pin.set_pull(init.Pull);
 
-  if (init.Mode == gpio::mode::Alternate) {
-    /* Speed mode configuration */
-      pin.set_af(init.Alternate);
-  }
-
-  if ((init.Mode == gpio::mode::Output) ||
-      (init.Mode == gpio::mode::Alternate)) {
-    /* Output mode configuration*/
+  switch(init.Mode) {
+  case gpio::mode::Alternate:
+    pin.set_af(init.Alternate);
+    [[fallthrough]];
+  case gpio::mode::Output:
     pin.set_output_type(pin.value(), init.OutputType);
+    break;
+  default: break;
   }
   return true;
 }
