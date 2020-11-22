@@ -3,9 +3,7 @@
 
 #include "general_purpose_io.hpp"
 
-namespace ll {
-
-namespace gpio {
+namespace ll::gpio {
 
 enum class mode {
   Input = 0x00,
@@ -120,8 +118,6 @@ class Pin {
   const uint32_t value_;
 };
 
-}  // namespace gpio
-
-}  // namespace ll
+}  // namespace ll::gpio
 
 #endif
