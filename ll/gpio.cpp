@@ -1,7 +1,6 @@
 #include "gpio.h"
 
-namespace ll {
-namespace gpio {
+namespace ll::gpio {
 
 bool Pin::init(const init_cfg &init) {
   /* Pin Mode configuration */
@@ -36,9 +35,5 @@ void Pin::set_mode(mode mode) {
               (static_cast<uint32_t>(mode) << position_pin));
 }
 
-
-
-}  // namespace gpio
-
-}  // namespace ll
+}  // namespace ll::gpio
 

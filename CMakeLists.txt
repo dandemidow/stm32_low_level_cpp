@@ -48,6 +48,11 @@ target_link_options(${EXECUTABLE} PRIVATE
         -Wl,--gc-sections
         )
 
+target_compile_definitions(${EXECUTABLE}
+  PUBLIC
+    STM32L452
+)
+
 add_subdirectory(ll)
 
 target_link_libraries(${EXECUTABLE}

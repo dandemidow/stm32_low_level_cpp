@@ -4,7 +4,7 @@
 #include "general_purpose_io.hpp"
 
 namespace ll::gpio {
-
+using namespace address::gpio;
 enum class mode {
   Input = 0x00,
   Output = gpio::kModerMode00,

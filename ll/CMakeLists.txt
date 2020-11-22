@@ -12,7 +12,13 @@ target_include_directories(stll
     .
 )
 
-target_compile_options(stll PRIVATE
+target_compile_definitions(stll
+  PUBLIC
+    STM32L452
+)
+
+target_compile_options(stll
+  PRIVATE
     -march=armv7e-m
     -mcpu=cortex-m4
     -mthumb
