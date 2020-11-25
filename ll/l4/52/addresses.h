@@ -37,6 +37,10 @@ constexpr uint32_t kOTypeR0 = Flag<0x1u, 0u>::value;
 constexpr uint32_t kPin5 = Flag<0x1u, 5u>::value;
 constexpr uint32_t kPin8 = Flag<0x1u, 8u>::value;
 }  // namespace gpio
+
+namespace flash {
+constexpr uint32_t kBaseAddress = kAhb1periphBaseAddress + 0x2000ul;
+}  // namespace flash
 }  // namespace address
 
 #endif

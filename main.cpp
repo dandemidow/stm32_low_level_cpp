@@ -152,13 +152,6 @@ void SystemClock_Config(void) {
   nvic::set_priority(SysTick_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
 }
 
-/** Configure pins as
-        * Analog
-        * Input
-        * Output
-        * EVENT_OUT
-        * EXTI
-*/
 static void MX_GPIO_Init(ll::gpio::Pin &led) {
   /* GPIO Ports Clock Enable */
   ll::Ahb2Grp1EnableClock(ll::kAhb2Grp1PeriphGpioA);

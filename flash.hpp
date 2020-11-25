@@ -5,8 +5,7 @@
 #include "device_register.h"
 #include "module.h"
 
-constexpr uint32_t kFlashBaseAddress = kAhb1periphBaseAddress + 0x2000ul;
-using FlashBaseAddress = std::integral_constant<uint32_t, kFlashBaseAddress>;
+using FlashBaseAddress = std::integral_constant<uint32_t, address::flash::kBaseAddress>;
 
 namespace flash {
  enum : uint32_t {
