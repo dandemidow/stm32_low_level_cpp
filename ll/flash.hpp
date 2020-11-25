@@ -2,12 +2,11 @@
 #define FLASH_HPP_
 
 #include "addresses.h"
-#include "device_register.h"
 #include "module.h"
 
 using FlashBaseAddress = std::integral_constant<uint32_t, address::flash::kBaseAddress>;
 
-namespace flash {
+namespace ll::flash {
  enum : uint32_t {
    ACR = 0u,
    PDKEYR,
@@ -23,7 +22,7 @@ namespace flash {
    WRP1AR,
    WRP1BR
 };
-}  // namespace flash
+}  // namespace ll::flash
 
 using Flash = Module<FlashBaseAddress,
 Register,

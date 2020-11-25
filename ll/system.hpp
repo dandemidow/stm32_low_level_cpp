@@ -6,6 +6,16 @@
 
 namespace ll {
 
+namespace flash {
+enum class AcrLatency : uint32_t {
+  kAcrLatency0,
+  kAcrLatency1,
+  kAcrLatency2,
+  kAcrLatency3,
+  kAcrLatency4
+};
+}  // namespace flash
+
 static inline void flash_set_latency(uint32_t latency) {
   auto &flash = *new Flash{};
   reg::modify(flash.get<flash::ACR>(), address::flash::kAcrLatency, latency);

@@ -40,12 +40,12 @@
 #include "main.h"
 
 #include "core_cm4.hpp"
-#include "ll_cortex.hpp"
-#include "ll_bus.hpp"
 #include "ll/gpio.h"
+#include "ll/system.hpp"
+#include "ll_bus.hpp"
+#include "ll_cortex.hpp"
 #include "ll_power.hpp"
 #include "ll_rcc.hpp"
-#include "ll_system.hpp"
 #include "ll_utils.hpp"
 
 static void SystemClock_Config();
