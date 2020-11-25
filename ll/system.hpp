@@ -5,8 +5,9 @@
 #include "flash.hpp"
 
 namespace ll {
-
 namespace flash {
+using namespace address::flash;
+
 enum class AcrLatency : uint32_t {
   kAcrLatency0,
   kAcrLatency1,
@@ -14,24 +15,19 @@ enum class AcrLatency : uint32_t {
   kAcrLatency3,
   kAcrLatency4
 };
+
+static inline void set_latency(flash::AcrLatency latency) {
+  auto &flash = *new Flash{};
+  reg::modify(flash.get<flash::ACR>(), kAcrLatency, static_cast<uint32_t>(latency));
+}
+
+static inline flash::AcrLatency get_latency() {
+  auto &flash = *new Flash{};
+  auto latency = bit::read(flash.get<flash::ACR>(), kAcrLatency);
+  return static_cast<flash::AcrLatency>(latency);
+}
+
 }  // namespace flash
-
-static inline void flash_set_latency(uint32_t latency) {
-  auto &flash = *new Flash{};
-  reg::modify(flash.get<flash::ACR>(), address::flash::kAcrLatency, latency);
-}
-
-static inline uint32_t flash_get_latency() {
-  auto &flash = *new Flash{};
-  return bit::read(flash.get<flash::ACR>(), address::flash::kAcrLatency);
-}
-
-static constexpr uint32_t kFlashAcrLatency0 = 0x00000000u;
-static constexpr uint32_t kFlashAcrLatency1 = 0x00000001u;
-static constexpr uint32_t kFlashAcrLatency2 = 0x00000002u;
-static constexpr uint32_t kFlashAcrLatency3 = 0x00000003u;
-static constexpr uint32_t kFlashAcrLatency4 = 0x00000004u;
-
 }  // namespace ll
 
 #endif
