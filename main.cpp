@@ -111,9 +111,9 @@ static void LL_Init(void) {
   */
 void SystemClock_Config(void) {
 
-  ll::flash_set_latency(ll::kFlashAcrLatency0);
+  ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency0);
 
-  if(ll::flash_get_latency() != ll::kFlashAcrLatency0) {
+  if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency0) {
   Error_Handler();
   }
   ll::power::set_regul_voltage_scaling(ll::power::kReguVoltageScale1);
