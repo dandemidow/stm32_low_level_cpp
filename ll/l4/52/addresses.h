@@ -40,6 +40,8 @@ constexpr uint32_t kPin8 = Flag<0x1u, 8u>::value;
 
 namespace flash {
 constexpr uint32_t kBaseAddress = kAhb1periphBaseAddress + 0x2000ul;
+
+constexpr uint32_t kAcrLatency = Flag<0x7u, 0u>::value;
 }  // namespace flash
 }  // namespace address
 

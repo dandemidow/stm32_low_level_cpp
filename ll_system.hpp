@@ -8,12 +8,12 @@ namespace ll {
 
 static inline void flash_set_latency(uint32_t latency) {
   auto &flash = *new Flash{};
-  reg::modify(flash.get<flash::ACR>(), kFlashAcrLatency, latency);
+  reg::modify(flash.get<flash::ACR>(), address::flash::kAcrLatency, latency);
 }
 
 static inline uint32_t flash_get_latency() {
   auto &flash = *new Flash{};
-  return bit::read(flash.get<flash::ACR>(), kFlashAcrLatency);
+  return bit::read(flash.get<flash::ACR>(), address::flash::kAcrLatency);
 }
 
 static constexpr uint32_t kFlashAcrLatency0 = 0x00000000u;
