@@ -41,10 +41,10 @@
 
 #include "core_cm4.hpp"
 #include "ll/gpio.h"
+#include "ll/power.hpp"
 #include "ll/system.hpp"
 #include "ll_bus.hpp"
 #include "ll_cortex.hpp"
-#include "ll_power.hpp"
 #include "ll_rcc.hpp"
 #include "ll_utils.hpp"
 
