@@ -116,7 +116,7 @@ void SystemClock_Config(void) {
   if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency0) {
   Error_Handler();
   }
-  ll::power::set_regul_voltage_scaling(ll::power::kReguVoltageScale1);
+  ll::power::set_regul_voltage_scaling(ll::power::ReguVoltage::kScale1);
 
   ll::rcc_msi_enable();
 
