@@ -6,16 +6,19 @@
 namespace ll {
 
 namespace power {
+using namespace address::power;
 
-static inline void set_regul_voltage_scaling(uint32_t voltage_scaling) {
+enum class ReguVoltage : uint32_t {
+  kScale1 = kCr1Vos0,
+  kScale2 = kCr1Vos1
+};
+
+static inline void set_regul_voltage_scaling(ReguVoltage voltage_scaling) {
   auto &pwr = *new PowerControl{};
-  reg::modify(pwr.get<pwr::CR1>(), kPwrCr1Vos, voltage_scaling);
+  reg::modify(pwr.get<pwr::CR1>(), kCr1Vos, static_cast<uint32_t>(voltage_scaling));
 }
 
-constexpr uint32_t kReguVoltageScale1 = kPwrCr1Vos0;
-constexpr uint32_t kReguVoltageScale2 = kPwrCr1Vos1;
-
-}  // namespace pwr
+}  // namespace power
 
 }  // namespace ll
 
