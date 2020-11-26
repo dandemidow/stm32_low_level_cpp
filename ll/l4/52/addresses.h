@@ -43,6 +43,14 @@ constexpr uint32_t kBaseAddress = kAhb1periphBaseAddress + 0x2000ul;
 
 constexpr uint32_t kAcrLatency = Flag<0x7u, 0u>::value;
 }  // namespace flash
+
+namespace power {
+constexpr uint32_t kBaseAddress = kApb1PeriphBaseAddress + 0x7000ul;
+
+constexpr uint32_t kCr1Vos = Flag<0x3u, 9u>::value;
+constexpr uint32_t kCr1Vos0 = Flag<0x1u, 9u>::value;
+constexpr uint32_t kCr1Vos1 = Flag<0x2u, 9u>::value;
+}  // namespace power
 }  // namespace address
 
 #endif

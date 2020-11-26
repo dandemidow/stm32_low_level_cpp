@@ -2,13 +2,11 @@
 #define POWER_CONTROL_HPP_
 
 #include "addresses.h"
-#include "device_register.h"
 #include "module.h"
 
-constexpr uint32_t kPowerBaseAddress = kApb1PeriphBaseAddress + 0x7000ul;
-using PowerBaseAddress = std::integral_constant<uint32_t, kPowerBaseAddress>;
+using PowerBaseAddress = std::integral_constant<uint32_t, address::power::kBaseAddress>;
 
-namespace pwr {
+namespace ll::pwr {
  enum : uint32_t {
    CR1 = 0u,
    CR2,
@@ -35,7 +33,7 @@ namespace pwr {
    PUCRH,
    PDCRH
 };
-}  // namespace flash
+}  // namespace ll::pwr
 
 using PowerControl = Module<PowerBaseAddress,
 Register,
@@ -65,9 +63,5 @@ Register
 >;
 
 static_assert(std::is_standard_layout<PowerControl>::value);
-
-constexpr uint32_t kPwrCr1Vos = Flag<0x3u, 9u>::value;
-constexpr uint32_t kPwrCr1Vos0 = Flag<0x1u, 9u>::value;
-constexpr uint32_t kPwrCr1Vos1 = Flag<0x2u, 9u>::value;
 
 #endif
