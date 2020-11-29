@@ -118,7 +118,8 @@ void SystemClock_Config(void) {
   }
   ll::power::set_regul_voltage_scaling(ll::power::ReguVoltage::kScale1);
 
-  ll::rcc_msi_enable();
+  ll::rcc::Msi msi{};
+  msi.Enable();
 
    /* Wait till MSI is ready */
   while(ll::rcc_msi_is_ready() != true) {

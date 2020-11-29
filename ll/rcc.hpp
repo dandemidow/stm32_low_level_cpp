@@ -18,17 +18,19 @@ class Msi {
   inline void Enable() {
     bit::set(rcc.get<rcc::CR>(), kCrMsiOn);
   }
+
+  inline bool IsReady() const {
+    return ((bit::read(rcc.get<rcc::CR>(), kCrMsiRdy) == kCrMsiRdy) ? true : false);
+  }
+
+  inline void EnableRangeSelection() {
+    bit::set(rcc.get<rcc::CR>(), kCrMsiRgSel);
+  }
+
+  inline void SetRange(uint32_t range) {
+    reg::modify(rcc.get<rcc::CR>(), kCrMsiRange.value, range);
+  }
 };
-
-static inline bool rcc_msi_is_ready() {
-  auto &rcc = *new ResetClockControl{};
-  return ((bit::read(rcc.get<rcc::CR>(), kCrMsiRdy) == kCrMsiRdy) ? true : false);
-}
-
-static inline void rcc_msi_enable_range_selection() {
-  auto &rcc = *new ResetClockControl{};
-  bit::set(rcc.get<rcc::CR>(), kCrMsiRgSel);
-}
 
 static inline void rcc_msi_set_range(uint32_t range) {
   auto &rcc = *new ResetClockControl{};
