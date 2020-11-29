@@ -3,64 +3,68 @@
 
 #include "reset_clock_control.h"
 
-namespace ll {
+namespace ll::rcc {
 
-using RccSysClkSourceStatus = rcc::cfgr::Sws;
-using RccSysClkSource = rcc::cfgr::Sw;
-using RccSysClkDiv = rcc::cfgr::HPre;
-using RccApb1Div = rcc::cfgr::PPre1;
-using RccApb2Div = rcc::cfgr::PPre2;
+using SysClkSourceStatus = ll::rcc::cfgr::Sws;
+using SysClkSource = ll::rcc::cfgr::Sw;
+using SysClkDiv = ll::rcc::cfgr::HPre;
+using Apb1Div = rcc::cfgr::PPre1;
+using Apb2Div = rcc::cfgr::PPre2;
 
-static inline void rcc_msi_enable() {
-  auto &rcc = *new ResetClockControl{};
-  bit::set(rcc.get<rcc::CR>(), kRccCrMsiOn);
-}
+class Msi {
+  ResetClockControl &rcc;
+ public:
+  Msi() : rcc {*new ResetClockControl{}} {}
+  inline void Enable() {
+    bit::set(rcc.get<rcc::CR>(), kCrMsiOn);
+  }
+};
 
 static inline bool rcc_msi_is_ready() {
   auto &rcc = *new ResetClockControl{};
-  return ((bit::read(rcc.get<rcc::CR>(), kRccCrMsiRdy) == kRccCrMsiRdy) ? true : false);
+  return ((bit::read(rcc.get<rcc::CR>(), kCrMsiRdy) == kCrMsiRdy) ? true : false);
 }
 
 static inline void rcc_msi_enable_range_selection() {
   auto &rcc = *new ResetClockControl{};
-  bit::set(rcc.get<rcc::CR>(), kRccCrMsiRgSel);
+  bit::set(rcc.get<rcc::CR>(), kCrMsiRgSel);
 }
 
 static inline void rcc_msi_set_range(uint32_t range) {
   auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CR>(), kRccCrMsiRange.value, range);
+  reg::modify(rcc.get<rcc::CR>(), kCrMsiRange.value, range);
 }
 
 static inline void rcc_msi_set_calib_trimming(uint32_t value) {
   auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::ICSCR>(), kRccIcsCrMsiTrim.value, value << kRccIcsCrMsiTrim.position);
+  reg::modify(rcc.get<rcc::ICSCR>(), kIcsCrMsiTrim.value, value << kIcsCrMsiTrim.position);
 }
 
-static inline void rcc_set_sys_clk_source(RccSysClkSource source) {
+static inline void rcc_set_sys_clk_source(SysClkSource source) {
   auto &rcc = *new ResetClockControl{};
   reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kSw.value, static_cast<uint32_t>(source));
 }
 
-static inline RccSysClkSourceStatus rcc_get_sys_clk_source() {
+static inline SysClkSourceStatus rcc_get_sys_clk_source() {
   auto &rcc = *new ResetClockControl{};
-  return static_cast<RccSysClkSourceStatus>(bit::read(rcc.get<rcc::CFGR>(), rcc::cfgr::kSws));
+  return static_cast<SysClkSourceStatus>(bit::read(rcc.get<rcc::CFGR>(), rcc::cfgr::kSws));
 }
 
-static inline void rcc_set_ahb_prescaler(RccSysClkDiv prescaler) {
+static inline void rcc_set_ahb_prescaler(SysClkDiv prescaler) {
   auto &rcc = *new ResetClockControl{};
   reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
 }
 
-static inline void rcc_set_apb1_prescaler(RccApb1Div prescaler) {
+static inline void rcc_set_apb1_prescaler(Apb1Div prescaler) {
   auto &rcc = *new ResetClockControl{};
   reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
 }
 
-static inline void rcc_set_apb2_prescaler(RccApb2Div prescaler) {
+static inline void rcc_set_apb2_prescaler(Apb2Div prescaler) {
   auto &rcc = *new ResetClockControl{};
   reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
 }
 
-}  // namespace ll
+}  // namespace ll::rcc
 
 #endif

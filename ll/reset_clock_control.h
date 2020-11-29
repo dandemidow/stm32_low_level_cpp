@@ -2,13 +2,11 @@
 #define RESET_CLOCK_CONTROL_H_
 
 #include "addresses.h"
-#include "device_register.h"
 #include "module.h"
 
-constexpr uint32_t kRccBaseAddress = kAhb1periphBaseAddress + 0x1000UL;
-using RccBaseAddress = std::integral_constant<uint32_t, kRccBaseAddress>;
+using RccBaseAddress = std::integral_constant<uint32_t, address::rcc::kBaseAddress>;
 
-namespace rcc {
+namespace ll::rcc {
  enum : uint32_t {
   CR = 0u,          /*!< RCC clock control register,                                              Address offset: 0x00 */
   ICSCR,            /*!< RCC internal clock sources calibration register,                         Address offset: 0x04 */
@@ -110,7 +108,32 @@ enum class Sws : uint32_t {
 constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
 
 }  // namespace cfgr
-}  // namespace rcc
+
+constexpr uint32_t kApb2EnrSysCfgEn = Flag<0x1u, 0u>::value;
+constexpr uint32_t kApb1Enr1PwrEn = Flag<0x1u, 28u>::value;
+
+constexpr uint32_t kCrMsiOn = Flag<0x1u, 0u>::value;                  /*!< Internal Multi Speed oscillator (MSI) clock enable */
+constexpr uint32_t kCrMsiRdy = Flag<0x1u, 1u>::value;                 /*!< Internal Multi Speed oscillator (MSI) clock ready flag */
+constexpr uint32_t kCrMsiPllEn = Flag<0x1u, 2u>::value;               /*!< Internal Multi Speed oscillator (MSI) PLL enable */
+constexpr uint32_t kCrMsiRgSel = Flag<0x1u, 3u>::value;               /*!< Internal Multi Speed oscillator (MSI) range selection */
+constexpr auto kCrMsiRange = Flag<0xfu, 4u>{};               /*!< Internal Multi Speed oscillator (MSI) clock Range */
+constexpr uint32_t kCsrMsiSRange = Flag<0xfu, 8u>::value;
+
+constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
+constexpr uint32_t kPllCfgrPllM = Flag<0x7u, 4u>::value;
+constexpr uint32_t kPllCfgrPllN = Flag<0x7fu, 8u>::value;
+constexpr uint32_t kPllCfgrPllR = Flag<0x3u, 25u>::value;
+
+template <uint32_t Index>
+constexpr uint32_t GetRccCrMsiRange() {
+  constexpr uint32_t Lower = 0x0u;
+  constexpr uint32_t Upper = 0xbu;
+  static_assert ((Index >= Lower) && (Index <= Upper));
+  return Flag<Index, kCrMsiRange.position>::value;
+}
+
+constexpr auto kIcsCrMsiTrim = Flag<0xffu, 8u>{};
+}  // namespace ll::rcc
 
 using ResetClockControl = Module<RccBaseAddress,
 Register,
@@ -156,31 +179,5 @@ Register
 >;
 
 static_assert(std::is_standard_layout<ResetClockControl>::value);
-
-constexpr uint32_t kRccApb2EnrSysCfgEn = Flag<0x1u, 0u>::value;
-constexpr uint32_t kRccApb1Enr1PwrEn = Flag<0x1u, 28u>::value;
-
-/********************  Bit definition for RCC_CR register  ********************/
-constexpr uint32_t kRccCrMsiOn = Flag<0x1u, 0u>::value;                  /*!< Internal Multi Speed oscillator (MSI) clock enable */
-constexpr uint32_t kRccCrMsiRdy = Flag<0x1u, 1u>::value;                 /*!< Internal Multi Speed oscillator (MSI) clock ready flag */
-constexpr uint32_t kRccCrMsiPllEn = Flag<0x1u, 2u>::value;               /*!< Internal Multi Speed oscillator (MSI) PLL enable */
-constexpr uint32_t kRccCrMsiRgSel = Flag<0x1u, 3u>::value;               /*!< Internal Multi Speed oscillator (MSI) range selection */
-constexpr auto kRccCrMsiRange = Flag<0xfu, 4u>{};               /*!< Internal Multi Speed oscillator (MSI) clock Range */
-constexpr uint32_t kRccCsrMsiSRange = Flag<0xfu, 8u>::value;
-
-constexpr uint32_t kRccPllCfgrPllSrc = Flag<0x3u, 0u>::value;
-constexpr uint32_t kRccPllCfgrPllM = Flag<0x7u, 4u>::value;
-constexpr uint32_t kRccPllCfgrPllN = Flag<0x7fu, 8u>::value;
-constexpr uint32_t kRccPllCfgrPllR = Flag<0x3u, 25u>::value;
-
-template <uint32_t Index>
-constexpr uint32_t GetRccCrMsiRange() {
-  constexpr uint32_t Lower = 0x0u;
-  constexpr uint32_t Upper = 0xbu;
-  static_assert ((Index >= Lower) && (Index <= Upper));
-  return Flag<Index, kRccCrMsiRange.position>::value;
-}
-
-constexpr auto kRccIcsCrMsiTrim = Flag<0xffu, 8u>{};
 
 #endif
