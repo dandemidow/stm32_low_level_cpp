@@ -19,8 +19,8 @@ static inline void Ahb2Grp1EnableClock(uint32_t periphs) {
 
 constexpr uint32_t kApb2Grp1PeriphAll = 0xFFFFFFFFu;
 constexpr uint32_t kAhb2Grp1PeriphGpioA = Flag<0x1u, 0u>::value;
-constexpr uint32_t kApb2Grp1PeriphSysCfg = kRccApb2EnrSysCfgEn;
-constexpr uint32_t kApb1Grp1PeriphPwr = kRccApb1Enr1PwrEn;
+constexpr uint32_t kApb2Grp1PeriphSysCfg = rcc::kApb2EnrSysCfgEn;
+constexpr uint32_t kApb1Grp1PeriphPwr = rcc::kApb1Enr1PwrEn;
 
 }  // namespace ll
 

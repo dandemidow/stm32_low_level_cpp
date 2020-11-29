@@ -130,6 +130,7 @@ uint32_t SystemCoreClock = 4000000U;
 [[maybe_unused]] static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
 
 uint32_t GetMsiRangeFrequency() {
+  using namespace ll::rcc;
   constexpr std::array<uint32_t, 12u> MSIRangeTable {100000U,
                                                      200000U,
                                                      400000U,
@@ -145,23 +146,24 @@ uint32_t GetMsiRangeFrequency() {
   uint32_t msirange;
   auto &rcc = *new ResetClockControl {};
   /* Get MSI Range frequency--------------------------------------------------*/
-  if(rcc.And<rcc::CR>(kRccCrMsiRgSel) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
-    msirange = rcc.And<rcc::CSR>(kRccCsrMsiSRange) >> 8U;
+  if(rcc.And<CR>(kCrMsiRgSel) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
+    msirange = rcc.And<CSR>(kCsrMsiSRange) >> 8U;
   } else { /* MSIRANGE from RCC_CR applies */
-    msirange = rcc.And<rcc::CR>(kRccCrMsiRange.value) >> 4U;
+    msirange = rcc.And<CR>(kCrMsiRange.value) >> 4U;
   }
   /*MSI frequency range in HZ*/
   return MSIRangeTable[msirange];
 }
 
 uint32_t GetSysClkSource(uint32_t msirange) {
+  using namespace ll::rcc;
   uint32_t result;
   uint32_t pllm = 2u;
   uint32_t pllvco = 0u;
   uint32_t pllr = 2u;
 
   auto &rcc = *new ResetClockControl {};
-  switch (rcc.And<rcc::CFGR>(rcc::cfgr::kSws)) {
+  switch (rcc.And<CFGR>(cfgr::kSws)) {
     case 0x00:  /* MSI used as system clock source */
       result = msirange;
       break;
@@ -178,9 +180,9 @@ uint32_t GetSysClkSource(uint32_t msirange) {
       /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI_VALUE/ PLLM) * PLLN
          SYSCLK = PLL_VCO / PLLR
          */
-      pllm = (rcc.And<rcc::PLLCFGR>(kRccPllCfgrPllM) >> 4U) + 1U ;
+      pllm = (rcc.And<PLLCFGR>(kPllCfgrPllM) >> 4U) + 1U ;
 
-      switch (rcc.And<rcc::PLLCFGR>(kRccPllCfgrPllSrc)) {
+      switch (rcc.And<PLLCFGR>(kPllCfgrPllSrc)) {
         case 0x02:  /* HSI used as PLL clock source */
           pllvco = (HSI_VALUE / pllm);
           break;
@@ -193,8 +195,8 @@ uint32_t GetSysClkSource(uint32_t msirange) {
           pllvco = (msirange / pllm);
           break;
       }
-      pllvco = pllvco * (rcc.And<rcc::PLLCFGR>(kRccPllCfgrPllN) >> 8U);
-      pllr = ((rcc.And<rcc::PLLCFGR>(kRccPllCfgrPllR) >> 25U) + 1U) * 2U;
+      pllvco = pllvco * (rcc.And<PLLCFGR>(kPllCfgrPllN) >> 8U);
+      pllr = ((rcc.And<PLLCFGR>(kPllCfgrPllR) >> 25U) + 1U) * 2U;
       result = pllvco/pllr;
       break;
 
@@ -212,6 +214,7 @@ uint32_t GetSysClkSource(uint32_t msirange) {
   */
 
 void SystemInitialization() {
+    using namespace ll::rcc;
     auto &rcc = *new ResetClockControl {};
     auto &scb = *new SystemControlBlock {};
     /* FPU settings ------------------------------------------------------------*/
@@ -221,22 +224,22 @@ void SystemInitialization() {
 
     /* Reset the RCC clock configuration to the default reset state ------------*/
     /* Set MSION bit */
-    rcc.get<rcc::CR>() |= kRccCrMsiOn;
+    rcc.get<CR>() |= kCrMsiOn;
 
     /* Reset CFGR register */
-    rcc.set<rcc::CFGR>(0x00000000U);
+    rcc.set<CFGR>(0x00000000U);
 
     /* Reset HSEON, CSSON , HSION, and PLLON bits */
-    rcc.get<rcc::CR>() &= 0xEAF6FFFFU;
+    rcc.get<CR>() &= 0xEAF6FFFFU;
 
     /* Reset PLLCFGR register */
-    rcc.set<rcc::PLLCFGR>(0x00001000U);
+    rcc.set<PLLCFGR>(0x00001000U);
 
     /* Reset HSEBYP bit */
-    rcc.get<rcc::CR>() &= 0xFFFBFFFFU;
+    rcc.get<CR>() &= 0xFFFBFFFFU;
 
     /* Disable all interrupts */
-    rcc.set<rcc::CIER>(0x00000000U);
+    rcc.set<CIER>(0x00000000U);
 
     /* Configure the Vector Table location add offset address ------------------*/
   #ifdef VECT_TAB_SRAM
@@ -305,7 +308,7 @@ void SystemCoreClockUpdate(void) {
 
   /* Compute HCLK clock frequency --------------------------------------------*/
   /* Get HCLK prescaler */
-  uint32_t tmp = AHBPrescTable[(rcc.And<rcc::CFGR>(rcc::cfgr::kHPre) >> 4U)];
+  uint32_t tmp = AHBPrescTable[(rcc.And<ll::rcc::CFGR>(ll::rcc::cfgr::kHPre) >> 4U)];
   /* HCLK clock frequency */
   SystemCoreClock >>= tmp;
 }
