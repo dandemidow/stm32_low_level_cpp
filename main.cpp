@@ -122,26 +122,26 @@ void SystemClock_Config(void) {
   msi.Enable();
 
    /* Wait till MSI is ready */
-  while(ll::rcc_msi_is_ready() != true) {
+  while(msi.IsReady() != true) {
   }
 
-  ll::rcc_msi_enable_range_selection();
+  msi.EnableRangeSelection();
 
-  ll::rcc_msi_set_range(GetRccCrMsiRange<6>());
+  msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
 
-  ll::rcc_msi_set_calib_trimming(0);
+  msi.SetCalibTrimming(0);
 
-  ll::rcc_set_sys_clk_source(ll::RccSysClkSource::Msi);
+  ll::rcc::set_sys_clk_source(msi);
 
    /* Wait till System clock is ready */
-  while(ll::rcc_get_sys_clk_source() != ll::RccSysClkSourceStatus::Msi) {
+  while(ll::rcc::get_sys_clk_source() != ll::rcc::SysClkSourceStatus::Msi) {
   }
 
-  ll::rcc_set_ahb_prescaler(ll::RccSysClkDiv::Div1);
+  ll::rcc::set_ahb_prescaler(ll::rcc::SysClkDiv::Div1);
 
-  ll::rcc_set_apb1_prescaler(ll::RccApb1Div::Div1);
+  ll::rcc::set_apb1_prescaler(ll::rcc::Apb1Div::Div1);
 
-  ll::rcc_set_apb2_prescaler(ll::RccApb2Div::Div1);
+  ll::rcc::set_apb2_prescaler(ll::rcc::Apb2Div::Div1);
 
   ll::init_1ms_tick(4000000);
 
