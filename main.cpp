@@ -44,9 +44,9 @@
 #include "ll/power.hpp"
 #include "ll/rcc.hpp"
 #include "ll/system.hpp"
+#include "ll/utils.hpp"
 #include "ll_bus.hpp"
 #include "ll_cortex.hpp"
-#include "ll_utils.hpp"
 
 static void SystemClock_Config();
 static void MX_GPIO_Init(ll::gpio::Pin &led);
