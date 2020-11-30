@@ -134,7 +134,7 @@ void SystemClock_Config(void) {
   ll::rcc::set_sys_clk_source(msi);
 
    /* Wait till System clock is ready */
-  while(ll::rcc::get_sys_clk_source() != ll::rcc::SysClkSourceStatus::Msi) {
+  while(ll::rcc::get_sys_clk_source() != msi) {
   }
 
   ll::rcc::set_ahb_prescaler(ll::rcc::SysClkDiv::Div1);

@@ -1,6 +1,8 @@
 #if !defined(LL_RCC_H_)
 #define LL_RCC_H_
 
+#include <compare>
+
 #include "reset_clock_control.h"
 
 namespace ll::rcc {
@@ -37,6 +39,10 @@ class Msi {
 
   operator SysClkSource() {
     return SysClkSource::Msi;
+  }
+
+  friend auto operator !=(SysClkSourceStatus source, const ll::rcc::Msi &) {
+    return source != SysClkSourceStatus::Msi;
   }
 };
 
