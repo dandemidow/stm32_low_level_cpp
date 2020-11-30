@@ -55,6 +55,10 @@ constexpr uint32_t kCr1Vos1 = Flag<0x2u, 9u>::value;
 namespace rcc {
 constexpr uint32_t kBaseAddress = kAhb1periphBaseAddress + 0x1000UL;
 }  // namespace rcc
+
+namespace tick {
+constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0010ul;
+}  // namespace tick
 }  // namespace address
 
 #endif

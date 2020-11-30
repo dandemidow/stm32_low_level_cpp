@@ -2,13 +2,11 @@
 #define SYSTEM_TIMER_H_
 
 #include "addresses.h"
-#include "device_register.h"
 #include "module.h"
 
-constexpr uint32_t kSysTickBaseAddress = kSystemControlSpaceBaseAddress + 0x0010ul;
-using SysTickBaseAddress = std::integral_constant<uint32_t, kSysTickBaseAddress>;
+using SysTickBaseAddress = std::integral_constant<uint32_t, address::tick::kBaseAddress>;
 
-namespace sys_tick {
+namespace ll::tick {
  enum : uint32_t {
   CTRL = 0u,
   LOAD,
@@ -24,7 +22,7 @@ constexpr auto kEnable = Flag<0x1u, 0u>{};
 }  // namespace ctrl
 
 constexpr uint32_t kClkSourceHCLK = ctrl::kClkSource.value;
-}  // namespace sys_tick
+}  // namespace ll::tick
 
 using SystemTimer = Module<SysTickBaseAddress,
 Register,
