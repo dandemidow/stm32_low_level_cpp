@@ -9,10 +9,10 @@ namespace ll {
 
 static inline void sys_tick_set_clk_source(uint32_t source) {
   auto &sys_tick = *new SystemTimer{};
-  if (source == sys_tick::kClkSourceHCLK) {
-    bit::set(sys_tick.get<sys_tick::CTRL>(), sys_tick::kClkSourceHCLK);
+  if (source == tick::kClkSourceHCLK) {
+    bit::set(sys_tick.get<tick::CTRL>(), tick::kClkSourceHCLK);
   } else {
-    bit::clear(sys_tick.get<sys_tick::CTRL>(), sys_tick::kClkSourceHCLK);
+    bit::clear(sys_tick.get<tick::CTRL>(), tick::kClkSourceHCLK);
   }
 }
 
