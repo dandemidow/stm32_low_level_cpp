@@ -40,13 +40,13 @@
 #include "main.h"
 
 #include "core_cm4.hpp"
+#include "ll/cortex.hpp"
 #include "ll/gpio.h"
 #include "ll/power.hpp"
 #include "ll/rcc.hpp"
 #include "ll/system.hpp"
 #include "ll/utils.hpp"
 #include "ll_bus.hpp"
-#include "ll_cortex.hpp"
 
 static void SystemClock_Config();
 static void MX_GPIO_Init(ll::gpio::Pin &led);
