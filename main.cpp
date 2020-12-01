@@ -143,9 +143,9 @@ void SystemClock_Config(void) {
 
   ll::rcc::set_apb2_prescaler(ll::rcc::Apb2Div::Div1);
 
-  ll::tick::init_1ms_tick(4000000);
+  ll::tick::init_1ms(4000000);
 
-  ll::sys_tick_set_clk_source(ll::tick::kClkSourceHCLK);
+  ll::tick::sys_set_clk_source(ll::tick::kClkSourceHCLK);
 
   ll::set_system_core_clock(4000000);
 

@@ -6,8 +6,9 @@
 extern uint32_t SystemCoreClock;
 
 namespace ll {
+namespace tick {
 
-static inline void sys_tick_set_clk_source(uint32_t source) {
+static inline void sys_set_clk_source(uint32_t source) {
   auto &sys_tick = *new SystemTimer{};
   if (source == tick::kClkSourceHCLK) {
     bit::set(sys_tick.get<tick::CTRL>(), tick::kClkSourceHCLK);
@@ -16,6 +17,7 @@ static inline void sys_tick_set_clk_source(uint32_t source) {
   }
 }
 
+}  // namespace tick
 }  // namespace ll
 
 #endif
