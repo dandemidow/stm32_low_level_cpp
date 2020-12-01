@@ -52,6 +52,8 @@ static void SystemClock_Config();
 static void MX_GPIO_Init(ll::gpio::Pin &led);
 static void LL_Init();
 
+using namespace std::chrono_literals;
+
 /**
   * @brief  The application entry point.
   *
@@ -78,7 +80,7 @@ int main() {
     led.toggle();
 
     /* Insert delay 1000 ms */
-    ll::m_delay(1000);
+    ll::delay(1000ms);
   }
 }
 
