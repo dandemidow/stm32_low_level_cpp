@@ -7,29 +7,37 @@
 
 namespace ll::bus {
 
-using Apb2 = std::integral_constant<int, 0>;
-using Ahb2 = std::integral_constant<int, 1>;
+template <typename Bus>
+struct BusValue {
+  static constexpr uint32_t kBus = Bus::value;
+  uint32_t value;
+  operator uint32_t() const {
+    return value;
+  }
+};
 
-namespace details {
-constexpr auto DetectRccEnr(Apb2) {
-  return rcc::APB2ENR;
-}
-constexpr auto DetectRccEnr(Ahb2) {
-  return rcc::AHB2ENR;
-}
-}  // namespace details
+namespace apb1 {
+using tag = std::integral_constant<uint32_t, rcc::AHB1ENR>;
+constexpr auto kGrp1PeriphPwr = BusValue<tag>{rcc::kApb1Enr1PwrEn};
+}  // namespace apb1
+
+namespace apb2 {
+using tag = std::integral_constant<uint32_t, rcc::APB2ENR>;
+constexpr auto kGrp1PeriphAll = BusValue<tag>{0xFFFFFFFFu};
+constexpr auto kGrp1PeriphSysCfg = BusValue<tag>{rcc::kApb2EnrSysCfgEn};
+}  // namespace apb2
+
+namespace ahb2 {
+using tag = std::integral_constant<uint32_t, rcc::AHB2ENR>;
+constexpr auto kGrp1PeriphGpioA = BusValue<tag>{address::ahb2::kGrp1PeriphGpioA};
+}  // namespace ahb2
 
 template <typename Bus>
-static inline void Grp1EnableClock(uint32_t periphs) {
+static inline void Grp1EnableClock(const BusValue<Bus> &periphs) {
   auto &rcc = *new ResetClockControl{};
-  constexpr auto kRccEnr = details::DetectRccEnr(Bus{});
-  bit::set(rcc.get<kRccEnr>(), periphs);
-  bit::read(rcc.get<kRccEnr>(), periphs);
+  bit::set(rcc.get<Bus::value>(), periphs);
+  bit::read(rcc.get<Bus::value>(), periphs);
 }
-
-constexpr uint32_t kApb2Grp1PeriphAll = 0xFFFFFFFFu;
-constexpr uint32_t kApb2Grp1PeriphSysCfg = rcc::kApb2EnrSysCfgEn;
-constexpr uint32_t kApb1Grp1PeriphPwr = rcc::kApb1Enr1PwrEn;
 
 }  // namespace ll::bus
 

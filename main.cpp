@@ -85,8 +85,8 @@ int main() {
 }
 
 static void LL_Init(void) {
-  ll::bus::Grp1EnableClock<ll::bus::Apb2>(ll::bus::kApb2Grp1PeriphSysCfg);
-  ll::bus::Grp1EnableClock<ll::bus::Apb2>(ll::bus::kApb1Grp1PeriphPwr);
+  ll::bus::Grp1EnableClock(ll::bus::apb2::kGrp1PeriphSysCfg);
+  ll::bus::Grp1EnableClock(ll::bus::apb1::kGrp1PeriphPwr);
 
   nvic::set_priority_grouping(kNvicPriorityGroup4);
 
@@ -157,7 +157,7 @@ void SystemClock_Config(void) {
 
 static void MX_GPIO_Init(ll::gpio::Pin &led) {
   /* GPIO Ports Clock Enable */
-  ll::bus::Grp1EnableClock<ll::bus::Ahb2>(address::ahb2::kGrp1PeriphGpioA);
+  ll::bus::Grp1EnableClock(ll::bus::ahb2::kGrp1PeriphGpioA);
 
   /*led.reset_output*/
   led.reset_output();
