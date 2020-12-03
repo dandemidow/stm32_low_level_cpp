@@ -40,13 +40,13 @@
 #include "main.h"
 
 #include "core_cm4.hpp"
+#include "ll/bus.hpp"
 #include "ll/cortex.hpp"
 #include "ll/gpio.h"
 #include "ll/power.hpp"
 #include "ll/rcc.hpp"
 #include "ll/system.hpp"
 #include "ll/utils.hpp"
-#include "ll_bus.hpp"
 
 static void SystemClock_Config();
 static void MX_GPIO_Init(ll::gpio::Pin &led);
@@ -85,8 +85,8 @@ int main() {
 }
 
 static void LL_Init(void) {
-  ll::Apb2Grp1EnableClock(ll::kApb2Grp1PeriphSysCfg);
-  ll::Apb2Grp1EnableClock(ll::kApb1Grp1PeriphPwr);
+  ll::bus::Grp1EnableClock<ll::bus::Apb2>(ll::bus::kApb2Grp1PeriphSysCfg);
+  ll::bus::Grp1EnableClock<ll::bus::Apb2>(ll::bus::kApb1Grp1PeriphPwr);
 
   nvic::set_priority_grouping(kNvicPriorityGroup4);
 
@@ -157,7 +157,7 @@ void SystemClock_Config(void) {
 
 static void MX_GPIO_Init(ll::gpio::Pin &led) {
   /* GPIO Ports Clock Enable */
-  ll::Ahb2Grp1EnableClock(ll::kAhb2Grp1PeriphGpioA);
+  ll::bus::Grp1EnableClock<ll::bus::Ahb2>(address::ahb2::kGrp1PeriphGpioA);
 
   /*led.reset_output*/
   led.reset_output();

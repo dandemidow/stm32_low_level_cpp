@@ -59,6 +59,10 @@ constexpr uint32_t kBaseAddress = kAhb1periphBaseAddress + 0x1000UL;
 namespace tick {
 constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0010ul;
 }  // namespace tick
+
+namespace ahb2 {
+constexpr uint32_t kGrp1PeriphGpioA = Flag<0x1u, 0u>::value;
+}  // namespace ahb2
 }  // namespace address
 
 #endif
