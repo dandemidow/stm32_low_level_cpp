@@ -39,8 +39,8 @@
 
 #include "main.h"
 
-#include "core_cm4.hpp"
 #include "ll/bus.hpp"
+#include "ll/core.h"
 #include "ll/cortex.hpp"
 #include "ll/gpio.h"
 #include "ll/power.hpp"
