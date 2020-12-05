@@ -51,14 +51,10 @@
 static void SystemClock_Config();
 static void MX_GPIO_Init(ll::gpio::Pin &led);
 static void LL_Init();
+static void _Error_Handler(const char *, int);
 
 using namespace std::chrono_literals;
 
-/**
-  * @brief  The application entry point.
-  *
-  * @retval None
-  */
 int main() {
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -74,12 +70,8 @@ int main() {
   /* Initialize all configured peripherals */
   MX_GPIO_Init(led);
 
-  /* Infinite loop */
-  /* Toggle IO in an infinite loop */
   while (true) {
     led.toggle();
-
-    /* Insert delay 1000 ms */
     ll::delay(1000ms);
   }
 }

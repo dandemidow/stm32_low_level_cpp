@@ -139,17 +139,6 @@ constexpr uint32_t kNvicPriorityGroup4 = 0x00000003; /*!< 4 bits for pre-emption
                                                                  0 bit  for subpriority */
 #endif
 
-/* ########################## Assert Selection ############################## */
-/**
-  * @brief Uncomment the line below to expanse the "assert_param" macro in the 
-  *        HAL drivers code
-  */
-/* #define USE_FULL_ASSERT    1U */
-
-void _Error_Handler(const char *, int);
-
-#define Error_Handler() _Error_Handler(__FILE__, __LINE__)
-
 #endif /* __MAIN_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
