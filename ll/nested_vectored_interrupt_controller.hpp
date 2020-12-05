@@ -8,7 +8,7 @@
 constexpr uint32_t kNvicBaseAddress = kSystemControlSpaceBaseAddress + 0x0100ul;
 using NvicBaseAddress = std::integral_constant<uint32_t, kNvicBaseAddress>;
 
-namespace nvic {
+namespace ll::nvic {
  enum : uint32_t {
   ISER = 0u,
   RESERVED0,
@@ -24,7 +24,7 @@ namespace nvic {
   RESERVED5,
   STIR
 };
-}  // namespace nvic
+}  // namespace ll::nvic
 
 using NestedVectoredInterruptController = Module<NvicBaseAddress,
 Register[8u],

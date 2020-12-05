@@ -4,17 +4,7 @@
 #include "nested_vectored_interrupt_controller.hpp"
 #include "system_control_block.h"
 
-namespace nvic {
-
-static inline void set_priority(int32_t IRQn, uint32_t priority) {
-  if (IRQn >= 0) {
-    auto &nvic = *new NestedVectoredInterruptController{};
-    nvic.get<nvic::IP>()[static_cast<uint32_t>(IRQn)] = (uint8_t)((priority << (8u - kNvicPrioBits)) & 0xffu);
-  } else {
-    auto &scb = *new SystemControlBlock{};
-    scb.get<scb::SHP>()[(static_cast<uint32_t>(IRQn) & 0xful)-4ul] = (uint8_t)((priority << (8u - kNvicPrioBits)) & (uint32_t)0xfful);
-  }
-}
+namespace ll::nvic {
 
 static inline void set_priority_grouping(uint32_t priority_group) {
   auto &scb = *new SystemControlBlock{};
@@ -44,5 +34,15 @@ static inline uint32_t encode_priority (uint32_t priority_group, uint32_t Preemp
          );
 }
 
-}  // namespace nvic
+static inline void set_priority(int32_t IRQn, uint32_t priority = encode_priority(get_priority_grouping(), 0u, 0u)) {
+  if (IRQn >= 0) {
+    auto &nvic = *new NestedVectoredInterruptController{};
+    nvic.get<nvic::IP>()[static_cast<uint32_t>(IRQn)] = (uint8_t)((priority << (8u - kNvicPrioBits)) & 0xffu);
+  } else {
+    auto &scb = *new SystemControlBlock{};
+    scb.get<scb::SHP>()[(static_cast<uint32_t>(IRQn) & 0xful)-4ul] = (uint8_t)((priority << (8u - kNvicPrioBits)) & (uint32_t)0xfful);
+  }
+}
+
+}  // namespace ll::nvic
 #endif

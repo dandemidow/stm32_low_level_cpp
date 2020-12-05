@@ -80,23 +80,23 @@ static void LL_Init(void) {
   ll::bus::Grp1EnableClock(ll::bus::apb2::kGrp1PeriphSysCfg);
   ll::bus::Grp1EnableClock(ll::bus::apb1::kGrp1PeriphPwr);
 
-  nvic::set_priority_grouping(kNvicPriorityGroup4);
+  ll::nvic::set_priority_grouping(kNvicPriorityGroup4);
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */
-  nvic::set_priority(MemoryManagement_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
+  ll::nvic::set_priority(MemoryManagement_IRQn);
   /* BusFault_IRQn interrupt configuration */
-  nvic::set_priority(BusFault_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
+  ll::nvic::set_priority(BusFault_IRQn);
   /* UsageFault_IRQn interrupt configuration */
-  nvic::set_priority(UsageFault_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
+  ll::nvic::set_priority(UsageFault_IRQn);
   /* SVCall_IRQn interrupt configuration */
-  nvic::set_priority(SVCall_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
+  ll::nvic::set_priority(SVCall_IRQn);
   /* DebugMonitor_IRQn interrupt configuration */
-  nvic::set_priority(DebugMonitor_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
+  ll::nvic::set_priority(DebugMonitor_IRQn);
   /* PendSV_IRQn interrupt configuration */
-  nvic::set_priority(PendSV_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
+  ll::nvic::set_priority(PendSV_IRQn);
   /* SysTick_IRQn interrupt configuration */
-  nvic::set_priority(SysTick_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
+  ll::nvic::set_priority(SysTick_IRQn);
 }
 
 /**
@@ -144,7 +144,7 @@ void SystemClock_Config(void) {
   ll::set_system_core_clock(4000000);
 
   /* SysTick_IRQn interrupt configuration */
-  nvic::set_priority(SysTick_IRQn, nvic::encode_priority(nvic::get_priority_grouping(),0, 0));
+  ll::nvic::set_priority(SysTick_IRQn);
 }
 
 static void MX_GPIO_Init(ll::gpio::Pin &led) {
