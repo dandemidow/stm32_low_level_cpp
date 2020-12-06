@@ -4,7 +4,7 @@
 #include "addresses.h"
 #include "module.h"
 
-using NvicBaseAddress = std::integral_constant<uint32_t, kNvicBaseAddress>;
+using NvicBaseAddress = std::integral_constant<uint32_t, address::nvic::kBaseAddress>;
 
 namespace ll::nvic {
  enum : uint32_t {
@@ -41,9 +41,5 @@ Register
 >;
 
 static_assert(std::is_standard_layout<NestedVectoredInterruptController>::value);
-
-constexpr uint32_t kNvicPrioBits = 4u;       /*!< STM32L4XX uses 4 Bits for the Priority Levels */
-//constexpr uint32_t kRccCrMsiOn = Flag<0x1u, 0u>::value;
-//constexpr uint32_t kRccCrMsiRdy = Flag<0x1u, 1u>::value;
 
 #endif
