@@ -24,9 +24,10 @@ static inline uint32_t get_priority_grouping() {
 }
 
 static inline uint32_t encode_priority (uint32_t priority_group, uint32_t PreemptPriority, uint32_t SubPriority) {
+  using address::nvic::kPrioBits;
   uint32_t priority_group_tmp = (priority_group & (uint32_t)0x07UL);   /* only values 0..7 are used          */
-  uint32_t preempt_priority_bits = ((7UL - priority_group_tmp) > kNvicPrioBits) ? kNvicPrioBits : (uint32_t)(7UL - priority_group_tmp);
-  uint32_t sub_priority_bits     = ((priority_group_tmp + kNvicPrioBits) < (uint32_t)7UL) ? (uint32_t)0UL : (uint32_t)((priority_group_tmp - 7UL) + kNvicPrioBits);
+  uint32_t preempt_priority_bits = ((7UL - priority_group_tmp) > kPrioBits) ? kPrioBits : (uint32_t)(7UL - priority_group_tmp);
+  uint32_t sub_priority_bits     = ((priority_group_tmp + kPrioBits) < (uint32_t)7UL) ? (uint32_t)0UL : (uint32_t)((priority_group_tmp - 7UL) + kPrioBits);
 
   return (
            ((PreemptPriority & (uint32_t)((1UL << (preempt_priority_bits)) - 1UL)) << sub_priority_bits) |
@@ -35,12 +36,13 @@ static inline uint32_t encode_priority (uint32_t priority_group, uint32_t Preemp
 }
 
 static inline void set_priority(int32_t IRQn, uint32_t priority = encode_priority(get_priority_grouping(), 0u, 0u)) {
+  using address::nvic::kPrioBits;
   if (IRQn >= 0) {
     auto &nvic = *new NestedVectoredInterruptController{};
-    nvic.get<nvic::IP>()[static_cast<uint32_t>(IRQn)] = (uint8_t)((priority << (8u - kNvicPrioBits)) & 0xffu);
+    nvic.get<nvic::IP>()[static_cast<uint32_t>(IRQn)] = (uint8_t)((priority << (8u - kPrioBits)) & 0xffu);
   } else {
     auto &scb = *new SystemControlBlock{};
-    scb.get<scb::SHP>()[(static_cast<uint32_t>(IRQn) & 0xful)-4ul] = (uint8_t)((priority << (8u - kNvicPrioBits)) & (uint32_t)0xfful);
+    scb.get<scb::SHP>()[(static_cast<uint32_t>(IRQn) & 0xful)-4ul] = (uint8_t)((priority << (8u - kPrioBits)) & (uint32_t)0xfful);
   }
 }
 
