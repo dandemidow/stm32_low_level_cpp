@@ -19,18 +19,5 @@ target_compile_definitions(stll
 
 target_compile_options(stll
   PRIVATE
-    -march=armv7e-m
-    -mcpu=cortex-m4
-    -mthumb
-    -mfpu=fpv4-sp-d16
-    -mfloat-abi=hard
-    -fdata-sections
-    -ffunction-sections
-    -Wall
-    -Wextra
-    -Wno-volatile       #for a while disable this warning
-    -fmessage-length=0
-    -fno-exceptions
-    -fno-rtti
     $<$<CONFIG:Debug>:-Og>
 )

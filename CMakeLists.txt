@@ -17,35 +17,16 @@ set(EXECUTABLE ${PROJECT_NAME}.elf)
 
 add_executable(${EXECUTABLE} ${SRCS})
 
-target_compile_options(${EXECUTABLE} PRIVATE
-        -march=armv7e-m
-        -mcpu=cortex-m4
-        -mthumb
-        -mfpu=fpv4-sp-d16
-        -mfloat-abi=hard
-        -fdata-sections
-        -ffunction-sections
-        -Wall
-        -Wextra
-        -Wno-volatile       #for a while disable this warning
-        -fmessage-length=0
-        -fno-exceptions
-        -fno-rtti
-        $<$<CONFIG:Debug>:-Og>
-        )
+target_compile_options(${EXECUTABLE}
+  PRIVATE
+    $<$<CONFIG:Debug>:-Og>
+)
 
 set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/STM32L452RETx_FLASH.ld")
 
 target_link_options(${EXECUTABLE} PRIVATE
         -static
         -T${LINKER_SCRIPT}
-        -mcpu=cortex-m4
-        -mthumb
-        -mfpu=fpv4-sp-d16
-        -mfloat-abi=hard
-        -specs=nano.specs
-        -Wl,-Map=${PROJECT_NAME}.map,--cref
-        -Wl,--gc-sections
         )
 
 target_compile_definitions(${EXECUTABLE}

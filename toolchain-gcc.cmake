@@ -24,3 +24,29 @@ set(CMAKE_FIND_ROOT_PATH ${BINUTILS_PATH})
 set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)
 set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
+
+set(CMAKE_CXX_FLAGS_INIT
+  "-march=armv7e-m \
+  -mcpu=cortex-m4 \
+  -mthumb \
+  -mfpu=fpv4-sp-d16 \
+  -mfloat-abi=hard \
+  -fdata-sections \
+  -ffunction-sections \
+  -Wall \
+  -Wextra \
+  -Wno-volatile \
+  -fmessage-length=0 \
+  -fno-exceptions \
+  -fno-rtti"
+)
+
+set(CMAKE_EXE_LINKER_FLAGS
+  "-mcpu=cortex-m4 \
+  -mthumb \
+  -mfpu=fpv4-sp-d16 \
+  -mfloat-abi=hard \
+  -specs=nano.specs \
+  -Wl,-Map=${PROJECT_NAME}.map,--cref \
+  -Wl,--gc-sections"
+)
