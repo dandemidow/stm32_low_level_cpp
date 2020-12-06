@@ -60,6 +60,10 @@ namespace tick {
 constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0010ul;
 }  // namespace tick
 
+namespace nvic {
+constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0100ul;
+}  // namespace nvic
+
 namespace ahb2 {
 constexpr uint32_t kGrp1PeriphGpioA = Flag<0x1u, 0u>::value;
 }  // namespace ahb2

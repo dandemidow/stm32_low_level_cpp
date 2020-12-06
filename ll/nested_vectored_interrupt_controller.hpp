@@ -2,10 +2,8 @@
 #define NESTED_VECTORED_INTERRUPT_CONTROLLER_H_
 
 #include "addresses.h"
-#include "device_register.h"
 #include "module.h"
 
-constexpr uint32_t kNvicBaseAddress = kSystemControlSpaceBaseAddress + 0x0100ul;
 using NvicBaseAddress = std::integral_constant<uint32_t, kNvicBaseAddress>;
 
 namespace ll::nvic {
