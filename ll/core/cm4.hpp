@@ -25,9 +25,9 @@ static inline PriorityGroup get_priority_grouping() {
   return static_cast<PriorityGroup>(scb.And<scb::AIRCR>(kScbAircrPriGroup.mask) >> kScbAircrPriGroup.position);
 }
 
-static inline uint32_t encode_priority (uint32_t priority_group, uint32_t PreemptPriority, uint32_t SubPriority) {
+static inline uint32_t encode_priority (PriorityGroup priority_group, uint32_t PreemptPriority, uint32_t SubPriority) {
   using address::nvic::kPrioBits;
-  uint32_t priority_group_tmp = (priority_group & (uint32_t)0x07UL);   /* only values 0..7 are used          */
+  uint32_t priority_group_tmp = (static_cast<uint32_t>(priority_group) & (uint32_t)0x07UL);   /* only values 0..7 are used          */
   uint32_t preempt_priority_bits = ((7UL - priority_group_tmp) > kPrioBits) ? kPrioBits : (uint32_t)(7UL - priority_group_tmp);
   uint32_t sub_priority_bits     = ((priority_group_tmp + kPrioBits) < (uint32_t)7UL) ? (uint32_t)0UL : (uint32_t)((priority_group_tmp - 7UL) + kPrioBits);
 
