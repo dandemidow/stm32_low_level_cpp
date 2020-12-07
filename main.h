@@ -126,19 +126,6 @@ typedef enum
   I2C4_ER_IRQn                = 84      /*!< I2C4 Error interrupt                                              */
 } IRQn_Type;
 
-#ifndef NVIC_PRIORITYGROUP_0
-constexpr uint32_t kNvicPriorityGroup0 = 0x00000007; /*!< 0 bit  for pre-emption priority,
-                                                                 4 bits for subpriority */
-constexpr uint32_t kNvicPriorityGroup1 = 0x00000006; /*!< 1 bit  for pre-emption priority,
-                                                                 3 bits for subpriority */
-constexpr uint32_t kNvicPriorityGroup2 = 0x00000005; /*!< 2 bits for pre-emption priority,
-                                                                 2 bits for subpriority */
-constexpr uint32_t kNvicPriorityGroup3 = 0x00000004; /*!< 3 bits for pre-emption priority,
-                                                                 1 bit  for subpriority */
-constexpr uint32_t kNvicPriorityGroup4 = 0x00000003; /*!< 4 bits for pre-emption priority,
-                                                                 0 bit  for subpriority */
-#endif
-
 #endif /* __MAIN_H__ */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

@@ -63,6 +63,13 @@ constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0010ul;
 namespace nvic {
 constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0100ul;
 constexpr uint32_t kPrioBits = 4u;       // STM32L4XX uses 4 Bits for the Priority Levels
+enum class PriorityGroup {
+  Gr0 = 0x00000007,
+  Gr1 = 0x00000006,
+  Gr2 = 0x00000005,
+  Gr3 = 0x00000004,
+  Gr4 = 0x00000003
+};
 }  // namespace nvic
 
 namespace ahb2 {

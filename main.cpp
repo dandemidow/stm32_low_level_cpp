@@ -175,13 +175,3 @@ void _Error_Handler([[maybe_unused]] const char *file, [[maybe_unused]] int line
   while(1) {
   }
 }
-
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
