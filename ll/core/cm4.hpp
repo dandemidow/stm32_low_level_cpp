@@ -6,9 +6,11 @@
 
 namespace ll::nvic {
 
-static inline void set_priority_grouping(uint32_t priority_group) {
+using address::nvic::PriorityGroup;
+
+static inline void set_priority_grouping(PriorityGroup priority_group) {
   auto &scb = *new SystemControlBlock{};
-  uint32_t priority_group_tmp = (priority_group & (uint32_t)0x07u);            /* only values 0..7 are used          */
+  uint32_t priority_group_tmp = (static_cast<uint32_t>(priority_group) & (uint32_t)0x07u);            /* only values 0..7 are used          */
 
   uint32_t reg_value = scb.get<scb::AIRCR>();                                  /* read old register configuration    */
   reg_value &= ~((uint32_t)(kScbAircrVectKey.mask | kScbAircrPriGroup.mask));  /* clear bits to change               */
@@ -18,9 +20,9 @@ static inline void set_priority_grouping(uint32_t priority_group) {
   scb.set<scb::AIRCR>(reg_value);
 }
 
-static inline uint32_t get_priority_grouping() {
+static inline PriorityGroup get_priority_grouping() {
   auto &scb = *new SystemControlBlock{};
-  return static_cast<uint32_t>(scb.And<scb::AIRCR>(kScbAircrPriGroup.mask) >> kScbAircrPriGroup.position);
+  return static_cast<PriorityGroup>(scb.And<scb::AIRCR>(kScbAircrPriGroup.mask) >> kScbAircrPriGroup.position);
 }
 
 static inline uint32_t encode_priority (uint32_t priority_group, uint32_t PreemptPriority, uint32_t SubPriority) {
