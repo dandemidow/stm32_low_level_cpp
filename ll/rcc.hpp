@@ -25,6 +25,11 @@ class Msi {
     return ((bit::read(rcc.get<rcc::CR>(), kCrMsiRdy) == kCrMsiRdy) ? true : false);
   }
 
+  inline void WaitForReady() {
+    while(IsReady() != true) {
+    }
+  }
+
   inline void EnableRangeSelection() {
     bit::set(rcc.get<rcc::CR>(), kCrMsiRgSel);
   }

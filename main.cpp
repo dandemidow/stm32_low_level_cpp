@@ -80,7 +80,7 @@ static void LL_Init(void) {
   ll::bus::Grp1EnableClock(ll::bus::apb2::kGrp1PeriphSysCfg);
   ll::bus::Grp1EnableClock(ll::bus::apb1::kGrp1PeriphPwr);
 
-  ll::nvic::set_priority_grouping(kNvicPriorityGroup4);
+  ll::nvic::set_priority_grouping(ll::nvic::PriorityGroup::Gr4);
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */
@@ -108,21 +108,16 @@ void SystemClock_Config(void) {
   ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency0);
 
   if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency0) {
-  _Error_Handler(__FILE__, __LINE__);
+    _Error_Handler(__FILE__, __LINE__);
   }
   ll::power::set_regul_voltage_scaling(ll::power::ReguVoltage::kScale1);
 
   ll::rcc::Msi msi{};
   msi.Enable();
-
-   /* Wait till MSI is ready */
-  while(msi.IsReady() != true) {
-  }
+  msi.WaitForReady();
 
   msi.EnableRangeSelection();
-
   msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
-
   msi.SetCalibTrimming(0);
 
   ll::rcc::set_sys_clk_source(msi);
