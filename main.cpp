@@ -146,10 +146,8 @@ static void MX_GPIO_Init(ll::gpio::Pin &led) {
   /* GPIO Ports Clock Enable */
   ll::bus::Grp1EnableClock(ll::bus::ahb2::kGrp1PeriphGpioA);
 
-  /*led.reset_output*/
   led.reset_output();
 
-  /**/
   ll::gpio::init_cfg gpio_init {
     .Mode = ll::gpio::mode::Output,
     .Speed = ll::gpio::speed::VeryHigh,
