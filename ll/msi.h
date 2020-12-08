@@ -31,7 +31,7 @@ class Msi {
   }
 
   inline void SetCalibTrimming(uint32_t value) {
-    reg::modify(rcc.get<rcc::ICSCR>(), rcc::kIcsCrMsiTrim.value, value << kIcsCrMsiTrim.position);
+    reg::modify(rcc.get<rcc::ICSCR>(), rcc::kIcsCrMsiTrim.value, value << rcc::kIcsCrMsiTrim.position);
   }
 
   operator rcc::SysClkSource() {

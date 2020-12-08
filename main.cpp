@@ -43,8 +43,8 @@
 #include "ll/core.h"
 #include "ll/cortex.hpp"
 #include "ll/gpio.h"
+#include "ll/msi.h"
 #include "ll/power.hpp"
-#include "ll/rcc.hpp"
 #include "ll/system.hpp"
 #include "ll/utils.hpp"
 
@@ -56,8 +56,6 @@ static void _Error_Handler(const char *, int);
 using namespace std::chrono_literals;
 
 int main() {
-
-  /* MCU Configuration----------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   LL_Init();
@@ -112,7 +110,7 @@ void SystemClock_Config(void) {
   }
   ll::power::set_regul_voltage_scaling(ll::power::ReguVoltage::kScale1);
 
-  ll::rcc::Msi msi{};
+  ll::Msi msi{};
   msi.Enable();
   msi.WaitForReady();
 
