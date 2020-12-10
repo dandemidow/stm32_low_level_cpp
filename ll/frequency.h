@@ -10,7 +10,7 @@ class Frequency {
  public:
   typedef Ratio ratio;
 
-  Frequency() = default;
+  constexpr Frequency() = default;
   Frequency(const double& v) : value(v) {}
 
   template <class R>
@@ -35,5 +35,14 @@ class Frequency {
 
 using hertz = Frequency<std::ratio<1>>;
 using kilohertz = Frequency<std::kilo>;
+using megahertz = Frequency<std::mega>;
+
+constexpr kilohertz operator""_KHz ( long double freq ) {
+  return kilohertz{static_cast<double>(freq)};
+}
+
+constexpr kilohertz operator""_KHz ( unsigned long long int freq ) {
+  return kilohertz{static_cast<double>(freq)};
+}
 
 #endif
