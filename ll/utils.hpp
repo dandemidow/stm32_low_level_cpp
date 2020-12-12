@@ -5,24 +5,25 @@
 #include <limits>
 
 #include "system_timer.hpp"
+#include "frequency.h"
 
 extern uint32_t SystemCoreClock;
 
 namespace ll {
 namespace tick {
 
-static inline void init(uint32_t HCLKFrequency, uint32_t Ticks) {
+static inline void init(const hertz &hclk, uint32_t Ticks) {
   auto &sys_tick = *new SystemTimer{};
   /* Configure the SysTick to have interrupt in 1ms time base */
-  sys_tick.set<LOAD>(((HCLKFrequency / Ticks) - 1u));  // set reload register
+  sys_tick.set<LOAD>(((hclk.count() / Ticks) - 1u));  // set reload register
   sys_tick.set<VAL>(0u);                                // Load the SysTick Counter Value
   sys_tick.set<CTRL>(ctrl::kClkSource.mask | ctrl::kEnable.mask); // Enable the Systick Timer
 }
 
 
-inline void init_1ms(uint32_t HCLKFrequency) {
+inline void init_1ms(const hertz &hclk) {
   /* Use frequency provided in argument */
-  init(HCLKFrequency, 1000U);
+  init(hclk, 1000U);
 }
 
 }  // namespace tick
