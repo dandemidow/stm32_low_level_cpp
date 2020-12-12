@@ -156,9 +156,9 @@ uint32_t GetMsiRangeFrequency() {
   return MSIRangeTable[msirange];
 }
 
-uint32_t GetSysClkSource(uint32_t msirange) {
+hertz GetSysClkSource(uint32_t msirange) {
   using namespace ll::rcc;
-  uint32_t result;
+  hertz result;
   uint32_t pllm = 2u;
   uint32_t pllvco = 0u;
   uint32_t pllr = 2u;
@@ -166,15 +166,15 @@ uint32_t GetSysClkSource(uint32_t msirange) {
   auto &rcc = *new ResetClockControl {};
   switch (rcc.And<CFGR>(cfgr::kSws)) {
     case 0x00:  /* MSI used as system clock source */
-      result = msirange;
+      result = hertz{msirange};
       break;
 
     case 0x04:  /* HSI used as system clock source */
-      result = HSI_VALUE;
+      result = hertz{HSI_VALUE};
       break;
 
     case 0x08:  /* HSE used as system clock source */
-      result = HSE_VALUE;
+      result = hertz{HSE_VALUE};
       break;
 
     case 0x0C:  /* PLL used as system clock  source */
@@ -198,11 +198,11 @@ uint32_t GetSysClkSource(uint32_t msirange) {
       }
       pllvco = pllvco * (rcc.And<PLLCFGR>(kPllCfgrPllN) >> 8U);
       pllr = ((rcc.And<PLLCFGR>(kPllCfgrPllR) >> 25U) + 1U) * 2U;
-      result = pllvco/pllr;
+      result = hertz{pllvco/pllr};
       break;
 
     default:
-      result = msirange;
+      result = hertz{msirange};
       break;
   }
   return result;
@@ -311,7 +311,7 @@ void SystemCoreClockUpdate(void) {
   /* Get HCLK prescaler */
   uint32_t tmp = AHBPrescTable[(rcc.And<ll::rcc::CFGR>(ll::rcc::cfgr::kHPre) >> 4U)];
   /* HCLK clock frequency */
-  SystemCoreClock >>= tmp;
+  SystemCoreClock = hertz{static_cast<uint32_t>(SystemCoreClock.count()) >> tmp};
 }
 } // extern "C"
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
