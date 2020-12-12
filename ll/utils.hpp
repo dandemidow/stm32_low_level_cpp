@@ -7,7 +7,7 @@
 #include "system_timer.hpp"
 #include "frequency.h"
 
-extern uint32_t SystemCoreClock;
+extern hertz SystemCoreClock;
 
 namespace ll {
 namespace tick {
@@ -27,9 +27,9 @@ inline void init_1ms(const hertz &hclk) {
 
 }  // namespace tick
 
-inline void set_system_core_clock(uint32_t HCLKFrequency) {
+inline void set_system_core_clock(const hertz &hclk) {
   /* HCLK clock frequency */
-  SystemCoreClock = HCLKFrequency;
+  SystemCoreClock = hclk;
 }
 
 static void delay(const std::chrono::milliseconds &delay) {

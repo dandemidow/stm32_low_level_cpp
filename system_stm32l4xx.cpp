@@ -93,8 +93,9 @@
   ******************************************************************************
   */
 
-#include "system_control_block.h"
+#include "frequency.h"
 #include "reset_clock_control.h"
+#include "system_control_block.h"
 
 #if !defined  (HSE_VALUE)
   #define HSE_VALUE    8000000U  /*!< Value of the External oscillator in Hz */
@@ -125,7 +126,7 @@ constexpr uint32_t kVectTabOffset = 0x00u;
                is no need to call the 2 first functions listed above, since SystemCoreClock
                variable is updated automatically.
   */
-uint32_t SystemCoreClock = 4000000U;
+hertz SystemCoreClock = 4_KHz;
 
 [[maybe_unused]] static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
 

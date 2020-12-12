@@ -2,8 +2,9 @@
 #define LL_CORTEX_HPP_
 
 #include "system_timer.hpp"
+#include "frequency.h"
 
-extern uint32_t SystemCoreClock;
+extern hertz SystemCoreClock;
 
 namespace ll {
 namespace tick {
