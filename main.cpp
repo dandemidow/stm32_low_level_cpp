@@ -101,7 +101,7 @@ static void LL_Init(void) {
   * @brief System Clock Configuration
   * @retval None
   */
-void SystemClock_Config(void) {
+void SystemClock_Config() {
 
   ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency0);
 
@@ -130,11 +130,13 @@ void SystemClock_Config(void) {
 
   ll::rcc::set_apb2_prescaler(ll::rcc::Apb2Div::Div1);
 
-  ll::tick::init_1ms(4000000);
+  constexpr auto kBaseFrequency = 4_KHz;
+
+  ll::tick::init_1ms(kBaseFrequency);
 
   ll::tick::sys_set_clk_source(ll::tick::kClkSourceHCLK);
 
-  ll::set_system_core_clock(4000000);
+  ll::set_system_core_clock(kBaseFrequency);
 
   /* SysTick_IRQn interrupt configuration */
   ll::nvic::set_priority(SysTick_IRQn);

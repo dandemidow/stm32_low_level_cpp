@@ -11,7 +11,7 @@ class Frequency {
   using ratio = Ratio;
 
   constexpr Frequency() = default;
-  constexpr Frequency(const double& v) : value(v) {}
+  constexpr explicit Frequency(const double& v) : value(v) {}
 
   template <class R>
   constexpr Frequency(const Frequency<R>& d)

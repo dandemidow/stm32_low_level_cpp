@@ -20,7 +20,6 @@ static inline void init(const hertz &hclk, uint32_t Ticks) {
   sys_tick.set<CTRL>(ctrl::kClkSource.mask | ctrl::kEnable.mask); // Enable the Systick Timer
 }
 
-
 inline void init_1ms(const hertz &hclk) {
   /* Use frequency provided in argument */
   init(hclk, 1000U);
