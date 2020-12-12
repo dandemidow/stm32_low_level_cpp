@@ -98,15 +98,15 @@
 #include "system_control_block.h"
 
 #if !defined  (HSE_VALUE)
-constexpr auto HSE_VALUE = 8_KHz;  // Value of the External oscillator
+constexpr auto kHseValue = 8_KHz;  // Value of the External oscillator
 #endif /* HSE_VALUE */
 
 #if !defined  (MSI_VALUE)
-constexpr auto MSI_VALUE = 4_KHz;  // Value of the Internal oscillator
+constexpr auto kMsiValue = 4_KHz;  // Value of the Internal oscillator
 #endif /* MSI_VALUE */
 
 #if !defined  (HSI_VALUE)
-constexpr auto HSI_VALUE = 16_KHz; // Value of the Internal oscillator
+constexpr auto kHsiValue = 16_KHz; // Value of the Internal oscillator
 #endif /* HSI_VALUE */
 
 /************************* Miscellaneous Configuration ************************/
@@ -170,11 +170,11 @@ hertz GetSysClkSource(uint32_t msirange) {
       break;
 
     case 0x04:  /* HSI used as system clock source */
-      result = HSI_VALUE;
+      result = kHsiValue;
       break;
 
     case 0x08:  /* HSE used as system clock source */
-      result = HSE_VALUE    ;
+      result = kHseValue    ;
       break;
 
     case 0x0C:  /* PLL used as system clock  source */
@@ -185,11 +185,11 @@ hertz GetSysClkSource(uint32_t msirange) {
 
       switch (rcc.And<PLLCFGR>(kPllCfgrPllSrc)) {
         case 0x02:  /* HSI used as PLL clock source */
-          pllvco = (HSI_VALUE / pllm).count();
+          pllvco = (kHsiValue / pllm).count();
           break;
 
         case 0x03:  /* HSE used as PLL clock source */
-          pllvco = (HSE_VALUE / pllm).count();
+          pllvco = (kHseValue / pllm).count();
           break;
 
         default:    /* MSI used as PLL clock source */
