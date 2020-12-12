@@ -98,15 +98,15 @@
 #include "system_control_block.h"
 
 #if !defined  (HSE_VALUE)
-  #define HSE_VALUE    8000000U  /*!< Value of the External oscillator in Hz */
+constexpr auto HSE_VALUE = 8_KHz;  // Value of the External oscillator
 #endif /* HSE_VALUE */
 
 #if !defined  (MSI_VALUE)
-  #define MSI_VALUE    4000000U  /*!< Value of the Internal oscillator in Hz*/
+constexpr auto MSI_VALUE = 4_KHz;  // Value of the Internal oscillator
 #endif /* MSI_VALUE */
 
 #if !defined  (HSI_VALUE)
-  #define HSI_VALUE    16000000U /*!< Value of the Internal oscillator in Hz*/
+constexpr auto HSI_VALUE = 16_KHz; // Value of the Internal oscillator
 #endif /* HSI_VALUE */
 
 /************************* Miscellaneous Configuration ************************/
@@ -158,7 +158,7 @@ uint32_t GetMsiRangeFrequency() {
 
 hertz GetSysClkSource(uint32_t msirange) {
   using namespace ll::rcc;
-  hertz result;
+  hertz result {};
   uint32_t pllm = 2u;
   uint32_t pllvco = 0u;
   uint32_t pllr = 2u;
@@ -170,11 +170,11 @@ hertz GetSysClkSource(uint32_t msirange) {
       break;
 
     case 0x04:  /* HSI used as system clock source */
-      result = hertz{HSI_VALUE};
+      result = HSI_VALUE;
       break;
 
     case 0x08:  /* HSE used as system clock source */
-      result = hertz{HSE_VALUE};
+      result = HSE_VALUE    ;
       break;
 
     case 0x0C:  /* PLL used as system clock  source */
@@ -185,11 +185,11 @@ hertz GetSysClkSource(uint32_t msirange) {
 
       switch (rcc.And<PLLCFGR>(kPllCfgrPllSrc)) {
         case 0x02:  /* HSI used as PLL clock source */
-          pllvco = (HSI_VALUE / pllm);
+          pllvco = (HSI_VALUE / pllm).count();
           break;
 
         case 0x03:  /* HSE used as PLL clock source */
-          pllvco = (HSE_VALUE / pllm);
+          pllvco = (HSE_VALUE / pllm).count();
           break;
 
         default:    /* MSI used as PLL clock source */

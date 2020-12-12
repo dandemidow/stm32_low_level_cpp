@@ -11,8 +11,8 @@ class Frequency {
   using ratio = Ratio;
 
   constexpr Frequency() = default;
-  constexpr explicit Frequency(const double& v) : value{v} {}
-  constexpr explicit Frequency(const uint32_t& v) : value{static_cast<double>(v)} {}
+  constexpr explicit Frequency(double v) : value{v} {}
+  constexpr explicit Frequency(uint32_t v) : value{static_cast<double>(v)} {}
 
   template <class R>
   constexpr Frequency(const Frequency<R>& d)
@@ -21,8 +21,11 @@ class Frequency {
 
   constexpr double count() const {return value;}
 
-  constexpr Frequency operator+(const Frequency& d) {return {value + d.count()};}
-  constexpr Frequency operator-(const Frequency& d) {return {value - d.count()};}
+  constexpr Frequency operator+(const Frequency& d) const {return Frequency{value + d.count()};}
+  constexpr Frequency operator-(const Frequency& d) const {return Frequency{value - d.count()};}
+
+  constexpr Frequency operator*(uint32_t rhs) const {return Frequency{value * rhs};}
+  constexpr Frequency operator/(uint32_t rhs) const {return Frequency{static_cast<double>(value / rhs)};}
 
   constexpr Frequency& operator+=(const Frequency& d) {value += d.count(); return *this;}
   constexpr Frequency& operator-=(const Frequency& d) {value -= d.count(); return *this;}
