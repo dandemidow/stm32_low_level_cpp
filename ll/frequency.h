@@ -3,6 +3,11 @@
 
 #include <ratio>
 
+template <class> class Frequency;
+using hertz = Frequency<std::ratio<1>>;
+using kilohertz = Frequency<std::kilo>;
+using megahertz = Frequency<std::mega>;
+
 template <class Ratio>
 class Frequency {
  private:
@@ -24,21 +29,14 @@ class Frequency {
   constexpr Frequency operator-(const Frequency& d) const {return Frequency{value - d.count()};}
 
   constexpr Frequency operator*(uint32_t rhs) const {return Frequency{value * rhs};}
-  constexpr Frequency operator/(uint32_t rhs) const {return Frequency{static_cast<double>(value / rhs)};}
+  hertz operator/(uint32_t rhs) const {hertz tmp = *this; return hertz{tmp.count() / rhs};}
 
   constexpr Frequency& operator+=(const Frequency& d) {value += d.count(); return *this;}
   constexpr Frequency& operator-=(const Frequency& d) {value -= d.count(); return *this;}
 
   constexpr Frequency operator+() const {return *this;}
   constexpr Frequency operator-() const {return Frequency(-value);}
-
-  constexpr Frequency& operator*=(uint32_t rhs) {value *= rhs; return *this;}
-  constexpr Frequency& operator/=(uint32_t rhs) {value /= rhs; return *this;}
 };
-
-using hertz = Frequency<std::ratio<1>>;
-using kilohertz = Frequency<std::kilo>;
-using megahertz = Frequency<std::mega>;
 
 constexpr hertz operator""_Hz ( unsigned long long int freq ) {
   return hertz{static_cast<uint32_t>(freq)};
