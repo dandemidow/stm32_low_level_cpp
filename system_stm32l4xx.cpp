@@ -130,7 +130,7 @@ hertz SystemCoreClock = 4_KHz;
 
 [[maybe_unused]] static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
 
-uint32_t GetMsiRangeFrequency() {
+hertz GetMsiRangeFrequency() {
   using namespace ll::rcc;
   constexpr std::array<hertz, 12u> MSIRangeTable {100_KHz,
                                                   200_KHz,
