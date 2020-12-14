@@ -156,7 +156,7 @@ hertz GetMsiRangeFrequency() {
   return MSIRangeTable[msirange];
 }
 
-hertz GetSysClkSource(uint32_t msirange) {
+hertz GetSysClkSource(hertz msirange) {
   using namespace ll::rcc;
   hertz result {};
   uint32_t pllm = 2u;
@@ -166,7 +166,7 @@ hertz GetSysClkSource(uint32_t msirange) {
   auto &rcc = *new ResetClockControl {};
   switch (rcc.And<CFGR>(cfgr::kSws)) {
     case 0x00:  /* MSI used as system clock source */
-      result = hertz{msirange};
+      result = msirange;
       break;
 
     case 0x04:  /* HSI used as system clock source */
@@ -174,7 +174,7 @@ hertz GetSysClkSource(uint32_t msirange) {
       break;
 
     case 0x08:  /* HSE used as system clock source */
-      result = kHseValue    ;
+      result = kHseValue;
       break;
 
     case 0x0C:  /* PLL used as system clock  source */
@@ -193,7 +193,7 @@ hertz GetSysClkSource(uint32_t msirange) {
           break;
 
         default:    /* MSI used as PLL clock source */
-          pllvco = (msirange / pllm);
+          pllvco = (msirange / pllm).count();
           break;
       }
       pllvco = pllvco * (rcc.And<PLLCFGR>(kPllCfgrPllN) >> 8U);
@@ -302,7 +302,7 @@ void SystemCoreClockUpdate(void) {
   auto &rcc = *new ResetClockControl {};
 
   /*MSI frequency range in HZ*/
-  uint32_t msirange = GetMsiRangeFrequency();
+  auto msirange = GetMsiRangeFrequency();
 
   /* Get SYSCLK source -------------------------------------------------------*/
   SystemCoreClock = GetSysClkSource(msirange);
