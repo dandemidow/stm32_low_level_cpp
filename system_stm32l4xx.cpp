@@ -132,18 +132,18 @@ hertz SystemCoreClock = 4_KHz;
 
 uint32_t GetMsiRangeFrequency() {
   using namespace ll::rcc;
-  constexpr std::array<uint32_t, 12u> MSIRangeTable {100000U,
-                                                     200000U,
-                                                     400000U,
-                                                     800000U,
-                                                     1000000U,
-                                                     2000000U,
-                                                     4000000U,
-                                                     8000000U,
-                                                     16000000U,
-                                                     24000000U,
-                                                     32000000U,
-                                                     48000000U};
+  constexpr std::array<hertz, 12u> MSIRangeTable {100_KHz,
+                                                  200_KHz,
+                                                  400_KHz,
+                                                  800_KHz,
+                                                  1_MHz,
+                                                  2_MHz,
+                                                  4_MHz,
+                                                  8_MHz,
+                                                  16_MHz,
+                                                  24_MHz,
+                                                  32_MHz,
+                                                  48_MHz};
   uint32_t msirange;
   auto &rcc = *new ResetClockControl {};
   /* Get MSI Range frequency--------------------------------------------------*/
