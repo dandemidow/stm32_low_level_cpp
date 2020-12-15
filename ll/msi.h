@@ -33,6 +33,10 @@ class Msi {
     return rcc::SysClkSource::Msi;
   }
 
+  friend auto operator ==(rcc::SysClkSourceStatus source, const Msi &) {
+    return source == rcc::SysClkSourceStatus::Msi;
+  }
+
   friend auto operator !=(rcc::SysClkSourceStatus source, const Msi &) {
     return source != rcc::SysClkSourceStatus::Msi;
   }
