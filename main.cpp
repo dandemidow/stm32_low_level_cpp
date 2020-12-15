@@ -46,6 +46,7 @@
 #include "ll/msi.h"
 #include "ll/power.hpp"
 #include "ll/system.hpp"
+#include "ll/spinlock.hpp"
 #include "ll/utils.hpp"
 
 static void SystemClock_Config();
@@ -112,7 +113,7 @@ void SystemClock_Config() {
 
   ll::Msi msi{};
   msi.Enable();
-  msi.WaitForReady();
+  SpinLock::Till([&]{return msi.IsReady();});
 
   msi.EnableRangeSelection();
   msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
@@ -121,8 +122,7 @@ void SystemClock_Config() {
   ll::rcc::set_sys_clk_source(msi);
 
    /* Wait till System clock is ready */
-  while(ll::rcc::get_sys_clk_source() != msi) {
-  }
+  SpinLock::Till([&]{return ll::rcc::get_sys_clk_source() == msi;});
 
   ll::rcc::set_ahb_prescaler(ll::rcc::SysClkDiv::Div1);
 
