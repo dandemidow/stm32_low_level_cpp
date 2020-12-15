@@ -122,8 +122,7 @@ void SystemClock_Config() {
   ll::rcc::set_sys_clk_source(msi);
 
    /* Wait till System clock is ready */
-  while(ll::rcc::get_sys_clk_source() != msi) {
-  }
+  SpinLock::Till([&]{return ll::rcc::get_sys_clk_source() == msi;});
 
   ll::rcc::set_ahb_prescaler(ll::rcc::SysClkDiv::Div1);
 
