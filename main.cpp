@@ -46,6 +46,7 @@
 #include "ll/msi.h"
 #include "ll/power.hpp"
 #include "ll/system.hpp"
+#include "ll/spinlock.hpp"
 #include "ll/utils.hpp"
 
 static void SystemClock_Config();
@@ -112,6 +113,7 @@ void SystemClock_Config() {
 
   ll::Msi msi{};
   msi.Enable();
+  SpinLock::Till([&]{return msi.IsReady();});
   msi.WaitForReady();
 
   msi.EnableRangeSelection();
