@@ -114,7 +114,6 @@ void SystemClock_Config() {
   ll::Msi msi{};
   msi.Enable();
   SpinLock::Till([&]{return msi.IsReady();});
-  msi.WaitForReady();
 
   msi.EnableRangeSelection();
   msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
