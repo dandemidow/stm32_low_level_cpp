@@ -3,6 +3,7 @@
 
 #include "nested_vectored_interrupt_controller.hpp"
 #include "system_control_block.h"
+#include "irqs.h"
 
 namespace ll::nvic {
 
@@ -37,9 +38,9 @@ static inline uint32_t encode_priority (PriorityGroup priority_group, uint32_t P
          );
 }
 
-static inline void set_priority(int32_t IRQn, uint32_t priority = encode_priority(get_priority_grouping(), 0u, 0u)) {
+static inline void set_priority(IRQn_Type IRQn, uint32_t priority = encode_priority(get_priority_grouping(), 0u, 0u)) {
   using address::nvic::kPrioBits;
-  if (IRQn >= 0) {
+  if (static_cast<int>(IRQn) >= 0) {
     auto &nvic = *new NestedVectoredInterruptController{};
     nvic.get<nvic::IP>()[static_cast<uint32_t>(IRQn)] = (uint8_t)((priority << (8u - kPrioBits)) & 0xffu);
   } else {

@@ -37,8 +37,6 @@
   */
 
 
-#include "main.h"
-
 #include "ll/bus.hpp"
 #include "ll/core.h"
 #include "ll/cortex.hpp"
@@ -83,19 +81,19 @@ static void LL_Init(void) {
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */
-  ll::nvic::set_priority(MemoryManagement_IRQn);
+  ll::nvic::set_priority(IRQn_Type::MemoryManagement_IRQn);
   /* BusFault_IRQn interrupt configuration */
-  ll::nvic::set_priority(BusFault_IRQn);
+  ll::nvic::set_priority(IRQn_Type::BusFault_IRQn);
   /* UsageFault_IRQn interrupt configuration */
-  ll::nvic::set_priority(UsageFault_IRQn);
+  ll::nvic::set_priority(IRQn_Type::UsageFault_IRQn);
   /* SVCall_IRQn interrupt configuration */
-  ll::nvic::set_priority(SVCall_IRQn);
+  ll::nvic::set_priority(IRQn_Type::SVCall_IRQn);
   /* DebugMonitor_IRQn interrupt configuration */
-  ll::nvic::set_priority(DebugMonitor_IRQn);
+  ll::nvic::set_priority(IRQn_Type::DebugMonitor_IRQn);
   /* PendSV_IRQn interrupt configuration */
-  ll::nvic::set_priority(PendSV_IRQn);
+  ll::nvic::set_priority(IRQn_Type::PendSV_IRQn);
   /* SysTick_IRQn interrupt configuration */
-  ll::nvic::set_priority(SysTick_IRQn);
+  ll::nvic::set_priority(IRQn_Type::SysTick_IRQn);
 }
 
 /**
@@ -139,7 +137,7 @@ void SystemClock_Config() {
   ll::set_system_core_clock(kBaseFrequency);
 
   /* SysTick_IRQn interrupt configuration */
-  ll::nvic::set_priority(SysTick_IRQn);
+  ll::nvic::set_priority(IRQn_Type::SysTick_IRQn);
 }
 
 static void MX_GPIO_Init(ll::gpio::Pin &led) {
