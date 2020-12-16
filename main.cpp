@@ -139,7 +139,7 @@ void SystemClock_Config() {
   ll::set_system_core_clock(kBaseFrequency);
 
   /* SysTick_IRQn interrupt configuration */
-  ll::nvic::set_priority(SysTick_IRQn);
+  ll::nvic::set_priority(IRQn_Type::SysTick_IRQn);
 }
 
 static void MX_GPIO_Init(ll::gpio::Pin &led) {

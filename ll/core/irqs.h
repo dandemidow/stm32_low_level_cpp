@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-enum IRQn_Type {
+enum class IRQn_Type {
 /******  Cortex-M4 Processor Exceptions Numbers ****************************************************************/
   NonMaskableInt_IRQn         = -14,    /*!< 2 Cortex-M4 Non Maskable Interrupt                                */
   HardFault_IRQn              = -13,    /*!< 3 Cortex-M4 Hard Fault Interrupt                                  */
@@ -85,3 +85,5 @@ enum IRQn_Type {
   I2C4_EV_IRQn                = 83,     /*!< I2C4 Event interrupt                                              */
   I2C4_ER_IRQn                = 84      /*!< I2C4 Error interrupt                                              */
 };
+
+#endif
