@@ -37,8 +37,6 @@
   */
 
 
-#include "main.h"
-
 #include "ll/bus.hpp"
 #include "ll/core.h"
 #include "ll/cortex.hpp"
