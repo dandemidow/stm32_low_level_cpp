@@ -17,6 +17,7 @@ class SystemClock {
 
   SystemClock &operator <<(SysClkSource source) {
     reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kSw.value, static_cast<uint32_t>(source));
+    return *this;
   }
 
   inline SysClkSourceStatus get_source() const {
@@ -26,16 +27,6 @@ class SystemClock {
  private:
   ResetClockControl &rcc;
 };
-
-static inline void set_sys_clk_source(SysClkSource source) {
-  auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kSw.value, static_cast<uint32_t>(source));
-}
-
-static inline SysClkSourceStatus get_sys_clk_source() {
-  auto &rcc = *new ResetClockControl{};
-  return static_cast<SysClkSourceStatus>(bit::read(rcc.get<rcc::CFGR>(), rcc::cfgr::kSws));
-}
 
 static inline void set_ahb_prescaler(SysClkDiv prescaler) {
   auto &rcc = *new ResetClockControl{};

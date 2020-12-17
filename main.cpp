@@ -117,10 +117,11 @@ void SystemClock_Config() {
   msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
   msi.SetCalibTrimming(0);
 
-  ll::rcc::set_sys_clk_source(msi);
+  ll::rcc::SystemClock sys_clock;
+  sys_clock << msi;
 
    /* Wait till System clock is ready */
-  SpinLock::Till([&]{return ll::rcc::get_sys_clk_source() == msi;});
+  SpinLock::Till([&]{return sys_clock.get_source() == msi;});
 
   ll::rcc::set_ahb_prescaler(ll::rcc::SysClkDiv::Div1);
 
