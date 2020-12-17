@@ -11,15 +11,22 @@ using SysClkDiv = ll::rcc::cfgr::HPre;
 using Apb1Div = rcc::cfgr::PPre1;
 using Apb2Div = rcc::cfgr::PPre2;
 
-static inline void set_sys_clk_source(SysClkSource source) {
-  auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kSw.value, static_cast<uint32_t>(source));
-}
+class SystemClock {
+ public:
+  SystemClock() : rcc{*new ResetClockControl{}} {}
 
-static inline SysClkSourceStatus get_sys_clk_source() {
-  auto &rcc = *new ResetClockControl{};
-  return static_cast<SysClkSourceStatus>(bit::read(rcc.get<rcc::CFGR>(), rcc::cfgr::kSws));
-}
+  SystemClock &operator <<(SysClkSource source) {
+    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kSw.value, static_cast<uint32_t>(source));
+    return *this;
+  }
+
+  inline SysClkSourceStatus get_source() const {
+    return static_cast<SysClkSourceStatus>(bit::read(rcc.get<rcc::CFGR>(), rcc::cfgr::kSws));
+  }
+
+ private:
+  ResetClockControl &rcc;
+};
 
 static inline void set_ahb_prescaler(SysClkDiv prescaler) {
   auto &rcc = *new ResetClockControl{};
