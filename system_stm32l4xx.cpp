@@ -98,15 +98,15 @@
 #include "system_control_block.h"
 
 #if !defined  (HSE_VALUE)
-constexpr auto kHseValue = 8_KHz;  // Value of the External oscillator
+constexpr auto kHseValue = 8_MHz;  // Value of the External oscillator
 #endif /* HSE_VALUE */
 
 #if !defined  (MSI_VALUE)
-constexpr auto kMsiValue = 4_KHz;  // Value of the Internal oscillator
+constexpr auto kMsiValue = 4_MHz;  // Value of the Internal oscillator
 #endif /* MSI_VALUE */
 
 #if !defined  (HSI_VALUE)
-constexpr auto kHsiValue = 16_KHz; // Value of the Internal oscillator
+constexpr auto kHsiValue = 16_MHz; // Value of the Internal oscillator
 #endif /* HSI_VALUE */
 
 /************************* Miscellaneous Configuration ************************/
@@ -126,7 +126,7 @@ constexpr uint32_t kVectTabOffset = 0x00u;
                is no need to call the 2 first functions listed above, since SystemCoreClock
                variable is updated automatically.
   */
-hertz SystemCoreClock = 4_KHz;
+hertz SystemCoreClock = 4_MHz;
 
 [[maybe_unused]] static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
 
@@ -185,11 +185,11 @@ hertz GetSysClkSource(hertz msirange) {
 
       switch (rcc.And<PLLCFGR>(kPllCfgrPllSrc)) {
         case 0x02:  /* HSI used as PLL clock source */
-          pllvco = (kHsiValue / pllm).count();
+          pllvco = hertz{HSI_VALUE / pllm}.count();
           break;
 
         case 0x03:  /* HSE used as PLL clock source */
-          pllvco = (kHseValue / pllm).count();
+          pllvco = hertz{HSE_VALUE / pllm}.count();
           break;
 
         default:    /* MSI used as PLL clock source */

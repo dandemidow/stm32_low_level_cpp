@@ -129,7 +129,7 @@ void SystemClock_Config() {
 
   ll::rcc::set_apb2_prescaler(ll::rcc::Apb2Div::Div1);
 
-  constexpr auto kBaseFrequency = 4_KHz;
+  constexpr auto kBaseFrequency = 4_MHz;
 
   ll::tick::init_1ms(kBaseFrequency);
 
