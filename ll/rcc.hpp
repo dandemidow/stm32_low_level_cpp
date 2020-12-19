@@ -28,6 +28,19 @@ class SystemClock {
   ResetClockControl &rcc;
 };
 
+class AdvancedHighPerformanceBus {
+ public:
+  AdvancedHighPerformanceBus() : rcc{*new ResetClockControl{}} {}
+
+  AdvancedHighPerformanceBus &operator <<(SysClkDiv prescaler) {
+    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
+    return *this;
+  }
+
+ private:
+  ResetClockControl &rcc;
+};
+
 static inline void set_ahb_prescaler(SysClkDiv prescaler) {
   auto &rcc = *new ResetClockControl{};
   reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
