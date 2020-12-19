@@ -185,11 +185,11 @@ hertz GetSysClkSource(hertz msirange) {
 
       switch (rcc.And<PLLCFGR>(kPllCfgrPllSrc)) {
         case 0x02:  /* HSI used as PLL clock source */
-          pllvco = hertz{HSI_VALUE / pllm}.count();
+          pllvco = hertz{kHsiValue / pllm}.count();
           break;
 
         case 0x03:  /* HSE used as PLL clock source */
-          pllvco = hertz{HSE_VALUE / pllm}.count();
+          pllvco = hertz{kHseValue / pllm}.count();
           break;
 
         default:    /* MSI used as PLL clock source */
