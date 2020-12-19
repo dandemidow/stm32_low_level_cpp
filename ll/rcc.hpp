@@ -41,11 +41,6 @@ class AdvancedHighPerformanceBus {
   ResetClockControl &rcc;
 };
 
-static inline void set_ahb_prescaler(SysClkDiv prescaler) {
-  auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
-}
-
 static inline void set_apb1_prescaler(Apb1Div prescaler) {
   auto &rcc = *new ResetClockControl{};
   reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));

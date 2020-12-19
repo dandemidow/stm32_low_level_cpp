@@ -123,7 +123,8 @@ void SystemClock_Config() {
    /* Wait till System clock is ready */
   SpinLock::Till([&]{return sys_clock.get_source() == msi;});
 
-  ll::rcc::set_ahb_prescaler(ll::rcc::SysClkDiv::Div1);
+  ll::rcc::AdvancedHighPerformanceBus ahb {};
+  ahb << ll::rcc::SysClkDiv::Div1;
 
   ll::rcc::set_apb1_prescaler(ll::rcc::Apb1Div::Div1);
 
