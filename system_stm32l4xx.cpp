@@ -98,15 +98,15 @@
 #include "system_control_block.h"
 
 #if !defined  (HSE_VALUE)
-constexpr auto HSE_VALUE = 8_MHz;  // Value of the External oscillator
+constexpr auto kHseValue = 8_MHz;  // Value of the External oscillator
 #endif /* HSE_VALUE */
 
 #if !defined  (MSI_VALUE)
-constexpr auto MSI_VALUE = 4_MHz;  // Value of the Internal oscillator
+constexpr auto kMsiValue = 4_MHz;  // Value of the Internal oscillator
 #endif /* MSI_VALUE */
 
 #if !defined  (HSI_VALUE)
-constexpr auto HSI_VALUE = 16_MHz; // Value of the Internal oscillator
+constexpr auto kHsiValue = 16_MHz; // Value of the Internal oscillator
 #endif /* HSI_VALUE */
 
 /************************* Miscellaneous Configuration ************************/
@@ -130,20 +130,20 @@ hertz SystemCoreClock = 4_MHz;
 
 [[maybe_unused]] static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
 
-uint32_t GetMsiRangeFrequency() {
+hertz GetMsiRangeFrequency() {
   using namespace ll::rcc;
-  constexpr std::array<uint32_t, 12u> MSIRangeTable {100000U,
-                                                     200000U,
-                                                     400000U,
-                                                     800000U,
-                                                     1000000U,
-                                                     2000000U,
-                                                     4000000U,
-                                                     8000000U,
-                                                     16000000U,
-                                                     24000000U,
-                                                     32000000U,
-                                                     48000000U};
+  constexpr std::array<hertz, 12u> MSIRangeTable {100_KHz,
+                                                  200_KHz,
+                                                  400_KHz,
+                                                  800_KHz,
+                                                  1_MHz,
+                                                  2_MHz,
+                                                  4_MHz,
+                                                  8_MHz,
+                                                  16_MHz,
+                                                  24_MHz,
+                                                  32_MHz,
+                                                  48_MHz};
   uint32_t msirange;
   auto &rcc = *new ResetClockControl {};
   /* Get MSI Range frequency--------------------------------------------------*/
@@ -156,7 +156,7 @@ uint32_t GetMsiRangeFrequency() {
   return MSIRangeTable[msirange];
 }
 
-hertz GetSysClkSource(uint32_t msirange) {
+hertz GetSysClkSource(hertz msirange) {
   using namespace ll::rcc;
   hertz result {};
   uint32_t pllm = 2u;
@@ -166,15 +166,15 @@ hertz GetSysClkSource(uint32_t msirange) {
   auto &rcc = *new ResetClockControl {};
   switch (rcc.And<CFGR>(cfgr::kSws)) {
     case 0x00:  /* MSI used as system clock source */
-      result = hertz{msirange};
+      result = msirange;
       break;
 
     case 0x04:  /* HSI used as system clock source */
-      result = HSI_VALUE;
+      result = kHsiValue;
       break;
 
     case 0x08:  /* HSE used as system clock source */
-      result = HSE_VALUE    ;
+      result = kHseValue;
       break;
 
     case 0x0C:  /* PLL used as system clock  source */
@@ -193,7 +193,7 @@ hertz GetSysClkSource(uint32_t msirange) {
           break;
 
         default:    /* MSI used as PLL clock source */
-          pllvco = (msirange / pllm);
+          pllvco = (msirange / pllm).count();
           break;
       }
       pllvco = pllvco * (rcc.And<PLLCFGR>(kPllCfgrPllN) >> 8U);
@@ -302,7 +302,7 @@ void SystemCoreClockUpdate(void) {
   auto &rcc = *new ResetClockControl {};
 
   /*MSI frequency range in HZ*/
-  uint32_t msirange = GetMsiRangeFrequency();
+  auto msirange = GetMsiRangeFrequency();
 
   /* Get SYSCLK source -------------------------------------------------------*/
   SystemCoreClock = GetSysClkSource(msirange);

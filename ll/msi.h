@@ -17,11 +17,6 @@ class Msi {
     return ((bit::read(rcc.get<rcc::CR>(), rcc::kCrMsiRdy) == rcc::kCrMsiRdy) ? true : false);
   }
 
-  inline void WaitForReady() {
-    while(IsReady() != true) {
-    }
-  }
-
   inline void EnableRangeSelection() {
     bit::set(rcc.get<rcc::CR>(), rcc::kCrMsiRgSel);
   }
@@ -36,6 +31,10 @@ class Msi {
 
   operator rcc::SysClkSource() {
     return rcc::SysClkSource::Msi;
+  }
+
+  friend auto operator ==(rcc::SysClkSourceStatus source, const Msi &) {
+    return source == rcc::SysClkSourceStatus::Msi;
   }
 
   friend auto operator !=(rcc::SysClkSourceStatus source, const Msi &) {
