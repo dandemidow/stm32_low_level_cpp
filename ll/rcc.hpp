@@ -54,10 +54,18 @@ class AdvancedPeripheralBus1 {
   ResetClockControl &rcc;
 };
 
-static inline void set_apb2_prescaler(Apb2Div prescaler) {
-  auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
-}
+class AdvancedPeripheralBus2 {
+ public:
+  AdvancedPeripheralBus2() : rcc{*new ResetClockControl{}} {}
+
+  AdvancedPeripheralBus2 &operator <<(Apb2Div prescaler) {
+    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
+    return *this;
+  }
+
+ private:
+  ResetClockControl &rcc;
+};
 
 }  // namespace ll::rcc
 

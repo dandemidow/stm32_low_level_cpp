@@ -129,7 +129,8 @@ void SystemClock_Config() {
   ll::rcc::AdvancedPeripheralBus1 apb1 {};
   apb1 << ll::rcc::Apb1Div::Div1;
 
-  ll::rcc::set_apb2_prescaler(ll::rcc::Apb2Div::Div1);
+  ll::rcc::AdvancedPeripheralBus2 apb2 {};
+  apb2 << ll::rcc::Apb2Div::Div1;
 
   constexpr auto kBaseFrequency = 4_KHz;
 
