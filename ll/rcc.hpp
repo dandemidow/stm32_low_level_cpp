@@ -41,6 +41,19 @@ class AdvancedHighPerformanceBus {
   ResetClockControl &rcc;
 };
 
+class AdvancedPeripheralBus {
+ public:
+  AdvancedPeripheralBus() : rcc{*new ResetClockControl{}} {}
+
+  AdvancedPeripheralBus &operator <<(Apb1Div prescaler) {
+    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
+    return *this;
+  }
+
+ private:
+  ResetClockControl &rcc;
+};
+
 static inline void set_apb1_prescaler(Apb1Div prescaler) {
   auto &rcc = *new ResetClockControl{};
   reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
