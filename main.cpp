@@ -126,7 +126,8 @@ void SystemClock_Config() {
   ll::rcc::AdvancedHighPerformanceBus ahb {};
   ahb << ll::rcc::SysClkDiv::Div1;
 
-  ll::rcc::set_apb1_prescaler(ll::rcc::Apb1Div::Div1);
+  ll::rcc::AdvancedPeripheralBus1 apb1 {};
+  apb1 << ll::rcc::Apb1Div::Div1;
 
   ll::rcc::set_apb2_prescaler(ll::rcc::Apb2Div::Div1);
 
