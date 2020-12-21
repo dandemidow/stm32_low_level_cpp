@@ -28,20 +28,44 @@ class SystemClock {
   ResetClockControl &rcc;
 };
 
-static inline void set_ahb_prescaler(SysClkDiv prescaler) {
-  auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
-}
+class AdvancedHighPerformanceBus {
+ public:
+  AdvancedHighPerformanceBus() : rcc{*new ResetClockControl{}} {}
 
-static inline void set_apb1_prescaler(Apb1Div prescaler) {
-  auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
-}
+  AdvancedHighPerformanceBus &operator <<(SysClkDiv prescaler) {
+    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
+    return *this;
+  }
 
-static inline void set_apb2_prescaler(Apb2Div prescaler) {
-  auto &rcc = *new ResetClockControl{};
-  reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
-}
+ private:
+  ResetClockControl &rcc;
+};
+
+class AdvancedPeripheralBus1 {
+ public:
+  AdvancedPeripheralBus1() : rcc{*new ResetClockControl{}} {}
+
+  AdvancedPeripheralBus1 &operator <<(Apb1Div prescaler) {
+    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
+    return *this;
+  }
+
+ private:
+  ResetClockControl &rcc;
+};
+
+class AdvancedPeripheralBus2 {
+ public:
+  AdvancedPeripheralBus2() : rcc{*new ResetClockControl{}} {}
+
+  AdvancedPeripheralBus2 &operator <<(Apb2Div prescaler) {
+    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
+    return *this;
+  }
+
+ private:
+  ResetClockControl &rcc;
+};
 
 }  // namespace ll::rcc
 
