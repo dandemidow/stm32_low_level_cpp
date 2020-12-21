@@ -11,10 +11,16 @@ using SysClkDiv = ll::rcc::cfgr::HPre;
 using Apb1Div = rcc::cfgr::PPre1;
 using Apb2Div = rcc::cfgr::PPre2;
 
-class SystemClock {
+class BaseClock {
  public:
-  SystemClock() : rcc{*new ResetClockControl{}} {}
+  BaseClock() : rcc {*new ResetClockControl{}} {}
 
+ protected:
+  ResetClockControl &rcc;
+};
+
+class SystemClock : public BaseClock {
+ public:
   SystemClock &operator <<(SysClkSource source) {
     reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kSw.value, static_cast<uint32_t>(source));
     return *this;
@@ -23,48 +29,30 @@ class SystemClock {
   inline SysClkSourceStatus get_source() const {
     return static_cast<SysClkSourceStatus>(bit::read(rcc.get<rcc::CFGR>(), rcc::cfgr::kSws));
   }
-
- private:
-  ResetClockControl &rcc;
 };
 
-class AdvancedHighPerformanceBus {
+class AdvancedHighPerformanceBus : public BaseClock {
  public:
-  AdvancedHighPerformanceBus() : rcc{*new ResetClockControl{}} {}
-
   AdvancedHighPerformanceBus &operator <<(SysClkDiv prescaler) {
     reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
     return *this;
   }
-
- private:
-  ResetClockControl &rcc;
 };
 
-class AdvancedPeripheralBus1 {
+class AdvancedPeripheralBus1 : public BaseClock {
  public:
-  AdvancedPeripheralBus1() : rcc{*new ResetClockControl{}} {}
-
   AdvancedPeripheralBus1 &operator <<(Apb1Div prescaler) {
     reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
     return *this;
   }
-
- private:
-  ResetClockControl &rcc;
 };
 
-class AdvancedPeripheralBus2 {
+class AdvancedPeripheralBus2 : public BaseClock {
  public:
-  AdvancedPeripheralBus2() : rcc{*new ResetClockControl{}} {}
-
   AdvancedPeripheralBus2 &operator <<(Apb2Div prescaler) {
     reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
     return *this;
   }
-
- private:
-  ResetClockControl &rcc;
 };
 
 }  // namespace ll::rcc
