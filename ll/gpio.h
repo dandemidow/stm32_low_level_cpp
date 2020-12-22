@@ -57,6 +57,20 @@ struct init_cfg {
   gpio::alternate Alternate;
 };
 
+//struct Output {
+//  Output(GeneralPurposeIO &gpio) : gpio_{gpio} {}
+//  inline void reset(uint32_t value) {
+//    gpio_.set<BRR>(value);
+//  }
+//  bool init(const init_cfg &init) {
+//    set_mode(mode::Output);
+//    set_speed(init.Speed);
+//    set_pull(init.Pull);
+//    set_output_type(value_, init.OutputType);
+//    return true;
+//  }
+//  GeneralPurposeIO &gpio_;
+//};
 
 class Pin {
  public:
@@ -72,6 +86,7 @@ class Pin {
   inline void reset_output() {
     gpio_.set<BRR>(value_);
   }
+
   void set_mode(mode mode);
   inline void set_speed(speed speed) {
     const uint32_t position_pin = number_ * 2u;
