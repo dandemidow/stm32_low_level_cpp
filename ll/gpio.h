@@ -2,6 +2,7 @@
 #define LL_GPIO_H_
 
 #include "general_purpose_io.hpp"
+#include "bus.hpp"
 
 namespace ll::gpio {
 using namespace address::gpio;
@@ -116,7 +117,12 @@ class Pin {
 };
 
 struct Output : public Pin {
-  Output(port p, uint32_t number) : Pin{p, number} {}
+  Output(port p, uint32_t number) : Pin{p, number} {
+    switch (p) {
+    case port::A: bus::Grp1EnableClock(bus::ahb2::kGrp1PeriphGpioA);
+    }
+    reset();
+  }
   inline void reset() {
     gpio_.set<BRR>(value_);
   }

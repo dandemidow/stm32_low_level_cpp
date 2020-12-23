@@ -62,10 +62,11 @@ int main() {
   /* Configure the system clock */
   SystemClock_Config();
 
-  ll::gpio::Pin led {ll::gpio::port::A, 5u};
+  ll::gpio::Output led {ll::gpio::port::A, 5u};
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init(led);
+  led.init(ll::gpio::output::PushPull,
+           ll::gpio::pull::Up,
+           ll::gpio::speed::VeryHigh);
 
   while (true) {
     led.toggle();
@@ -145,19 +146,6 @@ void SystemClock_Config() {
 }
 
 static void MX_GPIO_Init(ll::gpio::Pin &led) {
-  /* GPIO Ports Clock Enable */
-  ll::bus::Grp1EnableClock(ll::bus::ahb2::kGrp1PeriphGpioA);
-
-  led.reset_output();
-
-  ll::gpio::init_cfg gpio_init {
-    .Mode = ll::gpio::mode::Output,
-    .Speed = ll::gpio::speed::VeryHigh,
-    .OutputType = ll::gpio::output::PushPull,
-    .Pull = ll::gpio::pull::Up,
-    .Alternate = ll::gpio::alternate::kAf0
-  };
-  led.init(gpio_init);
 }
 
 /**
