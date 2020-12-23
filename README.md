@@ -7,7 +7,7 @@ Memory-mapped objects replaced the device registers structure, the free function
 The C++ startup file also replaced the assembler file.</br>
 The **C++20** standard is used.</br>
 
-The FW size was decreased
+The FW size changes
 ```
 2020-10-28:
 arm-none-eabi-size.exe st_ll_app.elf
@@ -18,7 +18,12 @@ arm-none-eabi-size.exe st_ll_app.elf
 2020-11-15 (without ST Cube generated code):
 arm-none-eabi-size.exe st_ll_app.elf
    text    data     bss     dec     hex filename
-   1120     432    1568    3120     c30 ../build-st-ll-cpp20-ARM_GCC-Debug/st_ll_app.elf
+   1120     432    1568    3120     c30 build/st_ll_app.elf
+```
+```
+2020-12-23:
+   text    data     bss     dec     hex filename
+   1040     432    1568    3040     be0 build/st_ll_app.elf
 ```
 
 The GCC compiler version:</br>
