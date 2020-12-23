@@ -57,21 +57,6 @@ struct init_cfg {
   gpio::alternate Alternate;
 };
 
-//struct Output {
-//  Output(GeneralPurposeIO &gpio) : gpio_{gpio} {}
-//  inline void reset(uint32_t value) {
-//    gpio_.set<BRR>(value);
-//  }
-//  bool init(const init_cfg &init) {
-//    set_mode(mode::Output);
-//    set_speed(init.Speed);
-//    set_pull(init.Pull);
-//    set_output_type(value_, init.OutputType);
-//    return true;
-//  }
-//  GeneralPurposeIO &gpio_;
-//};
-
 class Pin {
  public:
   Pin(port p, uint32_t number)
@@ -82,10 +67,6 @@ class Pin {
   inline uint32_t position() const { return number_; }
   inline uint32_t value() const { return value_; }
   inline GeneralPurposeIO &get_port() { return gpio_; }
-
-  inline void reset_output() {
-    gpio_.set<BRR>(value_);
-  }
 
   void set_mode(mode mode);
   inline void set_speed(speed speed) {
@@ -125,12 +106,24 @@ class Pin {
     gpio_.set<BSRR>(((odr & value_) << 16u) | (~odr & value_));
   }
 
+  [[decrecated]]
   bool init(const init_cfg &init);
 
- private:
+ protected:
   GeneralPurposeIO &gpio_;
   const uint32_t number_;
   const uint32_t value_;
+};
+
+struct Output : public Pin {
+  Output(port p, uint32_t number) : Pin{p, number} {}
+  inline void reset() {
+    gpio_.set<BRR>(value_);
+  }
+
+  bool init(const gpio::output &out_type,
+            const gpio::pull &pull,
+            const gpio::speed &speed);
 };
 
 }  // namespace ll::gpio
