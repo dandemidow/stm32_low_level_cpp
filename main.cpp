@@ -48,7 +48,6 @@
 #include "ll/utils.hpp"
 
 static void SystemClock_Config();
-static void MX_GPIO_Init(ll::gpio::Pin &led);
 static void LL_Init();
 static void _Error_Handler(const char *, int);
 
@@ -143,9 +142,6 @@ void SystemClock_Config() {
 
   /* SysTick_IRQn interrupt configuration */
   ll::nvic::set_priority(IRQn_Type::SysTick_IRQn);
-}
-
-static void MX_GPIO_Init(ll::gpio::Pin &led) {
 }
 
 /**
