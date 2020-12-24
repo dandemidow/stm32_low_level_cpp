@@ -6,6 +6,7 @@ add_library(stll
   STATIC
     gpio/pin.cpp
     gpio/output.cpp
+    gpio/input.cpp
 )
 
 target_include_directories(stll

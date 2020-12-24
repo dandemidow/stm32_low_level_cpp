@@ -63,7 +63,9 @@ class Pin {
   Pin(port p, uint32_t number)
     : gpio_ {*new (p) GeneralPurposeIO{}},
       number_ {number},
-      value_ {0x01u << number} {}
+      value_ {0x01u << number} {
+
+  }
 
   inline uint32_t position() const { return number_; }
   inline uint32_t value() const { return value_; }
