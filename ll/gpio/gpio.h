@@ -107,7 +107,7 @@ class Pin {
     gpio_.set<BSRR>(((odr & value_) << 16u) | (~odr & value_));
   }
 
-  [[decrecated]]
+  [[deprecated]]
   bool init(const init_cfg &init);
 
  protected:
