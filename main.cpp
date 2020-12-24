@@ -40,7 +40,7 @@
 #include "ll/bus.hpp"
 #include "ll/core.h"
 #include "ll/cortex.hpp"
-#include "ll/gpio.h"
+#include "ll/gpio/output.h"
 #include "ll/msi.h"
 #include "ll/power.hpp"
 #include "ll/system.hpp"
