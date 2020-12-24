@@ -64,7 +64,9 @@ class Pin {
     : gpio_ {*new (p) GeneralPurposeIO{}},
       number_ {number},
       value_ {0x01u << number} {
-
+    switch (p) {
+    case port::A: bus::Grp1EnableClock(bus::ahb2::kGrp1PeriphGpioA);
+    }
   }
 
   inline uint32_t position() const { return number_; }
