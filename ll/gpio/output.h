@@ -1,7 +1,7 @@
 #if !defined(LL_GPIO_OUTPUT_H_)
 #define LL_GPIO_OUTPUT_H_
 
-#include "gpio.h"
+#include "pin.h"
 
 namespace ll::gpio {
 

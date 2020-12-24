@@ -4,7 +4,7 @@ project(ll-lib)
 
 add_library(stll
   STATIC
-    gpio/gpio.cpp
+    gpio/pin.cpp
     gpio/output.cpp
 )
 
