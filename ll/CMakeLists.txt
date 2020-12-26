@@ -7,6 +7,7 @@ add_library(stll
     gpio/pin.cpp
     gpio/output.cpp
     gpio/input.cpp
+    gpio/analog.cpp
 )
 
 target_include_directories(stll
