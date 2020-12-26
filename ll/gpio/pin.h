@@ -1,5 +1,5 @@
-#if !defined(LL_GPIO_H_)
-#define LL_GPIO_H_
+#if !defined(LL_GPIO_PIN_H_)
+#define LL_GPIO_PIN_H_
 
 #include "general_purpose_io.hpp"
 #include "bus.hpp"
@@ -63,7 +63,11 @@ class Pin {
   Pin(port p, uint32_t number)
     : gpio_ {*new (p) GeneralPurposeIO{}},
       number_ {number},
-      value_ {0x01u << number} {}
+      value_ {0x01u << number} {
+    switch (p) {
+    case port::A: bus::Grp1EnableClock(bus::ahb2::kGrp1PeriphGpioA);
+    }
+  }
 
   inline uint32_t position() const { return number_; }
   inline uint32_t value() const { return value_; }
@@ -107,29 +111,13 @@ class Pin {
     gpio_.set<BSRR>(((odr & value_) << 16u) | (~odr & value_));
   }
 
-  [[decrecated]]
+  [[deprecated]]
   bool init(const init_cfg &init);
 
  protected:
   GeneralPurposeIO &gpio_;
   const uint32_t number_;
   const uint32_t value_;
-};
-
-struct Output : public Pin {
-  Output(port p, uint32_t number) : Pin{p, number} {
-    switch (p) {
-    case port::A: bus::Grp1EnableClock(bus::ahb2::kGrp1PeriphGpioA);
-    }
-    reset();
-  }
-  inline void reset() {
-    gpio_.set<BRR>(value_);
-  }
-
-  bool init(const gpio::output &out_type,
-            const gpio::pull &pull,
-            const gpio::speed &speed);
 };
 
 }  // namespace ll::gpio
