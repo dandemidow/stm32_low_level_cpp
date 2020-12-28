@@ -28,11 +28,16 @@ target_link_options(${EXECUTABLE} PRIVATE
         -static
         -T${LINKER_SCRIPT}
         )
-
-target_compile_definitions(${EXECUTABLE}
-  PUBLIC
-    STM32L452
+set(COMMON_OPTS
+    "-mcpu=cortex-m4"
+    "-mthumb"
+    "-mfpu=fpv4-sp-d16"
+    "-mfloat-abi=hard"
 )
+
+add_compile_definitions(STM32L452)
+add_compile_options("-march=armv7e-m" "${COMMON_OPTS}")
+add_link_options(${COMMON_OPTS})
 
 add_subdirectory(ll)
 

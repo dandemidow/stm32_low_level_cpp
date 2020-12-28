@@ -26,12 +26,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)
 set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 set(CMAKE_CXX_FLAGS_INIT
-  "-march=armv7e-m \
-  -mcpu=cortex-m4 \
-  -mthumb \
-  -mfpu=fpv4-sp-d16 \
-  -mfloat-abi=hard \
-  -fdata-sections \
+  "-fdata-sections \
   -ffunction-sections \
   -Wall \
   -Wextra \
@@ -42,11 +37,7 @@ set(CMAKE_CXX_FLAGS_INIT
 )
 
 set(CMAKE_EXE_LINKER_FLAGS
-  "-mcpu=cortex-m4 \
-  -mthumb \
-  -mfpu=fpv4-sp-d16 \
-  -mfloat-abi=hard \
-  -specs=nano.specs \
+  "-specs=nano.specs \
   -Wl,-Map=${PROJECT_NAME}.map,--cref \
   -Wl,--gc-sections"
 )

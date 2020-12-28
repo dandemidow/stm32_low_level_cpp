@@ -15,11 +15,6 @@ target_include_directories(stll
     .
 )
 
-target_compile_definitions(stll
-  PUBLIC
-    STM32L452
-)
-
 target_compile_options(stll
   PRIVATE
     $<$<CONFIG:Debug>:-Og>
