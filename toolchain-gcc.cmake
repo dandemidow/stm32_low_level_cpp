@@ -27,17 +27,15 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 
 set(CMAKE_CXX_FLAGS_INIT
   "-fdata-sections \
-  -ffunction-sections \
-  -Wall \
-  -Wextra \
-  -Wno-volatile \
-  -fmessage-length=0 \
-  -fno-exceptions \
-  -fno-rtti"
+   -ffunction-sections \
+   -Wall \
+   -Wextra \
+   -Wno-volatile \
+   -fmessage-length=0 \
+   -fno-exceptions \
+   -fno-rtti"
 )
 
-set(CMAKE_EXE_LINKER_FLAGS
-  "-specs=nano.specs \
-  -Wl,-Map=${PROJECT_NAME}.map,--cref \
-  -Wl,--gc-sections"
+set(CMAKE_EXE_LINKER_FLAGS_INIT
+  "-specs=nano.specs"
 )

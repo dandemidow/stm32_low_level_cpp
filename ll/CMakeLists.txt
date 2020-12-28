@@ -17,5 +17,6 @@ target_include_directories(stm32ll
 
 target_compile_options(stm32ll
   PRIVATE
-    $<$<CONFIG:Debug>:-Og>
+    "${ARCH}"
+    "${COMMON_OPTS}"
 )
