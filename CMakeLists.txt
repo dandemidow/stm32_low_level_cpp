@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 enable_language(C ASM)
 
+set(EXECUTABLE ${PROJECT_NAME}.elf)
+
 set(SRCS
     main.cpp
     stm32l4xx_it.cpp
@@ -14,7 +16,15 @@ set(SRCS
     startup.cpp
 )
 
-set(EXECUTABLE ${PROJECT_NAME}.elf)
+set(BOARD "STM32L452")
+set(ARCH "-march=armv7e-m")
+set(COMMON_OPTS
+    "-mcpu=cortex-m4"
+    "-mthumb"
+    "-mfpu=fpv4-sp-d16"
+    "-mfloat-abi=hard"
+)
+set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/STM32L452RETx_FLASH.ld")
 
 add_executable(${EXECUTABLE} ${SRCS})
 
@@ -23,23 +33,14 @@ target_compile_options(${EXECUTABLE}
     $<$<CONFIG:Debug>:-Og>
 )
 
-set(LINKER_SCRIPT "${CMAKE_CURRENT_SOURCE_DIR}/STM32L452RETx_FLASH.ld")
-
 target_link_options(${EXECUTABLE}
   PRIVATE
     -static
     -T${LINKER_SCRIPT}
 )
 
-set(COMMON_OPTS
-    "-mcpu=cortex-m4"
-    "-mthumb"
-    "-mfpu=fpv4-sp-d16"
-    "-mfloat-abi=hard"
-)
-
-add_compile_definitions(STM32L452)
-add_compile_options("-march=armv7e-m" "${COMMON_OPTS}")
+add_compile_definitions(${BOARD})
+add_compile_options("${ARCH}" "${COMMON_OPTS}")
 add_link_options(${COMMON_OPTS})
 
 add_subdirectory(ll)
