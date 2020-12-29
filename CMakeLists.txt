@@ -9,7 +9,8 @@ enable_language(C ASM)
 
 set(EXECUTABLE ${PROJECT_NAME}.elf)
 
-include(examples/nucleo-l452re/blinking_led/source.cmake)
+#include(examples/nucleo-l452re/blinking_led/source.cmake)
+include(examples/stm32f0308-discovery/blinking_led/source.cmake)
 
 add_executable(${EXECUTABLE} ${SRCS})
 
