@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.15)
 
-project(ll-lib)
+project(stm32-ll-lib)
 
-add_library(stll
+add_library(stm32ll
   STATIC
     gpio/pin.cpp
     gpio/output.cpp
@@ -10,17 +10,13 @@ add_library(stll
     gpio/analog.cpp
 )
 
-target_include_directories(stll
+target_include_directories(stm32ll
   PUBLIC
     .
 )
 
-target_compile_definitions(stll
-  PUBLIC
-    STM32L452
-)
-
-target_compile_options(stll
+target_compile_options(stm32ll
   PRIVATE
-    $<$<CONFIG:Debug>:-Og>
+    "${ARCH}"
+    "${COMMON_OPTS}"
 )
