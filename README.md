@@ -1,4 +1,4 @@
-# stm32l4_low_level_cpp
+# stm32_low_level_cpp
 
 This project is just a fantasy of how the ST low-level library can be implemented in pure C++.</br>
 The LED blinking project was taken as an example.</br>
@@ -7,16 +7,14 @@ Memory-mapped objects replaced the device registers structure, the free function
 The C++ startup file also replaced the assembler file.</br>
 The **C++20** standard is used.</br>
 
-The FW size changes
+The blinking led FW (stm32l4 board) size changes
 ```
 2020-10-28:
-arm-none-eabi-size.exe st_ll_app.elf
    text    data     bss     dec     hex filename
    1264     432    1568    3264     cc0 build/st_ll_app.elf
 ```
 ```   
 2020-11-15 (without ST Cube generated code):
-arm-none-eabi-size.exe st_ll_app.elf
    text    data     bss     dec     hex filename
    1120     432    1568    3120     c30 build/st_ll_app.elf
 ```
