@@ -1,5 +1,6 @@
 
 set(BOARD "STM32L452")
+set(CPU_FAMILY "l4")
 set(ARCH "-march=armv7e-m")
 set(COMMON_OPTS
     "-mcpu=cortex-m4"

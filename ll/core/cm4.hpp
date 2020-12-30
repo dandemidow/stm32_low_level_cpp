@@ -1,8 +1,8 @@
 #if !defined(CORE_CM4_HPP_)
 #define CORE_CM4_HPP_
 
-#include "nested_vectored_interrupt_controller.hpp"
-#include "system_control_block.h"
+#include "register/nested_vectored_interrupt_controller.hpp"
+#include "register/system_control_block.h"
 #include "irqs.h"
 
 namespace ll::nvic {

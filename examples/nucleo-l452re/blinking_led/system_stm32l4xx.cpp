@@ -94,8 +94,8 @@
   */
 
 #include "frequency.h"
-#include "reset_clock_control.h"
-#include "system_control_block.h"
+#include "register/reset_clock_control.h"
+#include "register/system_control_block.h"
 
 #if !defined  (HSE_VALUE)
 constexpr auto kHseValue = 8_MHz;  // Value of the External oscillator

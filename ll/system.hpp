@@ -1,8 +1,7 @@
 #if !defined(LL_SYSTEM_H_)
 #define LL_SYSTEM_H_
 
-#include "device_register.h"
-#include "flash.hpp"
+#include "register/flash.hpp"
 
 namespace ll {
 namespace flash {

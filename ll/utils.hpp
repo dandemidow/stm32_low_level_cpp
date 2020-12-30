@@ -4,7 +4,7 @@
 #include <chrono>
 #include <limits>
 
-#include "system_timer.hpp"
+#include "register/system_timer.hpp"
 #include "frequency.h"
 
 extern hertz SystemCoreClock;

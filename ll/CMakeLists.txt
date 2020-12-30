@@ -13,6 +13,7 @@ add_library(stm32ll
 target_include_directories(stm32ll
   PUBLIC
     .
+    ${CMAKE_CURRENT_LIST_DIR}/${CPU_FAMILY}
 )
 
 target_compile_options(stm32ll
