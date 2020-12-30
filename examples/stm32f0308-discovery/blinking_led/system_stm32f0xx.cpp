@@ -94,8 +94,7 @@
   */
 
 #include "frequency.h"
-#include "reset_clock_control.h"
-#include "system_control_block.h"
+#include "register/reset_clock_control.h"
 
 #if !defined  (HSE_VALUE)
 constexpr auto kHseValue = 8_MHz;  // Value of the External oscillator
@@ -130,84 +129,6 @@ hertz SystemCoreClock = 8_MHz;
 
 [[maybe_unused]] static constexpr uint8_t  APBPrescTable[8] =  {0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U};
 
-hertz GetMsiRangeFrequency() {
-  using namespace ll::rcc;
-  constexpr std::array<hertz, 12u> MSIRangeTable {100_KHz,
-                                                  200_KHz,
-                                                  400_KHz,
-                                                  800_KHz,
-                                                  1_MHz,
-                                                  2_MHz,
-                                                  4_MHz,
-                                                  8_MHz,
-                                                  16_MHz,
-                                                  24_MHz,
-                                                  32_MHz,
-                                                  48_MHz};
-  uint32_t msirange;
-  auto &rcc = *new ResetClockControl {};
-  /* Get MSI Range frequency--------------------------------------------------*/
-  if(rcc.And<CR>(kCrMsiRgSel) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
-    msirange = rcc.And<CSR>(kCsrMsiSRange) >> 8U;
-  } else { /* MSIRANGE from RCC_CR applies */
-    msirange = rcc.And<CR>(kCrMsiRange.value) >> 4U;
-  }
-  /*MSI frequency range in HZ*/
-  return MSIRangeTable[msirange];
-}
-
-hertz GetSysClkSource(hertz msirange) {
-  using namespace ll::rcc;
-  hertz result {};
-  uint32_t pllm = 2u;
-  uint32_t pllvco = 0u;
-  uint32_t pllr = 2u;
-
-  auto &rcc = *new ResetClockControl {};
-  switch (rcc.And<CFGR>(cfgr::kSws)) {
-    case 0x00:  /* MSI used as system clock source */
-      result = msirange;
-      break;
-
-    case 0x04:  /* HSI used as system clock source */
-      result = kHsiValue;
-      break;
-
-    case 0x08:  /* HSE used as system clock source */
-      result = kHseValue;
-      break;
-
-    case 0x0C:  /* PLL used as system clock  source */
-      /* PLL_VCO = (HSE_VALUE or HSI_VALUE or MSI_VALUE/ PLLM) * PLLN
-         SYSCLK = PLL_VCO / PLLR
-         */
-      pllm = (rcc.And<PLLCFGR>(kPllCfgrPllM) >> 4U) + 1U ;
-
-      switch (rcc.And<PLLCFGR>(kPllCfgrPllSrc)) {
-        case 0x02:  /* HSI used as PLL clock source */
-          pllvco = hertz{kHsiValue / pllm}.count();
-          break;
-
-        case 0x03:  /* HSE used as PLL clock source */
-          pllvco = hertz{kHseValue / pllm}.count();
-          break;
-
-        default:    /* MSI used as PLL clock source */
-          pllvco = (msirange / pllm).count();
-          break;
-      }
-      pllvco = pllvco * (rcc.And<PLLCFGR>(kPllCfgrPllN) >> 8U);
-      pllr = ((rcc.And<PLLCFGR>(kPllCfgrPllR) >> 25U) + 1U) * 2U;
-      result = hertz{pllvco/pllr};
-      break;
-
-    default:
-      result = hertz{msirange};
-      break;
-  }
-  return result;
-}
-
 /**
   * @brief  Setup the microcontroller system.
   * @param  None
@@ -217,7 +138,6 @@ hertz GetSysClkSource(hertz msirange) {
 void SystemInitialization() {
     using namespace ll::rcc;
     auto &rcc = *new ResetClockControl {};
-    auto &scb = *new SystemControlBlock {};
 
     /* Reset the RCC clock configuration to the default reset state ------------*/
     /* Set HSION bit */
@@ -238,38 +158,14 @@ void SystemInitialization() {
     /* Reset PREDIV[3:0] bits */
     rcc.get<CFGR2>() &= (uint32_t)0xFFFFFFF0U;
 
-    #if defined (STM32F072xB) || defined (STM32F078xx)
-      /* Reset USART2SW[1:0], USART1SW[1:0], I2C1SW, CECSW, USBSW and ADCSW bits */
-      RCC->CFGR3 &= (uint32_t)0xFFFCFE2CU;
-    #elif defined (STM32F071xB)
-      /* Reset USART2SW[1:0], USART1SW[1:0], I2C1SW, CECSW and ADCSW bits */
-      RCC->CFGR3 &= (uint32_t)0xFFFFCEACU;
-    #elif defined (STM32F091xC) || defined (STM32F098xx)
-      /* Reset USART3SW[1:0], USART2SW[1:0], USART1SW[1:0], I2C1SW, CECSW and ADCSW bits */
-      RCC->CFGR3 &= (uint32_t)0xFFF0FEACU;
-    #elif defined (STM32F030x6) || defined (STM32F030x8) || defined (STM32F031x6) || defined (STM32F038xx) || defined (STM32F030xC)
-      /* Reset USART1SW[1:0], I2C1SW and ADCSW bits */
-      RCC->CFGR3 &= (uint32_t)0xFFFFFEECU;
-    #elif defined (STM32F051x8) || defined (STM32F058xx)
-      /* Reset USART1SW[1:0], I2C1SW, CECSW and ADCSW bits */
-      RCC->CFGR3 &= (uint32_t)0xFFFFFEACU;
-    #elif defined (STM32F042x6) || defined (STM32F048xx)
-      /* Reset USART1SW[1:0], I2C1SW, CECSW, USBSW and ADCSW bits */
-      RCC->CFGR3 &= (uint32_t)0xFFFFFE2CU;
-    #elif defined (STM32F070x6) || defined (STM32F070xB)
-      /* Reset USART1SW[1:0], I2C1SW, USBSW and ADCSW bits */
-      RCC->CFGR3 &= (uint32_t)0xFFFFFE6CU;
-      /* Set default USB clock to PLLCLK, since there is no HSI48 */
-      RCC->CFGR3 |= (uint32_t)0x00000080U;
-    #else
-     #warning "No target selected"
-    #endif
+    /* Reset USART1SW[1:0], I2C1SW and ADCSW bits */
+    rcc.get<CFGR3>() &= (uint32_t)0xFFFFFEECU;
 
-      /* Reset HSI14 bit */
-      RCC->CR2 &= (uint32_t)0xFFFFFFFEU;
+    /* Reset HSI14 bit */
+    rcc.get<CR2>() &= (uint32_t)0xFFFFFFFEU;
 
-      /* Disable all interrupts */
-      RCC->CIR = 0x00000000U;
+    /* Disable all interrupts */
+    rcc.set<CIR>(0x00000000U);
 }
 
 extern "C" {
@@ -320,20 +216,77 @@ void SystemInit(void) {
   * @retval None
   */
 void SystemCoreClockUpdate(void) {
-  constexpr std::array<uint8_t, 16u> AHBPrescTable {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
+//  constexpr std::array<uint8_t, 16u> AHBPrescTable {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
   auto &rcc = *new ResetClockControl {};
 
-  /*MSI frequency range in HZ*/
-  auto msirange = GetMsiRangeFrequency();
+//  /*MSI frequency range in HZ*/
+//  auto msirange = GetMsiRangeFrequency();
+
+//  /* Get SYSCLK source -------------------------------------------------------*/
+//  SystemCoreClock = GetSysClkSource(msirange);
+
+//  /* Compute HCLK clock frequency --------------------------------------------*/
+//  /* Get HCLK prescaler */
+//  uint32_t tmp = AHBPrescTable[(rcc.And<ll::rcc::CFGR>(ll::rcc::cfgr::kHPre) >> 4U)];
+//  /* HCLK clock frequency */
+//  SystemCoreClock = hertz{static_cast<uint32_t>(SystemCoreClock.count()) >> tmp};
+
+  uint32_t pllmull = 0, pllsource = 0, predivfactor = 0;
 
   /* Get SYSCLK source -------------------------------------------------------*/
-  SystemCoreClock = GetSysClkSource(msirange);
+  uint32_t tmp = rcc.Get<CFGR>() & RCC_CFGR_SWS;
 
-  /* Compute HCLK clock frequency --------------------------------------------*/
-  /* Get HCLK prescaler */
-  uint32_t tmp = AHBPrescTable[(rcc.And<ll::rcc::CFGR>(ll::rcc::cfgr::kHPre) >> 4U)];
-  /* HCLK clock frequency */
-  SystemCoreClock = hertz{static_cast<uint32_t>(SystemCoreClock.count()) >> tmp};
-}
+            switch (tmp)
+            {
+              case RCC_CFGR_SWS_HSI:  /* HSI used as system clock */
+                SystemCoreClock = HSI_VALUE;
+                break;
+              case RCC_CFGR_SWS_HSE:  /* HSE used as system clock */
+                SystemCoreClock = HSE_VALUE;
+                break;
+              case RCC_CFGR_SWS_PLL:  /* PLL used as system clock */
+                /* Get PLL clock source and multiplication factor ----------------------*/
+                pllmull = RCC->CFGR & RCC_CFGR_PLLMUL;
+                pllsource = RCC->CFGR & RCC_CFGR_PLLSRC;
+                pllmull = ( pllmull >> 18) + 2;
+                predivfactor = (RCC->CFGR2 & RCC_CFGR2_PREDIV) + 1;
+
+                if (pllsource == RCC_CFGR_PLLSRC_HSE_PREDIV)
+                {
+                  /* HSE used as PLL clock source : SystemCoreClock = HSE/PREDIV * PLLMUL */
+                  SystemCoreClock = (HSE_VALUE/predivfactor) * pllmull;
+                }
+          #if defined(STM32F042x6) || defined(STM32F048xx) || defined(STM32F072xB) || defined(STM32F078xx) || defined(STM32F091xC) || defined(STM32F098xx)
+                else if (pllsource == RCC_CFGR_PLLSRC_HSI48_PREDIV)
+                {
+                  /* HSI48 used as PLL clock source : SystemCoreClock = HSI48/PREDIV * PLLMUL */
+                  SystemCoreClock = (HSI48_VALUE/predivfactor) * pllmull;
+                }
+          #endif /* STM32F042x6 || STM32F048xx || STM32F072xB || STM32F078xx || STM32F091xC || STM32F098xx */
+                else
+                {
+          #if defined(STM32F042x6) || defined(STM32F048xx)  || defined(STM32F070x6) \
+           || defined(STM32F078xx) || defined(STM32F071xB)  || defined(STM32F072xB) \
+           || defined(STM32F070xB) || defined(STM32F091xC) || defined(STM32F098xx)  || defined(STM32F030xC)
+                  /* HSI used as PLL clock source : SystemCoreClock = HSI/PREDIV * PLLMUL */
+                  SystemCoreClock = (HSI_VALUE/predivfactor) * pllmull;
+          #else
+                  /* HSI used as PLL clock source : SystemCoreClock = HSI/2 * PLLMUL */
+                  SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
+          #endif /* STM32F042x6 || STM32F048xx || STM32F070x6 ||
+                    STM32F071xB || STM32F072xB || STM32F078xx || STM32F070xB ||
+                    STM32F091xC || STM32F098xx || STM32F030xC */
+                }
+                break;
+              default: /* HSI used as system clock */
+                SystemCoreClock = HSI_VALUE;
+                break;
+            }
+            /* Compute HCLK clock frequency ----------------*/
+            /* Get HCLK prescaler */
+            tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
+            /* HCLK clock frequency */
+            SystemCoreClock >>= tmp;
+          }
 } // extern "C"
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

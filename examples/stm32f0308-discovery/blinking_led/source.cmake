@@ -1,5 +1,6 @@
 
 set(BOARD "STM32F030x8")
+set(CPU_FAMILY "f0")
 set(ARCH "-march=armv6-m")
 set(COMMON_OPTS
     "-mcpu=cortex-m0"
