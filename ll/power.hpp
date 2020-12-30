@@ -1,7 +1,7 @@
 #if !defined(LL_POWER_H_)
 #define LL_POWER_H_
 
-#include "power_control.hpp"
+#include "register/power_control.hpp"
 
 namespace ll {
 
