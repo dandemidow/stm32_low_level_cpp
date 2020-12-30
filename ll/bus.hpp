@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-#include "reset_clock_control.h"
+#include "register/reset_clock_control.h"
 
 namespace ll::bus {
 

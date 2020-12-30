@@ -1,7 +1,7 @@
 #if !defined(LL_GPIO_PIN_H_)
 #define LL_GPIO_PIN_H_
 
-#include "general_purpose_io.hpp"
+#include "register/general_purpose_io.hpp"
 #include "bus.hpp"
 
 namespace ll::gpio {
