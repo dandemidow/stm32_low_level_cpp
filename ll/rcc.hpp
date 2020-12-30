@@ -1,7 +1,7 @@
 #if !defined(LL_RCC_H_)
 #define LL_RCC_H_
 
-#include "reset_clock_control.h"
+#include "register/reset_clock_control.h"
 
 namespace ll::rcc {
 
