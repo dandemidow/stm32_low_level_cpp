@@ -36,16 +36,15 @@
   ******************************************************************************
   */
 
-
-#include "ll/bus.hpp"
-#include "ll/core.h"
-#include "ll/cortex.hpp"
-#include "ll/gpio/output.h"
-#include "ll/msi.h"
-#include "ll/power.hpp"
-#include "ll/system.hpp"
-#include "ll/spinlock.hpp"
-#include "ll/utils.hpp"
+#include "bus.hpp"
+#include "core.h"
+#include "cortex.hpp"
+#include "gpio/output.h"
+#include "msi.h"
+#include "power.hpp"
+#include "system.hpp"
+#include "spinlock.hpp"
+#include "utils.hpp"
 
 static void SystemClock_Config();
 static void LL_Init();
@@ -61,20 +60,27 @@ int main() {
   /* Configure the system clock */
   SystemClock_Config();
 
-  ll::gpio::Output led {ll::gpio::port::A, 5u};
+  ll::gpio::Output led3 {ll::gpio::port::A, 5u};
+  ll::gpio::Output led4 {ll::gpio::port::A, 5u};
 
-  led.init(ll::gpio::output::PushPull,
-           ll::gpio::pull::Up,
-           ll::gpio::speed::VeryHigh);
+  led3.init(ll::gpio::output::PushPull,
+            ll::gpio::pull::Up,
+            ll::gpio::speed::VeryHigh);
+
+  led4.init(ll::gpio::output::PushPull,
+            ll::gpio::pull::Up,
+            ll::gpio::speed::VeryHigh);
 
   while (true) {
-    led.toggle();
-    ll::delay(1000ms);
+    led3.toggle();
+    ll::delay(500ms);
+    led4.toggle();
+    ll::delay(500ms);
   }
 }
 
 static void LL_Init(void) {
-  ll::bus::Grp1EnableClock(ll::bus::apb2::kGrp1PeriphSysCfg);
+  ll::bus::Grp2EnableClock(ll::bus::apb1::kGrp2PeriphSysCfg);
   ll::bus::Grp1EnableClock(ll::bus::apb1::kGrp1PeriphPwr);
 
   ll::nvic::set_priority_grouping(ll::nvic::PriorityGroup::Gr4);
