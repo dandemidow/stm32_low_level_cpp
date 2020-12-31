@@ -14,6 +14,9 @@ struct Flag {
 static constexpr uint32_t mask = Mask;
 static constexpr size_t   position = Position;
 static constexpr uint32_t value = (Mask << Position);
+constexpr operator uint32_t() {
+  return value;
+}
 };
 
 namespace reg {

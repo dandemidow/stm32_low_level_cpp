@@ -108,15 +108,6 @@ constexpr auto kHsiValue = 8_MHz; // Value of the Internal oscillator
 constexpr auto kHsi48Value = 48_MHz;  // Default value of the HSI48 Internal oscillator in Hz.
 #endif /* HSI48_VALUE */
 
-/************************* Miscellaneous Configuration ************************/
-/*!< Uncomment the following line if you need to relocate your vector Table in
-     Internal SRAM. */
-/* #define VECT_TAB_SRAM */
-// Vector Table base offset field.
-// This value must be a multiple of 0x200.
-constexpr uint32_t kVectTabOffset = 0x00u;
-/******************************************************************************/
-
   /* The SystemCoreClock variable is updated in three ways:
       1) by calling CMSIS function SystemCoreClockUpdate()
       2) by calling HAL API function HAL_RCC_GetHCLKFreq()
@@ -134,7 +125,6 @@ hertz SystemCoreClock = 8_MHz;
   * @param  None
   * @retval None
   */
-
 void SystemInitialization() {
     using namespace ll::rcc;
     auto &rcc = *new ResetClockControl {};
@@ -216,77 +206,46 @@ void SystemInit(void) {
   * @retval None
   */
 void SystemCoreClockUpdate(void) {
-//  constexpr std::array<uint8_t, 16u> AHBPrescTable {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
+  using namespace ll::rcc;
+  constexpr std::array<uint8_t, 16u> AHBPrescTable {0U, 0U, 0U, 0U, 0U, 0U, 0U, 0U, 1U, 2U, 3U, 4U, 6U, 7U, 8U, 9U};
   auto &rcc = *new ResetClockControl {};
-
-//  /*MSI frequency range in HZ*/
-//  auto msirange = GetMsiRangeFrequency();
-
-//  /* Get SYSCLK source -------------------------------------------------------*/
-//  SystemCoreClock = GetSysClkSource(msirange);
-
-//  /* Compute HCLK clock frequency --------------------------------------------*/
-//  /* Get HCLK prescaler */
-//  uint32_t tmp = AHBPrescTable[(rcc.And<ll::rcc::CFGR>(ll::rcc::cfgr::kHPre) >> 4U)];
-//  /* HCLK clock frequency */
-//  SystemCoreClock = hertz{static_cast<uint32_t>(SystemCoreClock.count()) >> tmp};
 
   uint32_t pllmull = 0, pllsource = 0, predivfactor = 0;
 
   /* Get SYSCLK source -------------------------------------------------------*/
-  uint32_t tmp = rcc.Get<CFGR>() & RCC_CFGR_SWS;
+  auto sysclk_cource = static_cast<cfgr::Sws>(rcc.get<CFGR>() & cfgr::kSws);
 
-            switch (tmp)
-            {
-              case RCC_CFGR_SWS_HSI:  /* HSI used as system clock */
-                SystemCoreClock = HSI_VALUE;
-                break;
-              case RCC_CFGR_SWS_HSE:  /* HSE used as system clock */
-                SystemCoreClock = HSE_VALUE;
-                break;
-              case RCC_CFGR_SWS_PLL:  /* PLL used as system clock */
-                /* Get PLL clock source and multiplication factor ----------------------*/
-                pllmull = RCC->CFGR & RCC_CFGR_PLLMUL;
-                pllsource = RCC->CFGR & RCC_CFGR_PLLSRC;
-                pllmull = ( pllmull >> 18) + 2;
-                predivfactor = (RCC->CFGR2 & RCC_CFGR2_PREDIV) + 1;
+  switch (sysclk_cource) {
+  case cfgr::Sws::Hsi:  /* HSI used as system clock */
+    SystemCoreClock = kHsiValue;
+    break;
+  case cfgr::Sws::Hse:  /* HSE used as system clock */
+    SystemCoreClock = kHseValue;
+    break;
+  case cfgr::Sws::Pll:  /* PLL used as system clock */
+    /* Get PLL clock source and multiplication factor ----------------------*/
+    pllmull = rcc.get<CFGR>() & cfgr::kPllMul;
+    pllsource = rcc.get<CFGR>() & cfgr::kPllSrc;
+    pllmull = ( pllmull >> 18) + 2;
+    predivfactor = (rcc.get<CFGR2>() & cfgr2::kPrediv) + 1;
 
-                if (pllsource == RCC_CFGR_PLLSRC_HSE_PREDIV)
-                {
-                  /* HSE used as PLL clock source : SystemCoreClock = HSE/PREDIV * PLLMUL */
-                  SystemCoreClock = (HSE_VALUE/predivfactor) * pllmull;
-                }
-          #if defined(STM32F042x6) || defined(STM32F048xx) || defined(STM32F072xB) || defined(STM32F078xx) || defined(STM32F091xC) || defined(STM32F098xx)
-                else if (pllsource == RCC_CFGR_PLLSRC_HSI48_PREDIV)
-                {
-                  /* HSI48 used as PLL clock source : SystemCoreClock = HSI48/PREDIV * PLLMUL */
-                  SystemCoreClock = (HSI48_VALUE/predivfactor) * pllmull;
-                }
-          #endif /* STM32F042x6 || STM32F048xx || STM32F072xB || STM32F078xx || STM32F091xC || STM32F098xx */
-                else
-                {
-          #if defined(STM32F042x6) || defined(STM32F048xx)  || defined(STM32F070x6) \
-           || defined(STM32F078xx) || defined(STM32F071xB)  || defined(STM32F072xB) \
-           || defined(STM32F070xB) || defined(STM32F091xC) || defined(STM32F098xx)  || defined(STM32F030xC)
-                  /* HSI used as PLL clock source : SystemCoreClock = HSI/PREDIV * PLLMUL */
-                  SystemCoreClock = (HSI_VALUE/predivfactor) * pllmull;
-          #else
-                  /* HSI used as PLL clock source : SystemCoreClock = HSI/2 * PLLMUL */
-                  SystemCoreClock = (HSI_VALUE >> 1) * pllmull;
-          #endif /* STM32F042x6 || STM32F048xx || STM32F070x6 ||
-                    STM32F071xB || STM32F072xB || STM32F078xx || STM32F070xB ||
-                    STM32F091xC || STM32F098xx || STM32F030xC */
-                }
-                break;
-              default: /* HSI used as system clock */
-                SystemCoreClock = HSI_VALUE;
-                break;
-            }
-            /* Compute HCLK clock frequency ----------------*/
-            /* Get HCLK prescaler */
-            tmp = AHBPrescTable[((RCC->CFGR & RCC_CFGR_HPRE) >> 4)];
-            /* HCLK clock frequency */
-            SystemCoreClock >>= tmp;
-          }
+    if (pllsource == cfgr::kPllSrcHsePrediv) {
+      /* HSE used as PLL clock source : SystemCoreClock = HSE/PREDIV * PLLMUL */
+      SystemCoreClock = (hertz{kHseValue}/predivfactor) * pllmull;
+    } else {
+      /* HSI used as PLL clock source : SystemCoreClock = HSI/2 * PLLMUL */
+      SystemCoreClock = hertz{(hertz{kHsiValue}.count() >> 1) * pllmull};
+    }
+    break;
+    default: /* HSI used as system clock */
+      SystemCoreClock = kHsiValue;
+      break;
+    }
+    /* Compute HCLK clock frequency ----------------*/
+    /* Get HCLK prescaler */
+    uint32_t tmp = AHBPrescTable[((rcc.get<CFGR>() & cfgr::kHPre) >> 4)];
+    /* HCLK clock frequency */
+    SystemCoreClock = hertz{SystemCoreClock.count() >> tmp};
+  }
 } // extern "C"
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
