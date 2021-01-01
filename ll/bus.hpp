@@ -17,8 +17,7 @@ struct BusValue {
 };
 
 namespace apb1 {
-using tag = std::integral_constant<uint32_t, rcc::AHB1ENR>;
-constexpr auto kGrp1PeriphPwr = BusValue<tag>{rcc::kApb1Enr1PwrEn};
+constexpr auto kGrp1PeriphPwr = rcc::kApb1Enr1PwrEn;
 }  // namespace apb1
 
 namespace apb2 {
@@ -32,11 +31,11 @@ using tag = std::integral_constant<uint32_t, rcc::AHB2ENR>;
 constexpr auto kGrp1PeriphGpioA = BusValue<tag>{address::ahb2::kGrp1PeriphGpioA};
 }  // namespace ahb2
 
-template <typename Bus>
-static inline void Grp1EnableClock(const BusValue<Bus> &periphs) {
+template <uint32_t Reg>
+static inline void GrpEnableClock(const RegisterValue<Reg> &periphs) {
   auto &rcc = *new ResetClockControl{};
-  bit::set(rcc.get<Bus::value>(), periphs);
-  bit::read(rcc.get<Bus::value>(), periphs);
+  bit::set(rcc.get<Reg>(), periphs);
+  bit::read(rcc.get<Reg>(), periphs);
 }
 
 }  // namespace ll::bus
