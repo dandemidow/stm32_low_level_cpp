@@ -7,9 +7,6 @@ namespace ll::gpio {
 
 struct Output : public Pin {
   Output(port p, uint32_t number) : Pin{p, number} {
-    switch (p) {
-    case port::A: bus::Grp1EnableClock(bus::ahb2::kGrp1PeriphGpioA);
-    }
     reset();
   }
   inline void reset() {
