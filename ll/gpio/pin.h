@@ -65,7 +65,7 @@ class Pin {
       number_ {number},
       value_ {0x01u << number} {
     switch (p) {
-    case port::A: bus::Grp1EnableClock(bus::ahb2::kGrp1PeriphGpioA);
+    case port::A: bus::GrpEnableClock(rcc::kGrp1PeriphGpioA);
     }
   }
 

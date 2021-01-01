@@ -21,9 +21,8 @@ constexpr auto kGrp1PeriphPwr = rcc::kApb1Enr1PwrEn;
 }  // namespace apb1
 
 namespace apb2 {
-using tag = std::integral_constant<uint32_t, rcc::APB2ENR>;
-constexpr auto kGrp1PeriphAll = BusValue<tag>{0xFFFFFFFFu};
-constexpr auto kGrp1PeriphSysCfg = BusValue<tag>{rcc::kApb2EnrSysCfgEn};
+constexpr auto kGrp1PeriphSysCfg = rcc::kApb2EnrSysCfgEn;
+constexpr auto kGrp1PeriphAll = rcc::kApb2PeriphAll;
 }  // namespace apb2
 
 namespace ahb2 {

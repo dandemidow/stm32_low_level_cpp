@@ -110,9 +110,11 @@ constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
 
 }  // namespace cfgr
 
-constexpr uint32_t kApb2EnrSysCfgEn = Flag<0x1u, 0u>::value;
+constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
+constexpr auto kApb2PeriphAll = RegisterValue<APB2ENR>{0xFFFFFFFFu};
+constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{Flag<0x1u, 28u>::value};
+constexpr auto kGrp1PeriphGpioA = RegisterValue<AHB2ENR>{address::ahb2::kGrp1PeriphGpioA};
 
-constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{Flag<0x1u, 28u>{}};
 
 constexpr uint32_t kCrMsiOn = Flag<0x1u, 0u>::value;                  /*!< Internal Multi Speed oscillator (MSI) clock enable */
 constexpr uint32_t kCrMsiRdy = Flag<0x1u, 1u>::value;                 /*!< Internal Multi Speed oscillator (MSI) clock ready flag */
