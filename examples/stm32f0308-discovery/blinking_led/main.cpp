@@ -40,7 +40,7 @@
 #include "core.h"
 #include "cortex.hpp"
 #include "gpio/output.h"
-#include "msi.h"
+#include "hsi.h"
 #include "power.hpp"
 #include "system.hpp"
 #include "spinlock.hpp"
@@ -60,8 +60,8 @@ int main() {
   /* Configure the system clock */
   SystemClock_Config();
 
-  ll::gpio::Output led3 {ll::gpio::port::A, 5u};
-  ll::gpio::Output led4 {ll::gpio::port::A, 5u};
+  ll::gpio::Output led3 {ll::gpio::port::C, 9u};
+  ll::gpio::Output led4 {ll::gpio::port::C, 8u};
 
   led3.init(ll::gpio::output::PushPull,
             ll::gpio::pull::Up,
@@ -97,16 +97,15 @@ static void LL_Init(void) {
   */
 void SystemClock_Config() {
 
-  ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency0);
+  ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency1);
 
-  if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency0) {
+  if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency1) {
     _Error_Handler(__FILE__, __LINE__);
   }
-  ll::power::set_regul_voltage_scaling(ll::power::ReguVoltage::kScale1);
 
-  ll::Msi msi{};
-  msi.Enable();
-  SpinLock::Till([&]{return msi.IsReady();});
+  ll::Hsi hsi{};
+  hsi.Enable();
+  SpinLock::Till([&]{return hsi.IsReady();});
 
   msi.EnableRangeSelection();
   msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
