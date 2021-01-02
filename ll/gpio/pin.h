@@ -1,8 +1,9 @@
 #if !defined(LL_GPIO_PIN_H_)
 #define LL_GPIO_PIN_H_
 
-#include "register/general_purpose_io.hpp"
 #include "bus.hpp"
+#include "register/general_purpose_io.hpp"
+#include "register/gpio_bus.h"
 
 namespace ll::gpio {
 using namespace address::gpio;
@@ -64,9 +65,7 @@ class Pin {
     : gpio_ {*new (p) GeneralPurposeIO{}},
       number_ {number},
       value_ {0x01u << number} {
-    switch (p) {
-    case port::A: bus::GrpEnableClock(rcc::kGrp1PeriphGpioA);
-    }
+    EnablePort(p);
   }
 
   inline uint32_t position() const { return number_; }
