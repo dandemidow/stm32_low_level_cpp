@@ -41,6 +41,7 @@
 #include "cortex.hpp"
 #include "gpio/output.h"
 #include "hsi.h"
+#include "pll.h"
 #include "power.hpp"
 #include "system.hpp"
 #include "spinlock.hpp"
@@ -108,6 +109,10 @@ void SystemClock_Config() {
   SpinLock::Till([&]{return hsi.IsReady();});
 
   hsi.SetCalibTrimming(ll::rcc::cr::HsiTrim::HsiTrim4);
+
+  ll::Pll pll {ll::rcc::cfgr::PllSrc::HsiDiv2, ll::rcc::cfgr::PllMul::PllMul12};
+  pll.Enable();
+  SpinLock::Till([&]{return pll.IsReady();});
 
   ll::rcc::SystemClock sys_clock;
   sys_clock << hsi;

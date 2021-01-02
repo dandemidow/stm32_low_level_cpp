@@ -83,10 +83,34 @@ enum class Sws : uint32_t {
 constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
 
 /*!< ADCPPRE configuration */
-constexpr uint32_t kPllSrcHsePrediv = 0x00010000u;
-
 constexpr uint32_t kPllSrc = Flag<0x1u, 16u>::value;
-constexpr uint32_t kPllMul = Flag<0xfu, 18u>::value;
+enum class PllSrc : uint32_t {
+  HsiDiv2   = 0x00000000u,
+  HsePrediv = 0x00010000u
+};
+
+constexpr auto kPllMul = Flag<0xfu, 18u>{};
+enum class PllMul : uint32_t {
+PllMul_0 = (0x1U << kPllMul.position), /*!< 0x00040000 */
+PllMul_1 = (0x2U << kPllMul.position), /*!< 0x00080000 */
+PllMul_2 = (0x4U << kPllMul.position), /*!< 0x00100000 */
+PllMul_3 = (0x8U << kPllMul.position), /*!< 0x00200000 */
+PllMul2 =  (0x00000000U),                 /*!< PLL input clock*2 */
+PllMul3 =  (0x00040000U),                 /*!< PLL input clock*3 */
+PllMul4 =  (0x00080000U),                 /*!< PLL input clock*4 */
+PllMul5 =  (0x000C0000U),                 /*!< PLL input clock*5 */
+PllMul6 =  (0x00100000U),                 /*!< PLL input clock*6 */
+PllMul7 =  (0x00140000U),                 /*!< PLL input clock*7 */
+PllMul8 =  (0x00180000U),                 /*!< PLL input clock*8 */
+PllMul9 =  (0x001C0000U),                 /*!< PLL input clock*9 */
+PllMul10 = (0x00200000U),                 /*!< PLL input clock10 */
+PllMul11 = (0x00240000U),                 /*!< PLL input clock*11 */
+PllMul12 = (0x00280000U),                 /*!< PLL input clock*12 */
+PllMul13 = (0x002C0000U),                 /*!< PLL input clock*13 */
+PllMul14 = (0x00300000U),                 /*!< PLL input clock*14 */
+PllMul15 = (0x00340000U),                 /*!< PLL input clock*15 */
+PllMul16 = (0x00380000U)
+};
 
 }  // namespace cfgr
 
@@ -112,6 +136,9 @@ enum class HsiTrim : uint32_t {
   HsiTrim3 = 0x08u << kHsiTrim.position,
   HsiTrim4 = 0x10u << kHsiTrim.position,
 };
+
+constexpr uint32_t kPllOn = Flag<0x1u, 24u>::value;
+constexpr uint32_t kPllRdy = Flag<0x1u, 25u>::value;
 }
 
 constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
