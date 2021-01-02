@@ -36,13 +36,12 @@
   ******************************************************************************
   */
 
-
 #include "bus.hpp"
 #include "core.h"
 #include "cortex.hpp"
 #include "gpio/output.h"
-#include "msi.h"
-#include "power.hpp"
+#include "hsi.h"
+#include "pll.h"
 #include "system.hpp"
 #include "spinlock.hpp"
 #include "utils.hpp"
@@ -61,39 +60,32 @@ int main() {
   /* Configure the system clock */
   SystemClock_Config();
 
-  ll::gpio::Output led {ll::gpio::port::A, 5u};
+  ll::gpio::Output led3 {ll::gpio::port::C, 9u};
+  ll::gpio::Output led4 {ll::gpio::port::C, 8u};
 
-  led.init(ll::gpio::output::PushPull,
-           ll::gpio::pull::Up,
-           ll::gpio::speed::VeryHigh);
+  led3.init(ll::gpio::output::PushPull,
+            ll::gpio::pull::Up,
+            ll::gpio::speed::VeryHigh);
+
+  led4.init(ll::gpio::output::PushPull,
+            ll::gpio::pull::Up,
+            ll::gpio::speed::VeryHigh);
 
   while (true) {
-    led.toggle();
-    ll::delay(1000ms);
+    led3.toggle();
+    ll::delay(500ms);
+    led4.toggle();
+    ll::delay(500ms);
   }
 }
 
 static void LL_Init(void) {
-   // TODO check the correctness
-   // LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
-   // LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
-  ll::bus::GrpEnableClock(ll::rcc::kApb2EnrSysCfgEn);
-  ll::bus::GrpEnableClock(ll::rcc::kApb1Enr1PwrEn);
-
-  ll::nvic::set_priority_grouping(ll::nvic::PriorityGroup::Gr4);
+  ll::bus::GrpEnableClock(ll::rcc::kApb1Grp2PeriphSysCfg);
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::MemoryManagement_IRQn);
+  ll::nvic::set_priority(IRQn_Type::SVC_IRQn);
   /* BusFault_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::BusFault_IRQn);
-  /* UsageFault_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::UsageFault_IRQn);
-  /* SVCall_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::SVCall_IRQn);
-  /* DebugMonitor_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::DebugMonitor_IRQn);
-  /* PendSV_IRQn interrupt configuration */
   ll::nvic::set_priority(IRQn_Type::PendSV_IRQn);
   /* SysTick_IRQn interrupt configuration */
   ll::nvic::set_priority(IRQn_Type::SysTick_IRQn);
@@ -105,26 +97,21 @@ static void LL_Init(void) {
   */
 void SystemClock_Config() {
 
-  ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency0);
+  ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency1);
 
-  if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency0) {
+  if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency1) {
     _Error_Handler(__FILE__, __LINE__);
   }
-  ll::power::set_regul_voltage_scaling(ll::power::ReguVoltage::kScale1);
 
-  ll::Msi msi{};
-  msi.Enable();
-  SpinLock::Till([&]{return msi.IsReady();});
+  ll::Hsi hsi{};
+  hsi.Enable();
+  SpinLock::Till([&]{return hsi.IsReady();});
 
-  msi.EnableRangeSelection();
-  msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
-  msi.SetCalibTrimming(0);
+  hsi.SetCalibTrimming(ll::rcc::cr::HsiTrim::HsiTrim4);
 
-  ll::rcc::SystemClock sys_clock;
-  sys_clock << msi;
-
-   /* Wait till System clock is ready */
-  SpinLock::Till([&]{return sys_clock.get_source() == msi;});
+  ll::Pll pll {ll::rcc::cfgr::PllSrc::HsiDiv2, ll::rcc::cfgr::PllMul::PllMul12};
+  pll.Enable();
+  SpinLock::Till([&]{return pll.IsReady();});
 
   ll::rcc::AdvancedHighPerformanceBus ahb {};
   ahb << ll::rcc::SysClkDiv::Div1;
@@ -132,10 +119,13 @@ void SystemClock_Config() {
   ll::rcc::AdvancedPeripheralBus1 apb1 {};
   apb1 << ll::rcc::Apb1Div::Div1;
 
-  ll::rcc::AdvancedPeripheralBus2 apb2 {};
-  apb2 << ll::rcc::Apb2Div::Div1;
+  ll::rcc::SystemClock sys_clock;
+  sys_clock << pll;
 
-  constexpr auto kBaseFrequency = 4_MHz;
+   /* Wait till System clock is ready */
+  SpinLock::Till([&]{return sys_clock.get_source() == pll;});
+
+  constexpr auto kBaseFrequency = 48_MHz;
 
   ll::tick::init_1ms(kBaseFrequency);
 

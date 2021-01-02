@@ -10,27 +10,22 @@ namespace ll::flash {
 
 enum : uint32_t {
   ACR = 0u,
-  PDKEYR,
   KEYR,
   OPTKEYR,
   SR,
   CR,
-  ECCR,
-  RESERVED1,
-  OPTR,
-  PCROP1SR,
-  PCROP1ER,
-  WRP1AR,
-  WRP1BR
+  AR,
+  RESERVED,
+  OBR,
+  WRPR,
 };
 
 enum class AcrLatency : uint32_t {
   kAcrLatency0,
-  kAcrLatency1,
-  kAcrLatency2,
-  kAcrLatency3,
-  kAcrLatency4
+  kAcrLatency1
 };
+
+constexpr uint32_t kAcrLatency = Flag<0x1u, 0u>::value;
 
 }  // namespace ll::flash
 
@@ -41,11 +36,7 @@ Register,
 Register,
 Register,
 Register,
-Register,
 uint32_t,
-Register,
-Register,
-Register,
 Register,
 Register
 >;
