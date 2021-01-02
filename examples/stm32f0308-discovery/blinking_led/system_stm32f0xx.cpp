@@ -229,7 +229,7 @@ void SystemCoreClockUpdate(void) {
     pllmull = ( pllmull >> 18) + 2;
     predivfactor = (rcc.get<CFGR2>() & cfgr2::kPrediv) + 1;
 
-    if (pllsource == cfgr::kPllSrcHsePrediv) {
+    if (pllsource == static_cast<uint32_t>(cfgr::PllSrc::HsePrediv)) {
       /* HSE used as PLL clock source : SystemCoreClock = HSE/PREDIV * PLLMUL */
       SystemCoreClock = (hertz{kHseValue}/predivfactor) * pllmull;
     } else {

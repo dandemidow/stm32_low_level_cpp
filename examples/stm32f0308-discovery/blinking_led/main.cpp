@@ -42,7 +42,6 @@
 #include "gpio/output.h"
 #include "hsi.h"
 #include "pll.h"
-#include "power.hpp"
 #include "system.hpp"
 #include "spinlock.hpp"
 #include "utils.hpp"
@@ -114,22 +113,19 @@ void SystemClock_Config() {
   pll.Enable();
   SpinLock::Till([&]{return pll.IsReady();});
 
-  ll::rcc::SystemClock sys_clock;
-  sys_clock << hsi;
-
-   /* Wait till System clock is ready */
-  SpinLock::Till([&]{return sys_clock.get_source() == hsi;});
-
   ll::rcc::AdvancedHighPerformanceBus ahb {};
   ahb << ll::rcc::SysClkDiv::Div1;
 
   ll::rcc::AdvancedPeripheralBus1 apb1 {};
   apb1 << ll::rcc::Apb1Div::Div1;
 
-  ll::rcc::AdvancedPeripheralBus2 apb2 {};
-  apb2 << ll::rcc::Apb2Div::Div1;
+  ll::rcc::SystemClock sys_clock;
+  sys_clock << pll;
 
-  constexpr auto kBaseFrequency = 4_MHz;
+   /* Wait till System clock is ready */
+  SpinLock::Till([&]{return sys_clock.get_source() == pll;});
+
+  constexpr auto kBaseFrequency = 48_MHz;
 
   ll::tick::init_1ms(kBaseFrequency);
 
