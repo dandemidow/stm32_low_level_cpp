@@ -101,27 +101,24 @@ constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{Flag<0x1u, 17u>::val
 constexpr auto kAhb1Grp1PeriphGpioB = RegisterValue<AHBENR>{Flag<0x1u, 18u>::value};
 constexpr auto kAhb1Grp1PeriphGpioC = RegisterValue<AHBENR>{Flag<0x1u, 19u>::value};
 
-constexpr uint32_t kCrMsiOn = Flag<0x1u, 0u>::value;                  /*!< Internal Multi Speed oscillator (MSI) clock enable */
-constexpr uint32_t kCrMsiRdy = Flag<0x1u, 1u>::value;                 /*!< Internal Multi Speed oscillator (MSI) clock ready flag */
-constexpr uint32_t kCrMsiPllEn = Flag<0x1u, 2u>::value;               /*!< Internal Multi Speed oscillator (MSI) PLL enable */
-constexpr uint32_t kCrMsiRgSel = Flag<0x1u, 3u>::value;               /*!< Internal Multi Speed oscillator (MSI) range selection */
-constexpr auto kCrMsiRange = Flag<0xfu, 4u>{};               /*!< Internal Multi Speed oscillator (MSI) clock Range */
-constexpr uint32_t kCsrMsiSRange = Flag<0xfu, 8u>::value;
+namespace cr {
+constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
+constexpr uint32_t kHsiRdy = Flag<0x1u, 1u>::value;
+constexpr auto kHsiTrim = Flag<0x1fu, 3u>{};
+enum class HsiTrim : uint32_t {
+  HsiTrim0 = 0x01u << kHsiTrim.position,
+  HsiTrim1 = 0x02u << kHsiTrim.position,
+  HsiTrim2 = 0x04u << kHsiTrim.position,
+  HsiTrim3 = 0x08u << kHsiTrim.position,
+  HsiTrim4 = 0x10u << kHsiTrim.position,
+};
+}
 
 constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
 constexpr uint32_t kPllCfgrPllM = Flag<0x7u, 4u>::value;
 constexpr uint32_t kPllCfgrPllN = Flag<0x7fu, 8u>::value;
 constexpr uint32_t kPllCfgrPllR = Flag<0x3u, 25u>::value;
 
-template <uint32_t Index>
-constexpr uint32_t GetRccCrMsiRange() {
-  constexpr uint32_t Lower = 0x0u;
-  constexpr uint32_t Upper = 0xbu;
-  static_assert ((Index >= Lower) && (Index <= Upper));
-  return Flag<Index, kCrMsiRange.position>::value;
-}
-
-constexpr auto kIcsCrMsiTrim = Flag<0xffu, 8u>{};
 }  // namespace ll::rcc
 
 using ResetClockControl = Module<RccBaseAddress,

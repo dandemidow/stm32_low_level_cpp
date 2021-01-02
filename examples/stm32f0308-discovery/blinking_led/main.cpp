@@ -107,15 +107,13 @@ void SystemClock_Config() {
   hsi.Enable();
   SpinLock::Till([&]{return hsi.IsReady();});
 
-  msi.EnableRangeSelection();
-  msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
-  msi.SetCalibTrimming(0);
+  hsi.SetCalibTrimming(ll::rcc::cr::HsiTrim::HsiTrim4);
 
   ll::rcc::SystemClock sys_clock;
-  sys_clock << msi;
+  sys_clock << hsi;
 
    /* Wait till System clock is ready */
-  SpinLock::Till([&]{return sys_clock.get_source() == msi;});
+  SpinLock::Till([&]{return sys_clock.get_source() == hsi;});
 
   ll::rcc::AdvancedHighPerformanceBus ahb {};
   ahb << ll::rcc::SysClkDiv::Div1;
