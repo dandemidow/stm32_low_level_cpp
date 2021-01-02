@@ -84,16 +84,8 @@ static void LL_Init(void) {
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::MemoryManagement_IRQn);
+  ll::nvic::set_priority(IRQn_Type::SVC_IRQn);
   /* BusFault_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::BusFault_IRQn);
-  /* UsageFault_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::UsageFault_IRQn);
-  /* SVCall_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::SVCall_IRQn);
-  /* DebugMonitor_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::DebugMonitor_IRQn);
-  /* PendSV_IRQn interrupt configuration */
   ll::nvic::set_priority(IRQn_Type::PendSV_IRQn);
   /* SysTick_IRQn interrupt configuration */
   ll::nvic::set_priority(IRQn_Type::SysTick_IRQn);
