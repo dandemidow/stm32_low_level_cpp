@@ -60,9 +60,13 @@ namespace tick {
 constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0010ul;
 }  // namespace tick
 
+namespace scb {
+static constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0D00UL; // System Control Block Base Address
+}  // namespace scb
+
 namespace nvic {
 constexpr uint32_t kBaseAddress = kSystemControlSpaceBaseAddress + 0x0100ul;
-constexpr uint32_t kPrioBits = 4u;       // STM32L4XX uses 4 Bits for the Priority Levels
+constexpr uint32_t kPrioBits = 2u;       // STM32F0XX uses 2 Bits for the Priority Levels
 enum class PriorityGroup {
   Gr0 = 0x00000007,
   Gr1 = 0x00000006,

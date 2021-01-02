@@ -80,10 +80,7 @@ int main() {
 }
 
 static void LL_Init(void) {
-  ll::bus::Grp2EnableClock(ll::bus::apb1::kGrp2PeriphSysCfg);
-  ll::bus::Grp1EnableClock(ll::bus::apb1::kGrp1PeriphPwr);
-
-  ll::nvic::set_priority_grouping(ll::nvic::PriorityGroup::Gr4);
+  ll::bus::GrpEnableClock(ll::rcc::kApb1Grp2PeriphSysCfg);
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */

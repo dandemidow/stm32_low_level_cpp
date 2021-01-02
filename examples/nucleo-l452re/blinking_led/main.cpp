@@ -74,6 +74,9 @@ int main() {
 }
 
 static void LL_Init(void) {
+   // TODO check the correctness
+   // LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
+   // LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
   ll::bus::GrpEnableClock(ll::rcc::kApb2EnrSysCfgEn);
   ll::bus::GrpEnableClock(ll::rcc::kApb1Enr1PwrEn);
 

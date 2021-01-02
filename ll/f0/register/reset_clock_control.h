@@ -3,6 +3,7 @@
 
 #include "addresses.h"
 #include "module.h"
+#include "register_value.hpp"
 
 using RccBaseAddress = std::integral_constant<uint32_t, address::rcc::kBaseAddress>;
 
@@ -95,8 +96,7 @@ constexpr uint32_t kPrediv = Flag<0xfu, 0u>::value;
 
 }  // namespace cfgr2
 
-constexpr uint32_t kApb2EnrSysCfgEn = Flag<0x1u, 0u>::value;
-constexpr uint32_t kApb1Enr1PwrEn = Flag<0x1u, 28u>::value;
+constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
 
 constexpr uint32_t kCrMsiOn = Flag<0x1u, 0u>::value;                  /*!< Internal Multi Speed oscillator (MSI) clock enable */
 constexpr uint32_t kCrMsiRdy = Flag<0x1u, 1u>::value;                 /*!< Internal Multi Speed oscillator (MSI) clock ready flag */
