@@ -7,6 +7,15 @@ Memory-mapped objects replaced the device registers structure, the free function
 The C++ startup file also replaced the assembler file.</br>
 The **C++20** standard is used.</br>
 
+For now, the two examples are available: blinking led for the nucleo-l452re board and the stm32f0308-discovery. You can find it in the examples folder.
+For CMake build process the **EXAMPLE_SOURCE_PATH** option should be defined:</br>
+_-DEXAMPLE_SOURCE_PATH:FILEPATH=C:/stm32llcpp20/examples/nucleo-l452re/blinking_led_
+
+The complete command ex.:
+```
+C:\cygwin64\bin\cmake.exe C:/cygwin64/home/dan/stm32llcpp20 -GNinja "-DCMAKE_BUILD_TYPE:STRING=Debug" "-DCMAKE_CXX_COMPILER:STRING=C:/Program Files (x86)/GNU Arm Embedded Toolchain/10 2020-q2-preview/bin/arm-none-eabi-g++.exe" "-DCMAKE_CXX_COMPILER_TARGET :STRING=arm-none-eabi" "-DCMAKE_C_COMPILER:STRING=C:/Program Files (x86)/GNU Arm Embedded Toolchain/10 2020-q2-preview/bin/arm-none-eabi-gcc-10.1.1.exe" "-DCMAKE_C_COMPILER_TARGET:STRING=arm-none-eabi" "-DCMAKE_MAKE_PROGRAM:FILEPATH=C:/cygwin64/bin/ninja.exe" "-DCMAKE_PREFIX_PATH:STRING=" "-DCMAKE_SYSROOT:STRING=C:/Program Files (x86)/GNU Tools Arm Embedded/9 2019-q4-major/arm-none-eabi" "-DCMAKE_TOOLCHAIN_FILE:INTERNAL=toolchain-gcc.cmake" "-DEXAMPLE_SOURCE_PATH:FILEPATH=C:/cygwin64/home/dan/stm32llcpp20/examples/nucleo-l452re/blinking_led"
+```
+
 The blinking led FW (stm32l4 board) size changes
 ```
 2020-10-28:
