@@ -33,7 +33,8 @@ set(CMAKE_CXX_FLAGS_INIT
    -Wno-volatile \
    -fmessage-length=0 \
    -fno-exceptions \
-   -fno-rtti"
+   -fno-rtti \
+   -O1"
 )
 
 set(CMAKE_EXE_LINKER_FLAGS_INIT
