@@ -63,10 +63,9 @@ enum class PPre2 {
 constexpr auto kPPre2 = Flag<0x7u, 11u>{};
 
 enum class Sw: uint32_t {
-  Msi = 0x00000000u,  // MSI oscillator selection as system clock
-  Hsi = 0x00000001u,  // HSI16 oscillator selection as system clock
-  Hse = 0x00000002u,  // HSE oscillator selection as system clock
-  Pll = 0x00000003u   // PLL selection as system clock
+  Hsi = 0x00000000u,
+  Hse = 0x00000001u,
+  Pll = 0x00000002u
 };
 
 constexpr auto kSw = Flag<0x3u, 0u>{};
@@ -74,10 +73,9 @@ constexpr uint32_t kSw0 = Flag<0x1u, kSw.position>::value;
 constexpr uint32_t kSw1 = Flag<0x2u, kSw.position>::value;
 
 enum class Sws : uint32_t {
-  Msi = 0x00000000u,
-  Hsi = 0x00000004u,
-  Hse = 0x00000008u,
-  Pll = 0x0000000cu,
+  Hsi = 0x00000000u,
+  Hse = 0x00000004u,
+  Pll = 0x00000008u,
 };
 
 constexpr uint32_t kSws = Flag<0x3u, 2u>::value;

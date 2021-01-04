@@ -16,7 +16,7 @@ namespace address {
 namespace gpio {
 constexpr uint32_t kPortA = kAhb2PeriphBaseAddress + 0x0000ul;
 constexpr uint32_t kPortB = kAhb2PeriphBaseAddress + 0x0400ul;
-constexpr uint32_t kPortC = kAhb2PeriphBaseAddress + 0x8000ul;
+constexpr uint32_t kPortC = kAhb2PeriphBaseAddress + 0x0800ul;
 
 constexpr uint32_t kModerMode0  = Flag<0x3u, 0u>::value;
 constexpr uint32_t kModerMode00 = Flag<0x1u, 0u>::value;
@@ -36,7 +36,6 @@ constexpr uint32_t kAfrlAfsel8 = Flag<0xfu, 0u>::value;
 
 constexpr uint32_t kOTypeR0 = Flag<0x1u, 0u>::value;
 
-constexpr uint32_t kPin5 = Flag<0x1u, 5u>::value;
 constexpr uint32_t kPin8 = Flag<0x1u, 8u>::value;
 }  // namespace gpio
 

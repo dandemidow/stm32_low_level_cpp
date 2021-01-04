@@ -64,7 +64,7 @@ class Pin {
   Pin(port p, uint32_t number)
     : gpio_ {*new (p) GeneralPurposeIO{}},
       number_ {number},
-      value_ {0x01u << number} {
+      value_ {static_cast<uint32_t>(0b1) << number} {
     EnablePort(p);
   }
 
