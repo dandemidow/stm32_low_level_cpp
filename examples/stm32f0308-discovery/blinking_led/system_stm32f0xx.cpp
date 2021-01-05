@@ -213,16 +213,17 @@ void SystemCoreClockUpdate(void) {
   uint32_t pllmull = 0, pllsource = 0, predivfactor = 0;
 
   /* Get SYSCLK source -------------------------------------------------------*/
-  auto sysclk_cource = static_cast<cfgr::Sws>(rcc.get<CFGR>() & cfgr::kSws);
+  auto sysclk_cource = static_cast<cfgr::SwsClk>(rcc.And<CFGR>(cfgr::kSws.value));
 
   switch (sysclk_cource) {
-  case cfgr::Sws::Hsi:  /* HSI used as system clock */
+  using cfgr::SwsClk;
+  case SwsClk::Hsi:  /* HSI used as system clock */
     SystemCoreClock = kHsiValue;
     break;
-  case cfgr::Sws::Hse:  /* HSE used as system clock */
+  case SwsClk::Hse:  /* HSE used as system clock */
     SystemCoreClock = kHseValue;
     break;
-  case cfgr::Sws::Pll:  /* PLL used as system clock */
+  case SwsClk::Pll:  /* PLL used as system clock */
     /* Get PLL clock source and multiplication factor ----------------------*/
     pllmull = rcc.get<CFGR>() & cfgr::kPllMul;
     pllsource = rcc.get<CFGR>() & cfgr::kPllSrc;

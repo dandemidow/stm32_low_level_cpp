@@ -36,33 +36,38 @@ enum class SwClk: uint32_t {
   Hse = static_cast<uint32_t>(Sw::Sw0),
   Pll = static_cast<uint32_t>(Sw::Sw1)
 };
-
-
-constexpr uint32_t kSw0 = Flag<0x1u, kSw.position>::value;
-constexpr uint32_t kSw1 = Flag<0x2u, kSw.position>::value;
-
-enum class Sws : uint32_t {
+constexpr auto kSws = Flag<0x3u, 2u>{};
+enum class Sws: uint32_t {
+  Sws0 = kSws.Make(0x1u),
+  Sws1 = kSws.Make(0x2u)
+};
+enum class SwsClk : uint32_t {
   Hsi = 0x00000000u,
-  Hse = 0x00000004u,
-  Pll = 0x00000008u,
+  Hse = static_cast<uint32_t>(Sws::Sws0),
+  Pll = static_cast<uint32_t>(Sws::Sws1)
 };
 
-constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
-enum class HPre {
+constexpr auto kHPre = Flag<0xfu, 4u>{};
+enum class HPre : uint32_t {
+  HPre0 = kHPre.Make(0x1u),
+  HPre1 = kHPre.Make(0x2u),
+  HPre2 = kHPre.Make(0x4u),
+  HPre3 = kHPre.Make(0x8u),
+};
+enum class HPreDiv : uint32_t {
   Div1   = 0x00000000u,
-  Div2   = 0x00000080u,
-  Div4   = 0x00000090u,
-  Div8   = 0x000000a0u,
-  Div16  = 0x000000b0u,
-  Div64  = 0x000000c0u,
-  Div128 = 0x000000d0u,
-  Div256 = 0x000000e0u,
-  Div512 = 0x000000f0u,
+  Div2   = kHPre.Make(0x8u),
+  Div4   = kHPre.Make(0x9u),
+  Div8   = kHPre.Make(0xau),
+  Div16  = kHPre.Make(0xbu),
+  Div64  = kHPre.Make(0xcu),
+  Div128 = kHPre.Make(0xdu),
+  Div256 = kHPre.Make(0xeu),
+  Div512 = kHPre.Make(0xfu),
 };
 
-constexpr uint32_t kHPre = Flag<0xfu, 4u>::value;
-
-enum class PPre1 {
+constexpr auto kPPre = Flag<0x7u, 8u>{};
+enum class PPreDiv {
   Div1   = 0x00000000u,
   Div2   = 0x00000400u,
   Div4   = 0x00000500u,
@@ -70,19 +75,6 @@ enum class PPre1 {
   Div16  = 0x00000700u,
 };
 
-constexpr auto kPPre1 = Flag<0x7u, 8u>{};
-template <uint32_t Index, std::enable_if_t<(Index >= 0 && Index <= 2), int> = 0>
-constexpr uint32_t kPPre1By = Flag<2^Index, kPPre1.position>::value;
-
-enum class PPre2 {
-  Div1   = 0x00000000u,
-  Div2   = 0x00002000u,
-  Div4   = 0x00002800u,
-  Div8   = 0x00003000u,
-  Div16  = 0x00003800u,
-};
-
-constexpr auto kPPre2 = Flag<0x7u, 11u>{};
 
 /*!< ADCPPRE configuration */
 constexpr uint32_t kPllSrc = Flag<0x1u, 16u>::value;
