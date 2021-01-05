@@ -67,14 +67,24 @@ enum class HPreDiv : uint32_t {
 };
 
 constexpr auto kPPre = Flag<0x7u, 8u>{};
+enum class PPre {
+  Pre0 = kPPre.Make(0x01u),
+  Pre1 = kPPre.Make(0x02u),
+  Pre2 = kPPre.Make(0x04u),
+};
 enum class PPreDiv {
   Div1   = 0x00000000u,
-  Div2   = 0x00000400u,
-  Div4   = 0x00000500u,
-  Div8   = 0x00000600u,
-  Div16  = 0x00000700u,
+  Div2   = Flag<0x1u, 10u>::value,
+  Div4   = Flag<0x5u, 8u>::value,
+  Div8   = Flag<0x3u, 9u>::value,
+  Div16  = Flag<0x7u, 8u>::value
 };
 
+// TODO fix rcc file
+using PPre1Div = PPreDiv;
+using PPre2Div = int;
+constexpr auto kPPre1 = kPPre;
+constexpr auto kPPre2 = kPPre;
 
 /*!< ADCPPRE configuration */
 constexpr uint32_t kPllSrc = Flag<0x1u, 16u>::value;

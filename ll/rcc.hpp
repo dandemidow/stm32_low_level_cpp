@@ -8,8 +8,8 @@ namespace ll::rcc {
 using SysClkSourceStatus = cfgr::SwsClk;
 using SysClkSource = cfgr::SwClk;
 using SysClkDiv = cfgr::HPreDiv;
-using Apb1Div = cfgr::PPre1;
-using Apb2Div = cfgr::PPre2;
+using Apb1Div = cfgr::PPre1Div;
+using Apb2Div = cfgr::PPre2Div;
 
 class BaseClock {
  public:
