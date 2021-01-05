@@ -8,6 +8,7 @@ namespace ll {
 class Pll {
   ResetClockControl &rcc;
  public:
+  static constexpr auto kClk = rcc::cfgr::kSwClk<rcc::cfgr::SwClk::Pll>;
   Pll(rcc::cfgr::PllSrc Source, rcc::cfgr::PllMul PLLMul) : rcc {*new ResetClockControl{}} {
     reg::modify(rcc.get<rcc::CFGR>(),
                 rcc::cfgr::kPllSrc | rcc::cfgr::kPllMul,
@@ -20,6 +21,10 @@ class Pll {
 
   inline bool IsReady() const {
     return ((bit::read(rcc.get<rcc::CR>(), rcc::cr::kPllRdy) == rcc::cr::kPllRdy) ? true : false);
+  }
+
+  constexpr operator decltype(kClk)() const {
+    return kClk;
   }
 
   operator rcc::SysClkSource() {

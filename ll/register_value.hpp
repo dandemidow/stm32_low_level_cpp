@@ -15,4 +15,14 @@ struct RegisterValue {
   }
 };
 
+template <uint32_t RegisterId>
+struct RegisterMaskValue {
+  static constexpr auto kReg = RegisterId;
+  uint32_t mask;
+  uint32_t value;
+  constexpr operator uint32_t() const {
+    return value;
+  }
+};
+
 #endif

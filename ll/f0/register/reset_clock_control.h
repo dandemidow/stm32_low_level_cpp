@@ -36,6 +36,9 @@ enum class SwClk: uint32_t {
   Hse = static_cast<uint32_t>(Sw::Sw0),
   Pll = static_cast<uint32_t>(Sw::Sw1)
 };
+template <SwClk sw>
+constexpr RegisterMaskValue<CFGR> kSwClk = {kSw.value, static_cast<uint32_t>(sw)};
+
 constexpr auto kSws = Flag<0x3u, 2u>{};
 enum class Sws: uint32_t {
   Sws0 = kSws.Make(0x1u),
@@ -65,6 +68,8 @@ enum class HPreDiv : uint32_t {
   Div256 = kHPre.Make(0xeu),
   Div512 = kHPre.Make(0xfu),
 };
+template <HPreDiv div>
+constexpr RegisterMaskValue<CFGR> kHPreDiv = {kHPre.value, static_cast<uint32_t>(div)};
 
 constexpr auto kPPre = Flag<0x7u, 8u>{};
 enum class PPre {
@@ -79,6 +84,8 @@ enum class PPreDiv {
   Div8   = Flag<0x3u, 9u>::value,
   Div16  = Flag<0x7u, 8u>::value
 };
+template <PPreDiv div>
+constexpr RegisterMaskValue<CFGR> kPPreDiv = {kPPre.value, static_cast<uint32_t>(div)};
 
 // TODO fix rcc file
 using PPre1Div = PPreDiv;
