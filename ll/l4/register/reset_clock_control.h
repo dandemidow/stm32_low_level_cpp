@@ -52,7 +52,8 @@ namespace ll::rcc {
 };
 
 namespace cfgr {
-enum class HPre {
+constexpr auto kHPre = Flag<0xfu, 4u>{};
+enum class HPreDiv {
   Div1   = 0x00000000u,
   Div2   = 0x00000080u,
   Div4   = 0x00000090u,
@@ -63,50 +64,52 @@ enum class HPre {
   Div256 = 0x000000e0u,
   Div512 = 0x000000f0u,
 };
+template <HPreDiv div>
+constexpr RegisterMaskValue<CFGR> kHPreDiv = {kHPre.value, static_cast<uint32_t>(div)};
 
-constexpr uint32_t kHPre = Flag<0xfu, 4u>::value;
-
-enum class PPre1 {
+constexpr auto kPPre1 = Flag<0x7u, 8u>{};
+template <uint32_t Index, std::enable_if_t<(Index >= 0 && Index <= 2), int> = 0>
+constexpr uint32_t kPPre1By = Flag<2^Index, kPPre1.position>::value;
+enum class PPre1Div {
   Div1   = 0x00000000u,
   Div2   = 0x00000400u,
   Div4   = 0x00000500u,
   Div8   = 0x00000600u,
   Div16  = 0x00000700u,
 };
+template <PPre1Div div>
+constexpr RegisterMaskValue<CFGR> kPPre1Div = {kPPre1.value, static_cast<uint32_t>(div)};
 
-constexpr auto kPPre1 = Flag<0x7u, 8u>{};
-template <uint32_t Index, std::enable_if_t<(Index >= 0 && Index <= 2), int> = 0>
-constexpr uint32_t kPPre1By = Flag<2^Index, kPPre1.position>::value;
-
-enum class PPre2 {
+constexpr auto kPPre2 = Flag<0x7u, 11u>{};
+enum class PPre2Div {
   Div1   = 0x00000000u,
   Div2   = 0x00002000u,
   Div4   = 0x00002800u,
   Div8   = 0x00003000u,
   Div16  = 0x00003800u,
 };
+template <PPre2Div div>
+constexpr RegisterMaskValue<CFGR> kPPre2Div = {kPPre2.value, static_cast<uint32_t>(div)};
 
-constexpr auto kPPre2 = Flag<0x7u, 11u>{};
-
-enum class Sw: uint32_t {
+constexpr auto kSw = Flag<0x3u, 0u>{};
+constexpr uint32_t kSw0 = Flag<0x1u, kSw.position>::value;
+constexpr uint32_t kSw1 = Flag<0x2u, kSw.position>::value;
+enum class SwClk: uint32_t {
   Msi = 0x00000000u,  // MSI oscillator selection as system clock
   Hsi = 0x00000001u,  // HSI16 oscillator selection as system clock
   Hse = 0x00000002u,  // HSE oscillator selection as system clock
   Pll = 0x00000003u   // PLL selection as system clock
 };
+template <SwClk sw>
+constexpr RegisterMaskValue<CFGR> kSwClk = {kSw.value, static_cast<uint32_t>(sw)};
 
-constexpr auto kSw = Flag<0x3u, 0u>{};
-constexpr uint32_t kSw0 = Flag<0x1u, kSw.position>::value;
-constexpr uint32_t kSw1 = Flag<0x2u, kSw.position>::value;
-
-enum class Sws : uint32_t {
+constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
+enum class SwsClk : uint32_t {
     Msi = 0x00000000u,
     Hsi = 0x00000004u,
     Hse = 0x00000008u,
     Pll = 0x0000000cu,
 };
-
-constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
 
 }  // namespace cfgr
 

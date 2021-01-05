@@ -8,6 +8,7 @@ namespace ll {
 class Msi {
   ResetClockControl &rcc;
  public:
+  static constexpr auto kClk = rcc::cfgr::kSwClk<rcc::cfgr::SwClk::Msi>;
   Msi() : rcc {*new ResetClockControl{}} {}
   inline void Enable() {
     bit::set(rcc.get<rcc::CR>(), rcc::kCrMsiOn);
@@ -27,6 +28,10 @@ class Msi {
 
   inline void SetCalibTrimming(uint32_t value) {
     reg::modify(rcc.get<rcc::ICSCR>(), rcc::kIcsCrMsiTrim.value, value << rcc::kIcsCrMsiTrim.position);
+  }
+
+  constexpr operator decltype(kClk)() const {
+    return kClk;
   }
 
   operator rcc::SysClkSource() {
