@@ -6,7 +6,7 @@
 namespace ll::rcc {
 
 using SysClkSourceStatus = ll::rcc::cfgr::Sws;
-using SysClkSource = ll::rcc::cfgr::Sw;
+using SysClkSource = ll::rcc::cfgr::SwClk;
 using SysClkDiv = ll::rcc::cfgr::HPre;
 using Apb1Div = rcc::cfgr::PPre1;
 using Apb2Div = rcc::cfgr::PPre2;

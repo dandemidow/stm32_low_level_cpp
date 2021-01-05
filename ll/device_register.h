@@ -17,6 +17,9 @@ static constexpr uint32_t value = (Mask << Position);
 constexpr operator uint32_t() const {
   return value;
 }
+static constexpr uint32_t Make(uint32_t v) {
+  return (v & mask) << position;
+}
 };
 
 namespace reg {
