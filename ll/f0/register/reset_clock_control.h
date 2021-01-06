@@ -87,19 +87,22 @@ enum class PPreDiv {
 template <PPreDiv div>
 constexpr RegisterMaskValue<CFGR> kPPreDiv = {kPPre.value, static_cast<uint32_t>(div)};
 
-// TODO fix rcc file
-using PPre1Div = PPreDiv;
-using PPre2Div = int;
-constexpr auto kPPre1 = kPPre;
-constexpr auto kPPre2 = kPPre;
-
 /*!< ADCPPRE configuration */
-constexpr uint32_t kPllSrc = Flag<0x1u, 16u>::value;
-enum class PllSrc : uint32_t {
-  HsiDiv2   = 0x00000000u,
-  HsePrediv = 0x00010000u
+constexpr auto kAdcPre = Flag<0x1u, 14u>{};
+enum class AdcPre {
+  Div2 = 0x00,
+  Div4 = kAdcPre.Make(0x1u)
 };
-
+constexpr auto kPllSrc = Flag<0x1u, 16u>{};
+enum class PllSrc : uint32_t {
+  HsiDiv2   = 0x00u,
+  HsePrediv = kPllSrc.Make(0x01u)
+};
+constexpr auto kPllXtPre = Flag<0x1u, 17u>{};
+enum class PllXtPre : uint32_t {
+  HsePrediv1 = 0x00u,
+  HsePrediv2 = kPllXtPre.Make(0x01u)
+};
 constexpr auto kPllMul = Flag<0xfu, 18u>{};
 enum class PllMul : uint32_t {
 PllMul_0 = kPllMul.Make(0x1u),  /*!< 0x00040000 */
@@ -123,6 +126,7 @@ PllMul15 = (0x00340000U),                 /*!< PLL input clock*15 */
 PllMul16 = (0x00380000U)
 };
 
+/*!< MCO configuration */
 }  // namespace cfgr
 
 namespace cfgr2 {
