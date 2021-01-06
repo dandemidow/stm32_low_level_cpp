@@ -127,6 +127,22 @@ PllMul16 = (0x00380000U)
 };
 
 /*!< MCO configuration */
+constexpr auto kMco = Flag<0xfu, 24u>{};
+enum class Mco : uint32_t {
+  Mco0 = kMco.Make(0x01u),
+  Mco1 = kMco.Make(0x02u),
+  Mco2 = kMco.Make(0x04u)
+};
+enum class McoSel : uint32_t {
+  NoClock = 0x00,
+  Hsi14  = static_cast<uint32_t>(Mco::Mco0),
+  Lsi    = static_cast<uint32_t>(Mco::Mco1),
+  Lse    = kMco.Make(0x03u),
+  SysClk = static_cast<uint32_t>(Mco::Mco2),
+  Hsi    = kMco.Make(0x05u),
+  Hse    = kMco.Make(0x06u),
+  Pll    = kMco.Make(0x07u)
+};
 }  // namespace cfgr
 
 namespace cfgr2 {
