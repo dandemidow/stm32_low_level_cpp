@@ -20,6 +20,10 @@ constexpr operator uint32_t() const {
 static constexpr uint32_t Make(uint32_t v) {
   return (v & mask) << position;
 }
+template <size_t Index, std::enable_if_t<((Mask >> Index) > 0u), bool> = true>
+static constexpr uint32_t Bit() {
+  return (mask & (0b01 << Index)) << position;
+}
 };
 
 namespace reg {
