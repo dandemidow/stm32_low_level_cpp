@@ -148,10 +148,19 @@ constexpr auto kCssRdyC = Flag<0x1u, 23u>{};
 
 }  // namespace cir
 
-constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
-constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{Flag<0x1u, 17u>::value};
-constexpr auto kAhb1Grp1PeriphGpioB = RegisterValue<AHBENR>{Flag<0x1u, 18u>::value};
-constexpr auto kAhb1Grp1PeriphGpioC = RegisterValue<AHBENR>{Flag<0x1u, 19u>::value};
+namespace apb2rstr {
+
+constexpr auto kSysCfgRst = Flag<0x1u, 0u>{};
+constexpr auto kAdcRst = Flag<0x1u, 9u>{};
+constexpr auto kTim1Rst = Flag<0x1u, 11u>{};
+constexpr auto kSpi1Rst = Flag<0x1u, 12u>{};
+constexpr auto kUsart1Rst = Flag<0x1u, 14u>{};
+constexpr auto kTim15Rst = Flag<0x1u, 16u>{};
+constexpr auto kTim16Rst = Flag<0x1u, 17u>{};
+constexpr auto kTim17Rst = Flag<0x1u, 18u>{};
+constexpr auto kDbgMcuRst = Flag<0x1u, 22u>{};
+
+}  // namespace apb2rstr
 
 namespace cr {
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
@@ -181,7 +190,13 @@ constexpr uint32_t kHseByp = Flag<0x1u, 18u>::value;
 constexpr uint32_t kCssOn = Flag<0x1u, 19u>::value;
 constexpr uint32_t kPllOn = Flag<0x1u, 24u>::value;
 constexpr uint32_t kPllRdy = Flag<0x1u, 25u>::value;
-}
+
+} // namespace cr
+
+constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
+constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{Flag<0x1u, 17u>::value};
+constexpr auto kAhb1Grp1PeriphGpioB = RegisterValue<AHBENR>{Flag<0x1u, 18u>::value};
+constexpr auto kAhb1Grp1PeriphGpioC = RegisterValue<AHBENR>{Flag<0x1u, 19u>::value};
 
 constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
 constexpr uint32_t kPllCfgrPllM = Flag<0x7u, 4u>::value;
