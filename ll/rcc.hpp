@@ -2,14 +2,12 @@
 #define LL_RCC_H_
 
 #include "register/reset_clock_control.h"
+#include "register_value.hpp"
 
 namespace ll::rcc {
 
-using SysClkSourceStatus = ll::rcc::cfgr::Sws;
-using SysClkSource = ll::rcc::cfgr::Sw;
-using SysClkDiv = ll::rcc::cfgr::HPre;
-using Apb1Div = rcc::cfgr::PPre1;
-using Apb2Div = rcc::cfgr::PPre2;
+using SysClkSourceStatus = cfgr::SwsClk;
+using SysClkSource = cfgr::SwClk;
 
 class BaseClock {
  public:
@@ -21,8 +19,10 @@ class BaseClock {
 
 class SystemClock : public BaseClock {
  public:
-  SystemClock &operator <<(SysClkSource source) {
-    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kSw.value, static_cast<uint32_t>(source));
+  SystemClock &operator <<(const RegisterMaskValue<rcc::CFGR> &adv_bus_value) {
+    reg::modify(rcc.get<rcc::CFGR>(),
+                adv_bus_value.mask,
+                adv_bus_value.value);
     return *this;
   }
 
@@ -31,29 +31,31 @@ class SystemClock : public BaseClock {
   }
 };
 
-class AdvancedHighPerformanceBus : public BaseClock {
- public:
-  AdvancedHighPerformanceBus &operator <<(SysClkDiv prescaler) {
-    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
-    return *this;
-  }
-};
 
-class AdvancedPeripheralBus1 : public BaseClock {
- public:
-  AdvancedPeripheralBus1 &operator <<(Apb1Div prescaler) {
-    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
-    return *this;
-  }
-};
 
-class AdvancedPeripheralBus2 : public BaseClock {
- public:
-  AdvancedPeripheralBus2 &operator <<(Apb2Div prescaler) {
-    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
-    return *this;
-  }
-};
+//class AdvancedHighPerformanceBus : public BaseClock {
+// public:
+//  AdvancedHighPerformanceBus &operator <<(SysClkDiv prescaler) {
+//    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kHPre, static_cast<uint32_t>(prescaler));
+//    return *this;
+//  }
+//};
+
+//class AdvancedPeripheralBus1 : public BaseClock {
+// public:
+//  AdvancedPeripheralBus1 &operator <<(Apb1Div prescaler) {
+//    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre1.value, static_cast<uint32_t>(prescaler));
+//    return *this;
+//  }
+//};
+
+//class AdvancedPeripheralBus2 : public BaseClock {
+// public:
+//  AdvancedPeripheralBus2 &operator <<(Apb2Div prescaler) {
+//    reg::modify(rcc.get<rcc::CFGR>(), rcc::cfgr::kPPre2.value, static_cast<uint32_t>(prescaler));
+//    return *this;
+//  }
+//};
 
 }  // namespace ll::rcc
 

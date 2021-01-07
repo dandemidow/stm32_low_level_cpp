@@ -309,7 +309,7 @@ void SystemCoreClockUpdate(void) {
 
   /* Compute HCLK clock frequency --------------------------------------------*/
   /* Get HCLK prescaler */
-  uint32_t tmp = AHBPrescTable[(rcc.And<ll::rcc::CFGR>(ll::rcc::cfgr::kHPre) >> 4U)];
+  uint32_t tmp = AHBPrescTable[(rcc.And<ll::rcc::CFGR>(ll::rcc::cfgr::kHPre.value) >> 4U)];
   /* HCLK clock frequency */
   SystemCoreClock = hertz{static_cast<uint32_t>(SystemCoreClock.count()) >> tmp};
 }

@@ -26,73 +26,66 @@ namespace ll::rcc {
 };
 
 namespace cfgr {
-enum class HPre {
-  Div1   = 0x00000000u,
-  Div2   = 0x00000080u,
-  Div4   = 0x00000090u,
-  Div8   = 0x000000a0u,
-  Div16  = 0x000000b0u,
-  Div64  = 0x000000c0u,
-  Div128 = 0x000000d0u,
-  Div256 = 0x000000e0u,
-  Div512 = 0x000000f0u,
-};
-
-constexpr uint32_t kHPre = Flag<0xfu, 4u>::value;
-
-enum class PPre1 {
-  Div1   = 0x00000000u,
-  Div2   = 0x00000400u,
-  Div4   = 0x00000500u,
-  Div8   = 0x00000600u,
-  Div16  = 0x00000700u,
-};
-
-constexpr auto kPPre1 = Flag<0x7u, 8u>{};
-template <uint32_t Index, std::enable_if_t<(Index >= 0 && Index <= 2), int> = 0>
-constexpr uint32_t kPPre1By = Flag<2^Index, kPPre1.position>::value;
-
-enum class PPre2 {
-  Div1   = 0x00000000u,
-  Div2   = 0x00002000u,
-  Div4   = 0x00002800u,
-  Div8   = 0x00003000u,
-  Div16  = 0x00003800u,
-};
-
-constexpr auto kPPre2 = Flag<0x7u, 11u>{};
-
-enum class Sw: uint32_t {
-  Hsi = 0x00000000u,
-  Hse = 0x00000001u,
-  Pll = 0x00000002u
-};
-
 constexpr auto kSw = Flag<0x3u, 0u>{};
-constexpr uint32_t kSw0 = Flag<0x1u, kSw.position>::value;
-constexpr uint32_t kSw1 = Flag<0x2u, kSw.position>::value;
-
-enum class Sws : uint32_t {
+enum class SwClk: uint32_t {
   Hsi = 0x00000000u,
-  Hse = 0x00000004u,
-  Pll = 0x00000008u,
+  Hse = static_cast<uint32_t>(kSw.Bit<0>()),
+  Pll = static_cast<uint32_t>(kSw.Bit<1>())
+};
+template <SwClk sw>
+constexpr RegisterMaskValue<CFGR> kSwClk = {kSw.value, static_cast<uint32_t>(sw)};
+
+constexpr auto kSws = Flag<0x3u, 2u>{};
+enum class SwsClk : uint32_t {
+  Hsi = 0x00000000u,
+  Hse = static_cast<uint32_t>(kSws.Bit<0>()),
+  Pll = static_cast<uint32_t>(kSws.Bit<1>())
 };
 
-constexpr uint32_t kSws = Flag<0x3u, 2u>::value;
+constexpr auto kHPre = Flag<0xfu, 4u>{};
+enum class HPreDiv : uint32_t {
+  Div1   = 0x00000000u,
+  Div2   = kHPre.Make(0x8u),
+  Div4   = kHPre.Make(0x9u),
+  Div8   = kHPre.Make(0xau),
+  Div16  = kHPre.Make(0xbu),
+  Div64  = kHPre.Make(0xcu),
+  Div128 = kHPre.Make(0xdu),
+  Div256 = kHPre.Make(0xeu),
+  Div512 = kHPre.Make(0xfu),
+};
+template <HPreDiv div>
+constexpr RegisterMaskValue<CFGR> kHPreDiv = {kHPre.value, static_cast<uint32_t>(div)};
+
+constexpr auto kPPre = Flag<0x7u, 8u>{};
+enum class PPreDiv {
+  Div1   = 0x00000000u,
+  Div2   = Flag<0x1u, 10u>::value,
+  Div4   = Flag<0x5u, 8u>::value,
+  Div8   = Flag<0x3u, 9u>::value,
+  Div16  = Flag<0x7u, 8u>::value
+};
+template <PPreDiv div>
+constexpr RegisterMaskValue<CFGR> kPPreDiv = {kPPre.value, static_cast<uint32_t>(div)};
 
 /*!< ADCPPRE configuration */
-constexpr uint32_t kPllSrc = Flag<0x1u, 16u>::value;
-enum class PllSrc : uint32_t {
-  HsiDiv2   = 0x00000000u,
-  HsePrediv = 0x00010000u
+constexpr auto kAdcPre = Flag<0x1u, 14u>{};
+enum class AdcPre {
+  Div2 = 0x00,
+  Div4 = kAdcPre.Bit<0>()
 };
-
+constexpr auto kPllSrc = Flag<0x1u, 16u>{};
+enum class PllSrc : uint32_t {
+  HsiDiv2   = 0x00u,
+  HsePrediv = kPllSrc.Bit<0>()
+};
+constexpr auto kPllXtPre = Flag<0x1u, 17u>{};
+enum class PllXtPre : uint32_t {
+  HsePrediv1 = 0x00u,
+  HsePrediv2 = kPllXtPre.Bit<0>()
+};
 constexpr auto kPllMul = Flag<0xfu, 18u>{};
 enum class PllMul : uint32_t {
-PllMul_0 = (0x1U << kPllMul.position), /*!< 0x00040000 */
-PllMul_1 = (0x2U << kPllMul.position), /*!< 0x00080000 */
-PllMul_2 = (0x4U << kPllMul.position), /*!< 0x00100000 */
-PllMul_3 = (0x8U << kPllMul.position), /*!< 0x00200000 */
 PllMul2 =  (0x00000000U),                 /*!< PLL input clock*2 */
 PllMul3 =  (0x00040000U),                 /*!< PLL input clock*3 */
 PllMul4 =  (0x00080000U),                 /*!< PLL input clock*4 */
@@ -110,6 +103,18 @@ PllMul15 = (0x00340000U),                 /*!< PLL input clock*15 */
 PllMul16 = (0x00380000U)
 };
 
+/*!< MCO configuration */
+constexpr auto kMco = Flag<0xfu, 24u>{};
+enum class McoSel : uint32_t {
+  NoClock = 0x00,
+  Hsi14  = static_cast<uint32_t>(kMco.Bit<0>()),
+  Lsi    = static_cast<uint32_t>(kMco.Bit<1>()),
+  Lse    = kMco.Make(0x03u),
+  SysClk = static_cast<uint32_t>(kMco.Bit<2>()),
+  Hsi    = kMco.Make(0x05u),
+  Hse    = kMco.Make(0x06u),
+  Pll    = kMco.Make(0x07u)
+};
 }  // namespace cfgr
 
 namespace cfgr2 {
@@ -118,26 +123,80 @@ constexpr uint32_t kPrediv = Flag<0xfu, 0u>::value;
 
 }  // namespace cfgr2
 
-constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
-constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{Flag<0x1u, 17u>::value};
-constexpr auto kAhb1Grp1PeriphGpioB = RegisterValue<AHBENR>{Flag<0x1u, 18u>::value};
-constexpr auto kAhb1Grp1PeriphGpioC = RegisterValue<AHBENR>{Flag<0x1u, 19u>::value};
+namespace cir {
+
+constexpr auto kLsiRdyF = Flag<0x1u, 0u>{};
+constexpr auto kLseRdyF = Flag<0x1u, 1u>{};
+constexpr auto kHsiRdyF = Flag<0x1u, 2u>{};
+constexpr auto kHseRdyF = Flag<0x1u, 3u>{};
+constexpr auto kPllRdyF = Flag<0x1u, 4u>{};
+constexpr auto kHsi14RdyF = Flag<0x1u, 5u>{};
+constexpr auto kCssF = Flag<0x1u, 7u>{};
+constexpr auto kLsiRdyIE = Flag<0x1u, 8u>{};
+constexpr auto kLseRdyIE = Flag<0x1u, 9u>{};
+constexpr auto kHsiRdyIE = Flag<0x1u, 10u>{};
+constexpr auto kHseRdyIE = Flag<0x1u, 11u>{};
+constexpr auto kPllRdyIE = Flag<0x1u, 12u>{};
+constexpr auto kHsi14RdyIE = Flag<0x1u, 13u>{};
+constexpr auto kLsiRdyC = Flag<0x1u, 16u>{};
+constexpr auto kLseRdyC = Flag<0x1u, 17u>{};
+constexpr auto kHsiRdyC = Flag<0x1u, 18u>{};
+constexpr auto kHseRdyC = Flag<0x1u, 19u>{};
+constexpr auto kPllRdyC = Flag<0x1u, 20u>{};
+constexpr auto kHsi14RdyC = Flag<0x1u, 21u>{};
+constexpr auto kCssRdyC = Flag<0x1u, 23u>{};
+
+}  // namespace cir
+
+namespace apb2rstr {
+
+constexpr auto kSysCfgRst = Flag<0x1u, 0u>{};
+constexpr auto kAdcRst = Flag<0x1u, 9u>{};
+constexpr auto kTim1Rst = Flag<0x1u, 11u>{};
+constexpr auto kSpi1Rst = Flag<0x1u, 12u>{};
+constexpr auto kUsart1Rst = Flag<0x1u, 14u>{};
+constexpr auto kTim15Rst = Flag<0x1u, 16u>{};
+constexpr auto kTim16Rst = Flag<0x1u, 17u>{};
+constexpr auto kTim17Rst = Flag<0x1u, 18u>{};
+constexpr auto kDbgMcuRst = Flag<0x1u, 22u>{};
+
+}  // namespace apb2rstr
 
 namespace cr {
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
 constexpr uint32_t kHsiRdy = Flag<0x1u, 1u>::value;
 constexpr auto kHsiTrim = Flag<0x1fu, 3u>{};
 enum class HsiTrim : uint32_t {
-  HsiTrim0 = 0x01u << kHsiTrim.position,
-  HsiTrim1 = 0x02u << kHsiTrim.position,
-  HsiTrim2 = 0x04u << kHsiTrim.position,
-  HsiTrim3 = 0x08u << kHsiTrim.position,
-  HsiTrim4 = 0x10u << kHsiTrim.position,
+  HsiTrim0 = kHsiTrim.Make(0x01u),
+  HsiTrim1 = kHsiTrim.Make(0x02u),
+  HsiTrim2 = kHsiTrim.Make(0x04u),
+  HsiTrim3 = kHsiTrim.Make(0x08u),
+  HsiTrim4 = kHsiTrim.Make(0x10u)
 };
-
+constexpr auto kHsiCal = Flag<0xffu, 8u>{};
+enum class HsiCal : uint32_t {
+  HsiCal0 = kHsiCal.Make(0x01u),
+  HsiCal1 = kHsiCal.Make(0x02u),
+  HsiCal2 = kHsiCal.Make(0x04u),
+  HsiCal3 = kHsiCal.Make(0x08u),
+  HsiCal4 = kHsiCal.Make(0x10u),
+  HsiCal5 = kHsiCal.Make(0x20u),
+  HsiCal6 = kHsiCal.Make(0x40u),
+  HsiCal7 = kHsiCal.Make(0x80u),
+};
+constexpr uint32_t kHseOn = Flag<0x1u, 16u>::value;
+constexpr uint32_t kHseRdy = Flag<0x1u, 17u>::value;
+constexpr uint32_t kHseByp = Flag<0x1u, 18u>::value;
+constexpr uint32_t kCssOn = Flag<0x1u, 19u>::value;
 constexpr uint32_t kPllOn = Flag<0x1u, 24u>::value;
 constexpr uint32_t kPllRdy = Flag<0x1u, 25u>::value;
-}
+
+} // namespace cr
+
+constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
+constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{Flag<0x1u, 17u>::value};
+constexpr auto kAhb1Grp1PeriphGpioB = RegisterValue<AHBENR>{Flag<0x1u, 18u>::value};
+constexpr auto kAhb1Grp1PeriphGpioC = RegisterValue<AHBENR>{Flag<0x1u, 19u>::value};
 
 constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
 constexpr uint32_t kPllCfgrPllM = Flag<0x7u, 4u>::value;

@@ -126,14 +126,9 @@ void SystemClock_Config() {
    /* Wait till System clock is ready */
   SpinLock::Till([&]{return sys_clock.get_source() == msi;});
 
-  ll::rcc::AdvancedHighPerformanceBus ahb {};
-  ahb << ll::rcc::SysClkDiv::Div1;
-
-  ll::rcc::AdvancedPeripheralBus1 apb1 {};
-  apb1 << ll::rcc::Apb1Div::Div1;
-
-  ll::rcc::AdvancedPeripheralBus2 apb2 {};
-  apb2 << ll::rcc::Apb2Div::Div1;
+  sys_clock << ll::rcc::cfgr::kHPreDiv<ll::rcc::cfgr::HPreDiv::Div1>
+            << ll::rcc::cfgr::kPPre1Div<ll::rcc::cfgr::PPre1Div::Div1>
+            << ll::rcc::cfgr::kPPre2Div<ll::rcc::cfgr::PPre2Div::Div1>;
 
   constexpr auto kBaseFrequency = 4_MHz;
 

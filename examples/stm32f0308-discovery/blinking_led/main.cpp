@@ -113,14 +113,10 @@ void SystemClock_Config() {
   pll.Enable();
   SpinLock::Till([&]{return pll.IsReady();});
 
-  ll::rcc::AdvancedHighPerformanceBus ahb {};
-  ahb << ll::rcc::SysClkDiv::Div1;
-
-  ll::rcc::AdvancedPeripheralBus1 apb1 {};
-  apb1 << ll::rcc::Apb1Div::Div1;
-
   ll::rcc::SystemClock sys_clock;
-  sys_clock << pll;
+  sys_clock << ll::rcc::cfgr::kHPreDiv<ll::rcc::cfgr::HPreDiv::Div1>
+            << ll::rcc::cfgr::kPPreDiv<ll::rcc::cfgr::PPreDiv::Div1>
+            << pll;
 
    /* Wait till System clock is ready */
   SpinLock::Till([&]{return sys_clock.get_source() == pll;});
