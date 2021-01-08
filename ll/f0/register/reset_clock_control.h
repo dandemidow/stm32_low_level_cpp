@@ -190,6 +190,20 @@ constexpr auto kGpioFEn = Flag<0x1u, 22u>{};
 
 }  // namespace ahbenr
 
+namespace apb2enr {
+
+constexpr auto kSysCfgCompEn = Flag<0x1u, 0u>{};
+constexpr auto kAdcEn        = Flag<0x1u, 9u>{};
+constexpr auto kTim1En       = Flag<0x1u, 11u>{};
+constexpr auto kSpi1En       = Flag<0x1u, 12u>{};
+constexpr auto kUsart1En     = Flag<0x1u, 14u>{};
+constexpr auto kTim15En      = Flag<0x1u, 16u>{};
+constexpr auto kTim16En      = Flag<0x1u, 17u>{};
+constexpr auto kTim17En      = Flag<0x1u, 18u>{};
+constexpr auto kDbgMcuEn     = Flag<0x1u, 22u>{};
+
+}  // namespace apb2enr
+
 namespace cr {
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
 constexpr uint32_t kHsiRdy = Flag<0x1u, 1u>::value;
