@@ -162,6 +162,20 @@ constexpr auto kDbgMcuRst = Flag<0x1u, 22u>{};
 
 }  // namespace apb2rstr
 
+namespace apb2rstr {
+
+constexpr auto kTim3Rst   = Flag<0x1u, 1u>{};
+constexpr auto kTim6Rst   = Flag<0x1u, 4u>{};
+constexpr auto kTim14Rst  = Flag<0x1u, 8u>{};
+constexpr auto kWwdgRst   = Flag<0x1u, 11u>{};
+constexpr auto kSpi2Rst   = Flag<0x1u, 14u>{};
+constexpr auto kUsart2Rst = Flag<0x1u, 17u>{};
+constexpr auto kI2C1Rst   = Flag<0x1u, 21u>{};
+constexpr auto kI2C2Rst   = Flag<0x1u, 22u>{};
+constexpr auto kPwrRst    = Flag<0x1u, 28u>{};
+
+}  // namespace apb2rstr
+
 namespace cr {
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
 constexpr uint32_t kHsiRdy = Flag<0x1u, 1u>::value;
