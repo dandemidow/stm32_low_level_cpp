@@ -176,6 +176,20 @@ constexpr auto kPwrRst    = Flag<0x1u, 28u>{};
 
 }  // namespace apb2rstr
 
+namespace ahbenr {
+
+constexpr auto kDmaEn   = Flag<0x1u, 0u>{};
+constexpr auto kSramEn  = Flag<0x1u, 2u>{};
+constexpr auto kFlitfEn = Flag<0x1u, 4u>{};
+constexpr auto kCrcEn   = Flag<0x1u, 6u>{};
+constexpr auto kGpioAEn = Flag<0x1u, 17u>{};
+constexpr auto kGpioBEn = Flag<0x1u, 18u>{};
+constexpr auto kGpioCEn = Flag<0x1u, 19u>{};
+constexpr auto kGpioDEn = Flag<0x1u, 20u>{};
+constexpr auto kGpioFEn = Flag<0x1u, 22u>{};
+
+}  // namespace ahbenr
+
 namespace cr {
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
 constexpr uint32_t kHsiRdy = Flag<0x1u, 1u>::value;
