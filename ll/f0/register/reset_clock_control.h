@@ -236,6 +236,22 @@ constexpr auto kBdRst  = Flag<0x1u, 16u>{};
 
 }  // namespace bdcr
 
+namespace csr {
+
+constexpr auto kLsiOn      = Flag<0x1u, 0u>{};
+constexpr auto kLsiRdy     = Flag<0x1u, 1u>{};
+constexpr auto kV18PwrRstF = Flag<0x1u, 23u>{};
+constexpr auto kRmvF       = Flag<0x1u, 24u>{};
+constexpr auto kOblRstF    = Flag<0x1u, 25u>{};
+constexpr auto kPinRstF    = Flag<0x1u, 26u>{};
+constexpr auto kPorRstF    = Flag<0x1u, 27u>{};
+constexpr auto kSftRstF    = Flag<0x1u, 28u>{};
+constexpr auto kIwdgRstF   = Flag<0x1u, 29u>{};
+constexpr auto kWwdgRstF   = Flag<0x1u, 30u>{};
+constexpr auto kLpwrRstF   = Flag<0x1u, 31u>{};
+
+}  // namespace csr
+
 namespace cr {
 
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
