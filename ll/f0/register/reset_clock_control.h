@@ -151,18 +151,119 @@ constexpr auto kCssRdyC = Flag<0x1u, 23u>{};
 namespace apb2rstr {
 
 constexpr auto kSysCfgRst = Flag<0x1u, 0u>{};
-constexpr auto kAdcRst = Flag<0x1u, 9u>{};
-constexpr auto kTim1Rst = Flag<0x1u, 11u>{};
-constexpr auto kSpi1Rst = Flag<0x1u, 12u>{};
+constexpr auto kAdcRst    = Flag<0x1u, 9u>{};
+constexpr auto kTim1Rst   = Flag<0x1u, 11u>{};
+constexpr auto kSpi1Rst   = Flag<0x1u, 12u>{};
 constexpr auto kUsart1Rst = Flag<0x1u, 14u>{};
-constexpr auto kTim15Rst = Flag<0x1u, 16u>{};
-constexpr auto kTim16Rst = Flag<0x1u, 17u>{};
-constexpr auto kTim17Rst = Flag<0x1u, 18u>{};
+constexpr auto kTim15Rst  = Flag<0x1u, 16u>{};
+constexpr auto kTim16Rst  = Flag<0x1u, 17u>{};
+constexpr auto kTim17Rst  = Flag<0x1u, 18u>{};
 constexpr auto kDbgMcuRst = Flag<0x1u, 22u>{};
 
 }  // namespace apb2rstr
 
+namespace apb2rstr {
+
+constexpr auto kTim3Rst   = Flag<0x1u, 1u>{};
+constexpr auto kTim6Rst   = Flag<0x1u, 4u>{};
+constexpr auto kTim14Rst  = Flag<0x1u, 8u>{};
+constexpr auto kWwdgRst   = Flag<0x1u, 11u>{};
+constexpr auto kSpi2Rst   = Flag<0x1u, 14u>{};
+constexpr auto kUsart2Rst = Flag<0x1u, 17u>{};
+constexpr auto kI2C1Rst   = Flag<0x1u, 21u>{};
+constexpr auto kI2C2Rst   = Flag<0x1u, 22u>{};
+constexpr auto kPwrRst    = Flag<0x1u, 28u>{};
+
+}  // namespace apb2rstr
+
+namespace ahbenr {
+
+constexpr auto kDmaEn   = Flag<0x1u, 0u>{};
+constexpr auto kSramEn  = Flag<0x1u, 2u>{};
+constexpr auto kFlitfEn = Flag<0x1u, 4u>{};
+constexpr auto kCrcEn   = Flag<0x1u, 6u>{};
+constexpr auto kGpioAEn = Flag<0x1u, 17u>{};
+constexpr auto kGpioBEn = Flag<0x1u, 18u>{};
+constexpr auto kGpioCEn = Flag<0x1u, 19u>{};
+constexpr auto kGpioDEn = Flag<0x1u, 20u>{};
+constexpr auto kGpioFEn = Flag<0x1u, 22u>{};
+
+}  // namespace ahbenr
+
+namespace apb2enr {
+
+constexpr auto kSysCfgCompEn = Flag<0x1u, 0u>{};
+constexpr auto kAdcEn        = Flag<0x1u, 9u>{};
+constexpr auto kTim1En       = Flag<0x1u, 11u>{};
+constexpr auto kSpi1En       = Flag<0x1u, 12u>{};
+constexpr auto kUsart1En     = Flag<0x1u, 14u>{};
+constexpr auto kTim15En      = Flag<0x1u, 16u>{};
+constexpr auto kTim16En      = Flag<0x1u, 17u>{};
+constexpr auto kTim17En      = Flag<0x1u, 18u>{};
+constexpr auto kDbgMcuEn     = Flag<0x1u, 22u>{};
+
+}  // namespace apb2enr
+
+namespace apb1enr {
+
+constexpr auto kTim3En   = Flag<0x1u, 1u>{};
+constexpr auto kTim6En   = Flag<0x1u, 4u>{};
+constexpr auto kTim14En  = Flag<0x1u, 8u>{};
+constexpr auto kWwdgEn   = Flag<0x1u, 11u>{};
+constexpr auto kSpi2En   = Flag<0x1u, 14u>{};
+constexpr auto kUsart2En = Flag<0x1u, 17u>{};
+constexpr auto kI2C1En   = Flag<0x1u, 21u>{};
+constexpr auto kI2C2En   = Flag<0x1u, 22u>{};
+constexpr auto kPwrEn    = Flag<0x1u, 28u>{};
+
+}  // namespace apb1enr
+
+namespace bdcr {
+
+constexpr auto kLseOn  = Flag<0x1u, 0u>{};
+constexpr auto kLseRdy = Flag<0x1u, 1u>{};
+constexpr auto kLseByp = Flag<0x1u, 2u>{};
+constexpr auto kLseDrv = Flag<0x3u, 3u>{};
+constexpr auto kRtcSel = Flag<0x3u, 8u>{};
+enum class RtcSel : uint32_t {
+  NoClock = 0x00,
+  Lse     = kRtcSel.Bit<0>(),
+  Lsi     = kRtcSel.Bit<1>(),
+  Hse     = kRtcSel.Make(0b11)
+};
+constexpr auto kRtcEn  = Flag<0x1u, 15u>{};
+constexpr auto kBdRst  = Flag<0x1u, 16u>{};
+
+}  // namespace bdcr
+
+namespace csr {
+
+constexpr auto kLsiOn      = Flag<0x1u, 0u>{};
+constexpr auto kLsiRdy     = Flag<0x1u, 1u>{};
+constexpr auto kV18PwrRstF = Flag<0x1u, 23u>{};
+constexpr auto kRmvF       = Flag<0x1u, 24u>{};
+constexpr auto kOblRstF    = Flag<0x1u, 25u>{};
+constexpr auto kPinRstF    = Flag<0x1u, 26u>{};
+constexpr auto kPorRstF    = Flag<0x1u, 27u>{};
+constexpr auto kSftRstF    = Flag<0x1u, 28u>{};
+constexpr auto kIwdgRstF   = Flag<0x1u, 29u>{};
+constexpr auto kWwdgRstF   = Flag<0x1u, 30u>{};
+constexpr auto kLpwrRstF   = Flag<0x1u, 31u>{};
+
+}  // namespace csr
+
+namespace ahbrstr {
+
+constexpr auto kGpioARst = Flag<0x1u, 17u>{};
+constexpr auto kGpioBRst = Flag<0x1u, 18u>{};
+constexpr auto kGpioCRst = Flag<0x1u, 19u>{};
+constexpr auto kGpioDRst = Flag<0x1u, 20u>{};
+constexpr auto kGpioFRst = Flag<0x1u, 22u>{};
+
+}  // namespace ahbrstr
+
 namespace cr {
+
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
 constexpr uint32_t kHsiRdy = Flag<0x1u, 1u>::value;
 constexpr auto kHsiTrim = Flag<0x1fu, 3u>{};
@@ -193,10 +294,10 @@ constexpr uint32_t kPllRdy = Flag<0x1u, 25u>::value;
 
 } // namespace cr
 
-constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
-constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{Flag<0x1u, 17u>::value};
-constexpr auto kAhb1Grp1PeriphGpioB = RegisterValue<AHBENR>{Flag<0x1u, 18u>::value};
-constexpr auto kAhb1Grp1PeriphGpioC = RegisterValue<AHBENR>{Flag<0x1u, 19u>::value};
+constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{apb2enr::kSysCfgCompEn.value};
+constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{ahbenr::kGpioAEn.value};
+constexpr auto kAhb1Grp1PeriphGpioB = RegisterValue<AHBENR>{ahbenr::kGpioBEn.value};
+constexpr auto kAhb1Grp1PeriphGpioC = RegisterValue<AHBENR>{ahbenr::kGpioCEn.value};
 
 constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
 constexpr uint32_t kPllCfgrPllM = Flag<0x7u, 4u>::value;
