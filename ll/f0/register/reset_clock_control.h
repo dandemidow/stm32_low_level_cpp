@@ -252,6 +252,16 @@ constexpr auto kLpwrRstF   = Flag<0x1u, 31u>{};
 
 }  // namespace csr
 
+namespace ahbrstr {
+
+constexpr auto kGpioARst = Flag<0x1u, 17u>{};
+constexpr auto kGpioBRst = Flag<0x1u, 18u>{};
+constexpr auto kGpioCRst = Flag<0x1u, 19u>{};
+constexpr auto kGpioDRst = Flag<0x1u, 20u>{};
+constexpr auto kGpioFRst = Flag<0x1u, 22u>{};
+
+}  // namespace ahbrstr
+
 namespace cr {
 
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
