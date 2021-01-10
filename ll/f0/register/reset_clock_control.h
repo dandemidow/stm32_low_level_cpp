@@ -280,6 +280,23 @@ enum class Prediv : uint32_t {
 
 }  // namespace cfgr2
 
+namespace cfgr3 {
+
+constexpr auto kUsart1Sw = Flag<0x3u, 0u>{};
+enum class Usart1Sw : uint32_t {
+  Pclk   = 0x00,
+  Sysclk = kUsart1Sw.Make(0x01u),
+  Lse    = kUsart1Sw.Make(0x02u),
+  Lsi    = kUsart1Sw.Make(0x03u),
+};
+constexpr auto kI2C1Sw = Flag<0x1u, 4u>{};
+enum class I2C1Sw {
+  Hsi    = 0x00,
+  Sysclk = kI2C1Sw.Make(0x01u)
+};
+
+}  // namespace cfgr3
+
 namespace cr {
 
 constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
