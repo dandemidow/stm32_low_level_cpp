@@ -117,12 +117,6 @@ enum class McoSel : uint32_t {
 };
 }  // namespace cfgr
 
-namespace cfgr2 {
-
-constexpr uint32_t kPrediv = Flag<0xfu, 0u>::value;
-
-}  // namespace cfgr2
-
 namespace cir {
 
 constexpr auto kLsiRdyF = Flag<0x1u, 0u>{};
@@ -261,6 +255,47 @@ constexpr auto kGpioDRst = Flag<0x1u, 20u>{};
 constexpr auto kGpioFRst = Flag<0x1u, 22u>{};
 
 }  // namespace ahbrstr
+
+namespace cfgr2 {
+
+constexpr auto kPrediv = Flag<0xfu, 0u>{};
+enum class Prediv : uint32_t {
+  Div1  = 0x00,
+  Div2  = kPrediv.Make(0x01u),
+  Div3  = kPrediv.Make(0x02u),
+  Div4  = kPrediv.Make(0x03u),
+  Div5  = kPrediv.Make(0x04u),
+  Div6  = kPrediv.Make(0x05u),
+  Div7  = kPrediv.Make(0x06u),
+  Div8  = kPrediv.Make(0x07u),
+  Div9  = kPrediv.Make(0x08u),
+  Div10 = kPrediv.Make(0x09u),
+  Div11 = kPrediv.Make(0x0au),
+  Div12 = kPrediv.Make(0x0bu),
+  Div13 = kPrediv.Make(0x0cu),
+  Div14 = kPrediv.Make(0x0du),
+  Div15 = kPrediv.Make(0x0eu),
+  Div16 = kPrediv.Make(0x0fu)
+};
+
+}  // namespace cfgr2
+
+namespace cfgr3 {
+
+constexpr auto kUsart1Sw = Flag<0x3u, 0u>{};
+enum class Usart1Sw : uint32_t {
+  Pclk   = 0x00,
+  Sysclk = kUsart1Sw.Make(0x01u),
+  Lse    = kUsart1Sw.Make(0x02u),
+  Lsi    = kUsart1Sw.Make(0x03u),
+};
+constexpr auto kI2C1Sw = Flag<0x1u, 4u>{};
+enum class I2C1Sw {
+  Hsi    = 0x00,
+  Sysclk = kI2C1Sw.Make(0x01u)
+};
+
+}  // namespace cfgr3
 
 namespace cr {
 
