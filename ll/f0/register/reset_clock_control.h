@@ -330,7 +330,15 @@ enum class I2C1Sw {
 
 }  // namespace cfgr3
 
+namespace cr2 {
 
+constexpr auto kHsi14On = Flag<0x1u, 0u>{};
+constexpr auto kHsi14Rdy = Flag<0x1u, 1u>{};
+constexpr auto kHsi14Dis = Flag<0x1u, 2u>{};
+constexpr auto kHsi14Trim = Flag<0x1u, 3u>{};
+constexpr auto kHsi14Cal = Flag<0xffu, 8u>{};
+
+}  // namespace cr2
 
 constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{apb2enr::kSysCfgCompEn.value};
 constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{ahbenr::kGpioAEn.value};
