@@ -25,6 +25,39 @@ namespace ll::rcc {
      CR2         /*!< RCC clock control register 2,                                Address offset: 0x34 */
 };
 
+namespace cr {
+
+constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
+constexpr uint32_t kHsiRdy = Flag<0x1u, 1u>::value;
+constexpr auto kHsiTrim = Flag<0x1fu, 3u>{};
+enum class HsiTrim : uint32_t {
+  HsiTrim0 = kHsiTrim.Make(0x01u),
+  HsiTrim1 = kHsiTrim.Make(0x02u),
+  HsiTrim2 = kHsiTrim.Make(0x04u),
+  HsiTrim3 = kHsiTrim.Make(0x08u),
+  HsiTrim4 = kHsiTrim.Make(0x10u)
+};
+constexpr auto kHsiCal = Flag<0xffu, 8u>{};
+enum class HsiCal : uint32_t {
+  HsiCal0 = kHsiCal.Make(0x01u),
+  HsiCal1 = kHsiCal.Make(0x02u),
+  HsiCal2 = kHsiCal.Make(0x04u),
+  HsiCal3 = kHsiCal.Make(0x08u),
+  HsiCal4 = kHsiCal.Make(0x10u),
+  HsiCal5 = kHsiCal.Make(0x20u),
+  HsiCal6 = kHsiCal.Make(0x40u),
+  HsiCal7 = kHsiCal.Make(0x80u),
+};
+constexpr uint32_t kHseOn = Flag<0x1u, 16u>::value;
+constexpr uint32_t kHseRdy = Flag<0x1u, 17u>::value;
+constexpr uint32_t kHseByp = Flag<0x1u, 18u>::value;
+constexpr uint32_t kCssOn = Flag<0x1u, 19u>::value;
+constexpr uint32_t kPllOn = Flag<0x1u, 24u>::value;
+constexpr uint32_t kPllRdy = Flag<0x1u, 25u>::value;
+
+} // namespace cr
+
+
 namespace cfgr {
 constexpr auto kSw = Flag<0x3u, 0u>{};
 enum class SwClk: uint32_t {
@@ -297,37 +330,15 @@ enum class I2C1Sw {
 
 }  // namespace cfgr3
 
-namespace cr {
+namespace cr2 {
 
-constexpr uint32_t kHsiOn = Flag<0x1u, 0u>::value;
-constexpr uint32_t kHsiRdy = Flag<0x1u, 1u>::value;
-constexpr auto kHsiTrim = Flag<0x1fu, 3u>{};
-enum class HsiTrim : uint32_t {
-  HsiTrim0 = kHsiTrim.Make(0x01u),
-  HsiTrim1 = kHsiTrim.Make(0x02u),
-  HsiTrim2 = kHsiTrim.Make(0x04u),
-  HsiTrim3 = kHsiTrim.Make(0x08u),
-  HsiTrim4 = kHsiTrim.Make(0x10u)
-};
-constexpr auto kHsiCal = Flag<0xffu, 8u>{};
-enum class HsiCal : uint32_t {
-  HsiCal0 = kHsiCal.Make(0x01u),
-  HsiCal1 = kHsiCal.Make(0x02u),
-  HsiCal2 = kHsiCal.Make(0x04u),
-  HsiCal3 = kHsiCal.Make(0x08u),
-  HsiCal4 = kHsiCal.Make(0x10u),
-  HsiCal5 = kHsiCal.Make(0x20u),
-  HsiCal6 = kHsiCal.Make(0x40u),
-  HsiCal7 = kHsiCal.Make(0x80u),
-};
-constexpr uint32_t kHseOn = Flag<0x1u, 16u>::value;
-constexpr uint32_t kHseRdy = Flag<0x1u, 17u>::value;
-constexpr uint32_t kHseByp = Flag<0x1u, 18u>::value;
-constexpr uint32_t kCssOn = Flag<0x1u, 19u>::value;
-constexpr uint32_t kPllOn = Flag<0x1u, 24u>::value;
-constexpr uint32_t kPllRdy = Flag<0x1u, 25u>::value;
+constexpr auto kHsi14On = Flag<0x1u, 0u>{};
+constexpr auto kHsi14Rdy = Flag<0x1u, 1u>{};
+constexpr auto kHsi14Dis = Flag<0x1u, 2u>{};
+constexpr auto kHsi14Trim = Flag<0x1u, 3u>{};
+constexpr auto kHsi14Cal = Flag<0xffu, 8u>{};
 
-} // namespace cr
+}  // namespace cr2
 
 constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{apb2enr::kSysCfgCompEn.value};
 constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{ahbenr::kGpioAEn.value};
