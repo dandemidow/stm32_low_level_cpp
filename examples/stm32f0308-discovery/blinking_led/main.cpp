@@ -52,6 +52,44 @@ static void _Error_Handler(const char *, int);
 
 using namespace std::chrono_literals;
 
+void  Configure_TIMTimeBase(void)
+{
+  /* Enable the timer peripheral clock */
+  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1);
+
+  /* Set counter mode */
+  /* Reset value is LL_TIM_COUNTERMODE_UP */
+  //LL_TIM_SetCounterMode(TIM1, LL_TIM_COUNTERMODE_UP);
+
+  /* Set the pre-scaler value to have TIM1 counter clock equal to 10 kHz      */
+  /*
+   In this example TIM1 input clock TIM1CLK is set to APB2 clock (PCLK2),
+   since APB2 pre-scaler is equal to 1.
+      TIM1CLK = PCLK2
+      PCLK2 = HCLK
+      => TIM1CLK = SystemCoreClock (80 MHz)
+  */
+  LL_TIM_SetPrescaler(TIM1, __LL_TIM_CALC_PSC(SystemCoreClock, 10000));
+
+  /* Set the auto-reload value to have an initial update event frequency of 10 Hz */
+  InitialAutoreload = __LL_TIM_CALC_ARR(SystemCoreClock, LL_TIM_GetPrescaler(TIM1), 10);
+  LL_TIM_SetAutoReload(TIM1, InitialAutoreload);
+
+  /* Enable the update interrupt */
+  LL_TIM_EnableIT_UPDATE(TIM1);
+
+  /* Configure the NVIC to handle TIM1 update interrupt */
+  NVIC_SetPriority(TIM1_UP_TIM16_IRQn, 0);
+  NVIC_EnableIRQ(TIM1_UP_TIM16_IRQn);
+
+  /* Enable counter */
+  LL_TIM_EnableCounter(TIM1);
+
+  /* Force update generation */
+  LL_TIM_GenerateEvent_UPDATE(TIM1);
+}
+
+
 int main() {
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
