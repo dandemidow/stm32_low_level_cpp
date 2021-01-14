@@ -55,7 +55,7 @@ using namespace std::chrono_literals;
 void  Configure_TIMTimeBase(void)
 {
   /* Enable the timer peripheral clock */
-  LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_TIM1);
+  ll::bus::GrpEnableClock(ll::rcc::kApb2Grp1PeriphTim1);
 
   /* Set counter mode */
   /* Reset value is LL_TIM_COUNTERMODE_UP */
