@@ -42,8 +42,9 @@
 #include "gpio/output.h"
 #include "hsi.h"
 #include "pll.h"
-#include "system.hpp"
 #include "spinlock.hpp"
+#include "system.hpp"
+#include "register/timer.h"
 #include "utils.hpp"
 
 static void SystemClock_Config();
@@ -69,6 +70,7 @@ void  Configure_TIMTimeBase(void)
       PCLK2 = HCLK
       => TIM1CLK = SystemCoreClock (80 MHz)
   */
+  ll::tick
   LL_TIM_SetPrescaler(TIM1, __LL_TIM_CALC_PSC(SystemCoreClock, 10000));
 
   /* Set the auto-reload value to have an initial update event frequency of 10 Hz */

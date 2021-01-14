@@ -6,6 +6,9 @@
 
 namespace ll::tim {
 
+#define __LL_TIM_CALC_PSC(__TIMCLK__, __CNTCLK__)   \
+   ((__TIMCLK__) >= (__CNTCLK__)) ? (uint32_t)((__TIMCLK__)/(__CNTCLK__) - 1U) : 0U
+
 class Timer {
  public:
   Timer(index i) : tim_{*new (i) Tim{}} {
