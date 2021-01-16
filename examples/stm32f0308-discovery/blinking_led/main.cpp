@@ -56,13 +56,13 @@ using namespace std::chrono_literals;
 void  Configure_TIMTimeBase(void)
 {
   /* Enable the timer peripheral clock */
-  ll::bus::GrpEnableClock(ll::rcc::kApb2Grp1PeriphTim1);
+  ll::bus::GrpEnableClock(ll::rcc::kGrp1PeriphTim3);
 
   /* Set counter mode */
   /* Reset value is LL_TIM_COUNTERMODE_UP */
   //LL_TIM_SetCounterMode(TIM1, LL_TIM_COUNTERMODE_UP);
 
-  /* Set the pre-scaler value to have TIM1 counter clock equal to 10 kHz      */
+  /* Set the pre-scaler value to have TIM3 counter clock equal to 10 kHz      */
   /*
    In this example TIM1 input clock TIM1CLK is set to APB2 clock (PCLK2),
    since APB2 pre-scaler is equal to 1.
@@ -76,15 +76,15 @@ void  Configure_TIMTimeBase(void)
 
   /* Set the auto-reload value to have an initial update event frequency of 10 Hz */
   auto InitialAutoreload = ll::tim::CalcArr(timer.GetPrescaler(), 10);
-  LL_TIM_SetAutoReload(TIM1, InitialAutoreload);
+
   timer.SetAutoReload(InitialAutoreload);
 
   /* Enable the update interrupt */
   LL_TIM_EnableIT_UPDATE(TIM1);
 
   /* Configure the NVIC to handle TIM1 update interrupt */
-  NVIC_SetPriority(TIM1_UP_TIM16_IRQn, 0);
-  NVIC_EnableIRQ(TIM1_UP_TIM16_IRQn);
+  ll::nvic::set_priority(IRQn_Type::TIM3_IRQn);
+  ll::nvic::enable_irq(IRQn_Type::TIM3_IRQn);
 
   /* Enable counter */
   LL_TIM_EnableCounter(TIM1);
