@@ -3,11 +3,19 @@
 
 #include "tim.hpp"
 #include "bus.hpp"
+#include "frequency.h"
+
+extern hertz SystemCoreClock;
 
 namespace ll::tim {
 
-#define __LL_TIM_CALC_PSC(__TIMCLK__, __CNTCLK__)   \
-   ((__TIMCLK__) >= (__CNTCLK__)) ? (uint32_t)((__TIMCLK__)/(__CNTCLK__) - 1U) : 0U
+constexpr auto CalcPsc(uint32_t cnt_clk, uint32_t tim_clk = SystemCoreClock.count()) -> int {
+  uint32_t result = 0u;
+  if (tim_clk >= cnt_clk) {
+    result = static_cast<uint32_t>(tim_clk/cnt_clk - 1u);
+  }
+  return result;
+}
 
 class Timer {
  public:
