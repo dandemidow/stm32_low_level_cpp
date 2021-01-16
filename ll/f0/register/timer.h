@@ -17,6 +17,14 @@ constexpr auto CalcPsc(uint32_t cnt_clk, uint32_t tim_clk = SystemCoreClock.coun
   return result;
 }
 
+constexpr auto CalcArr(uint32_t psc, uint32_t freq, uint32_t tim_clk = SystemCoreClock.count()) {
+  uint32_t result = 0u;
+  if ((tim_clk/(psc + 1u)) >= freq) {
+    result = (tim_clk/(freq * (psc + 1u)) - 1u);
+  }
+  return result;
+}
+
 class Timer {
  public:
   Timer(index i) : tim_{*new (i) Tim{}} {
