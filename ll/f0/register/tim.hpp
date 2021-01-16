@@ -11,6 +11,12 @@ enum class index : uint32_t {
   T3 = address::tim::kT3
 };
 
+namespace cr1 {
+
+constexpr auto kCen = Flag<1u, 0u>{};
+
+}  // namespace cr1
+
 namespace dier {
 
 constexpr auto kUie = Flag<1u, 0u>{};

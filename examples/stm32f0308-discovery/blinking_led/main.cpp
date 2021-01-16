@@ -87,7 +87,7 @@ void  Configure_TIMTimeBase(void)
   ll::nvic::enable_irq(IRQn_Type::TIM3_IRQn);
 
   /* Enable counter */
-  LL_TIM_EnableCounter(TIM1);
+  timer.EnableCounter();
 
   /* Force update generation */
   LL_TIM_GenerateEvent_UPDATE(TIM1);

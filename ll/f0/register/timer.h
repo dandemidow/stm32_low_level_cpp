@@ -50,6 +50,14 @@ class Timer {
     bit::clear(tim_.get<DIER>(), dier::kUie);
   }
 
+  inline void EnableCounter() {
+    bit::set(tim_.get<CR1>(), cr1::kCen);
+  }
+
+  inline void DisableCounter() {
+    bit::clear(tim_.get<CR1>(), cr1::kCen);
+  }
+
  private:
   Tim &tim_;
 };
