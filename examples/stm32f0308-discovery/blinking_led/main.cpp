@@ -80,7 +80,7 @@ void  Configure_TIMTimeBase(void)
   timer.SetAutoReload(InitialAutoreload);
 
   /* Enable the update interrupt */
-  LL_TIM_EnableIT_UPDATE(TIM1);
+  timer.EnableItUpdate();
 
   /* Configure the NVIC to handle TIM1 update interrupt */
   ll::nvic::set_priority(IRQn_Type::TIM3_IRQn);

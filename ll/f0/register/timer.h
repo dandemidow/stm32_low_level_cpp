@@ -42,6 +42,14 @@ class Timer {
     tim_.set<ARR>(auto_reload);
   }
 
+  inline auto EnableItUpdate() {
+    bit::set(tim_.get<DIER>(), dier::kUie);
+  }
+
+  inline auto DisableItUpdate() {
+    bit::clear(tim_.get<DIER>(), dier::kUie);
+  }
+
  private:
   Tim &tim_;
 };
