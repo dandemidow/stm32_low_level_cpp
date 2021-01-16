@@ -73,11 +73,11 @@ void  Configure_TIMTimeBase(void)
   ll::tim::Timer timer {ll::tim::index::T1};
 
   timer.SetPrescaler(ll::tim::CalcPsc(10000));
-  LL_TIM_SetPrescaler(TIM1, __LL_TIM_CALC_PSC(SystemCoreClock, 10000));
 
   /* Set the auto-reload value to have an initial update event frequency of 10 Hz */
-  InitialAutoreload = __LL_TIM_CALC_ARR(SystemCoreClock, LL_TIM_GetPrescaler(TIM1), 10);
+  auto InitialAutoreload = ll::tim::CalcArr(timer.GetPrescaler(), 10);
   LL_TIM_SetAutoReload(TIM1, InitialAutoreload);
+  timer.SetAutoReload(InitialAutoreload);
 
   /* Enable the update interrupt */
   LL_TIM_EnableIT_UPDATE(TIM1);

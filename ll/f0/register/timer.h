@@ -34,6 +34,14 @@ class Timer {
     tim_.set<PSC>(prescaler);
   }
 
+  inline auto GetPrescaler() {
+    return tim_.get<PSC>();
+  }
+
+  inline auto SetAutoReload(uint32_t auto_reload) {
+    tim_.set<ARR>(auto_reload);
+  }
+
  private:
   Tim &tim_;
 };
