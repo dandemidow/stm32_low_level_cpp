@@ -17,6 +17,12 @@ constexpr auto kCen = Flag<1u, 0u>{};
 
 }  // namespace cr1
 
+namespace egr {
+
+constexpr auto kUg = Flag<0x1, 0u>{};
+
+}  // namespace egr
+
 namespace dier {
 
 constexpr auto kUie = Flag<1u, 0u>{};

@@ -58,6 +58,10 @@ class Timer {
     bit::clear(tim_.get<CR1>(), cr1::kCen);
   }
 
+  inline void GenerateEventUpdate() {
+    bit::set(tim_.get<EGR>(), egr::kUg);
+  }
+
  private:
   Tim &tim_;
 };
