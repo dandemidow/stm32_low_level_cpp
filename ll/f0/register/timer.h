@@ -39,6 +39,28 @@ enum class ClockDiv : uint32_t {
   Div4 = cr1::kCkd.Bit<1>()
 };
 
+enum class ClockSource: uint32_t {
+  Internal = 0x00,
+  ExtMode1 = smcr::kSms,
+  ExtMode2 = smcr::kEce
+};
+
+enum class UpdateSource : uint32_t {
+  Regular = 0x00,
+  Counter = cr1::kUrs
+};
+
+enum class TriggerOutput : uint32_t {
+  Reset = 0x00,
+  Enable = cr2::kMms.Bit<0>(),
+  Update = cr2::kMms.Bit<1>(),
+  Cc1If = cr2::kMms.Bit<1>() | cr2::kMms.Bit<0>(),
+  Oc1Ref = cr2::kMms.Bit<2>(),
+  Oc2Ref = cr2::kMms.Bit<2>() | cr2::kMms.Bit<0>(),
+  Oc3Ref = cr2::kMms.Bit<2>() | cr2::kMms.Bit<1>(),
+  Oc4Ref = cr2::kMms.Bit<2>() | cr2::kMms.Bit<1>() | cr2::kMms.Bit<0>()
+};
+
 class Timer {
  public:
   Timer(index i) : tim_{*new (i) Tim{}} {
@@ -95,8 +117,8 @@ class Timer {
     bit::clear(tim_.get<CR1>(), cr1::kArpe);
   }
 
-  inline void SetClockSource(uint32_t ClockSource) {
-    reg::modify(tim_.get<SMCR>(), smcr::kSms | smcr::kEce, ClockSource);
+  inline void SetClockSource(ClockSource clock_source) {
+    reg::modify(tim_.get<SMCR>(), smcr::kSms | smcr::kEce, static_cast<uint32_t>(clock_source));
   }
 
   inline void EnableMasterSlaveMode() {
@@ -111,8 +133,8 @@ class Timer {
     reg::modify(tim_.get<CR2>(), cr2::kMms, TimerSynchronization);
   }
 
-  inline void SetUpdateSource(uint32_t UpdateSource) {
-    reg::modify(tim_.get<CR1>(), cr1::kUrs, UpdateSource);
+  inline void SetUpdateSource(UpdateSource update_source) {
+    reg::modify(tim_.get<CR1>(), cr1::kUrs, static_cast<uint32_t>(update_source));
   }
 
   inline uint32_t GetUpdateSource() {

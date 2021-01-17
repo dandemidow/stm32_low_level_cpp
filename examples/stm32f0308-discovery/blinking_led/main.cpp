@@ -77,14 +77,10 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   /* Force update generation */
   timer.GenerateEventUpdate();
 
-//  timer.SetOnePulseMode(ll::tim::cr1::kOpm);
-
-//  timer.EnableARRPreload();
   timer.DisableARRPreload();
-  timer.SetClockSource(0x00);
-  timer.SetUpdateSource(ll::tim::cr1::kUrs);
+  timer.SetClockSource(ll::tim::ClockSource::Internal);
+  timer.SetUpdateSource(ll::tim::UpdateSource::Counter);
 //  timer.SetTriggerOutput(0x00);
-//  timer.DisableMasterSlaveMode();
 
   timer.EnableItUpdate();
   timer.EnableCounter();
