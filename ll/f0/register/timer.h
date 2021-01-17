@@ -30,6 +30,13 @@ class Timer {
   Timer(index i) : tim_{*new (i) Tim{}} {
   }
 
+  auto Init(uint32_t counter_mode, uint32_t clock_div) {
+    uint32_t tmpcr1 = tim_.get<CR1>();
+    reg::modify(tmpcr1, cr1::kDir | cr1::kCms, counter_mode);
+    reg::modify(tmpcr1, cr1::kCkd, clock_div);
+    tim_.set<CR1>(tmpcr1);
+  }
+
   inline auto SetPrescaler(uint32_t prescaler) {
     tim_.set<PSC>(prescaler);
   }
@@ -40,6 +47,10 @@ class Timer {
 
   inline auto SetAutoReload(uint32_t auto_reload) {
     tim_.set<ARR>(auto_reload);
+  }
+
+  inline auto SetRepetitionCounter(uint32_t repetition_counter) {
+    tim_.set<RCR>(repetition_counter);
   }
 
   inline auto EnableItUpdate() {
@@ -61,6 +72,15 @@ class Timer {
   inline void GenerateEventUpdate() {
     bit::set(tim_.get<EGR>(), egr::kUg);
   }
+
+  inline void EnableARRPreload() {
+    bit::set(tim_.get<CR1>(), cr1::kArpe);
+  }
+
+  inline void DisableARRPreload() {
+    bit::clear(tim_.get<CR1>(), cr1::kArpe);
+  }
+
 
  private:
   Tim &tim_;

@@ -13,7 +13,11 @@ enum class index : uint32_t {
 
 namespace cr1 {
 
-constexpr auto kCen = Flag<1u, 0u>{};
+constexpr auto kCen = Flag<0x1u, 0u>{};
+constexpr auto kDir = Flag<0x1u, 4u>{};
+constexpr auto kCms = Flag<0x3u, 5u>{};
+constexpr auto kArpe = Flag<0x1u, 7u>{};
+constexpr auto kCkd = Flag<0x3u, 8u>{};
 
 }  // namespace cr1
 

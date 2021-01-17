@@ -53,10 +53,13 @@ static void _Error_Handler(const char *, int);
 
 using namespace std::chrono_literals;
 
-void  Configure_TIMTimeBase(void)
-{
+static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   /* Enable the timer peripheral clock */
   ll::bus::GrpEnableClock(ll::rcc::kGrp1PeriphTim3);
+
+  /* Configure the NVIC to handle TIM3 update interrupt */
+  ll::nvic::set_priority(IRQn_Type::TIM3_IRQn);
+  ll::nvic::enable_irq(IRQn_Type::TIM3_IRQn);
 
   /* Set counter mode */
   /* Reset value is LL_TIM_COUNTERMODE_UP */
@@ -70,30 +73,29 @@ void  Configure_TIMTimeBase(void)
       PCLK2 = HCLK
       => TIM1CLK = SystemCoreClock (80 MHz)
   */
-  ll::tim::Timer timer {ll::tim::index::T1};
 
-  timer.SetPrescaler(ll::tim::CalcPsc(10000));
+  timer.Init(0x00, 0x00);
 
-  /* Set the auto-reload value to have an initial update event frequency of 10 Hz */
-  auto InitialAutoreload = ll::tim::CalcArr(timer.GetPrescaler(), 10);
+  /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
+  auto InitialAutoreload = 64999;//ll::tim::CalcArr(timer.GetPrescaler(), 1);
 
   timer.SetAutoReload(InitialAutoreload);
 
-  /* Enable the update interrupt */
-  timer.EnableItUpdate();
+  timer.SetPrescaler(65000/*ll::tim::CalcPsc(10000u)*/);
 
-  /* Configure the NVIC to handle TIM1 update interrupt */
-  ll::nvic::set_priority(IRQn_Type::TIM3_IRQn);
-  ll::nvic::enable_irq(IRQn_Type::TIM3_IRQn);
+  timer.SetRepetitionCounter(0x00);
+
+  /* Enable the update interrupt */
+//  timer.EnableItUpdate();
 
   /* Enable counter */
-  timer.EnableCounter();
+//  timer.EnableCounter();
 
   /* Force update generation */
-  LL_TIM_GenerateEvent_UPDATE(TIM1);
+  timer.GenerateEventUpdate();
 }
 
-
+static ll::tim::Timer *timer_ = nullptr;
 int main() {
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -104,6 +106,7 @@ int main() {
 
   ll::gpio::Output led3 {ll::gpio::port::C, 9u};
   ll::gpio::Output led4 {ll::gpio::port::C, 8u};
+  ll::tim::Timer timer {ll::tim::index::T3};
 
   led3.init(ll::gpio::output::PushPull,
             ll::gpio::pull::Up,
@@ -113,12 +116,18 @@ int main() {
             ll::gpio::pull::Up,
             ll::gpio::speed::VeryHigh);
 
+  Configure_TIMTimeBase(timer);
+  timer_ = &timer;
+
   while (true) {
-    led3.toggle();
-    ll::delay(500ms);
+    ll::delay(1s);
     led4.toggle();
-    ll::delay(500ms);
   }
+}
+
+void TIM3_IRQHandler() {
+  //led3.toggle();
+    timer_->DisableCounter();
 }
 
 static void LL_Init(void) {
