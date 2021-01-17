@@ -65,43 +65,26 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   ll::nvic::set_priority(IRQn_Type::TIM3_IRQn);
   ll::nvic::enable_irq(IRQn_Type::TIM3_IRQn);
 
-  /* Set counter mode */
-  /* Reset value is LL_TIM_COUNTERMODE_UP */
-  //LL_TIM_SetCounterMode(TIM1, LL_TIM_COUNTERMODE_UP);
-
-  /* Set the pre-scaler value to have TIM3 counter clock equal to 10 kHz      */
-  /*
-   In this example TIM1 input clock TIM1CLK is set to APB2 clock (PCLK2),
-   since APB2 pre-scaler is equal to 1.
-      TIM1CLK = PCLK2
-      PCLK2 = HCLK
-      => TIM1CLK = SystemCoreClock (80 MHz)
-  */
-
-  timer.Init(0x00, 0x00);
-
-  /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
-  auto InitialAutoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
-
-  timer.SetAutoReload(InitialAutoreload);
+  timer.Init(ll::tim::CounterMode::Up, 0x00);
 
   timer.SetPrescaler(ll::tim::CalcPsc(10000u));
 
+  /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
+  auto InitialAutoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
+  timer.SetAutoReload(InitialAutoreload);
+
   timer.SetRepetitionCounter(0x00);
-
-  /* Enable the update interrupt */
-//  timer.EnableItUpdate();
-
-  /* Enable counter */
-//  timer.EnableCounter();
-
   /* Force update generation */
   timer.GenerateEventUpdate();
 
-  timer.EnableARRPreload();
+//  timer.SetOnePulseMode(ll::tim::cr1::kOpm);
+
+//  timer.EnableARRPreload();
+  timer.DisableARRPreload();
   timer.SetClockSource(0x00);
-  timer.SetTriggerOutput(0x00);
-  timer.DisableMasterSlaveMode();
+  timer.SetUpdateSource(ll::tim::cr1::kUrs);
+//  timer.SetTriggerOutput(0x00);
+//  timer.DisableMasterSlaveMode();
 
   timer.EnableItUpdate();
   timer.EnableCounter();
@@ -127,10 +110,13 @@ int main() {
             ll::gpio::pull::Up,
             ll::gpio::speed::VeryHigh);
 
-  Configure_TIMTimeBase(timer);
   timer_ = &timer;
   error_led = &led4;
   timer_led = &led3;
+
+  Configure_TIMTimeBase(timer);
+
+  led4.toggle();
 
   while (true) {
     ll::delay(1s);
@@ -139,8 +125,12 @@ int main() {
 }
 
 void TIM3_IRQHandler() {
-  timer_led->toggle();
-//    timer_->DisableCounter();
+  if (timer_ && timer_->IsActiveFlagUpdate()) {
+    timer_->ClearFlagUpdate();
+    if (timer_led) {
+      timer_led->toggle();
+    }
+  }
 }
 
 static void LL_Init(void) {

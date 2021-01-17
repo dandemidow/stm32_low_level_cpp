@@ -25,14 +25,22 @@ constexpr auto CalcArr(uint32_t psc, uint32_t freq, uint32_t tim_clk = SystemCor
   return result;
 }
 
+enum class CounterMode : uint32_t {
+  Up = 0x00,
+  Down = cr1::kDir,
+  CenterUp = cr1::kCms.Bit<0>(),
+  CenterDown = cr1::kCms.Bit<1>(),
+  CenterUpDown = cr1::kCms
+};
+
 class Timer {
  public:
   Timer(index i) : tim_{*new (i) Tim{}} {
   }
 
-  auto Init(uint32_t counter_mode, uint32_t clock_div) {
+  auto Init(CounterMode counter_mode, uint32_t clock_div) {
     uint32_t tmpcr1 = tim_.get<CR1>();
-    reg::modify(tmpcr1, cr1::kDir | cr1::kCms, counter_mode);
+    reg::modify(tmpcr1, cr1::kDir | cr1::kCms, static_cast<uint32_t>(counter_mode));
     reg::modify(tmpcr1, cr1::kCkd, clock_div);
     tim_.set<CR1>(tmpcr1);
   }
@@ -103,6 +111,22 @@ class Timer {
 
   inline uint32_t GetUpdateSource() {
     return bit::read(tim_.get<CR1>(), cr1::kUrs);
+  }
+
+  inline void SetOnePulseMode(uint32_t OnePulseMode) {
+    reg::modify(tim_.get<CR1>(), cr1::kOpm, OnePulseMode);
+  }
+
+  inline uint32_t GetOnePulseMode() {
+    return bit::read(tim_.get<CR1>(), cr1::kOpm);
+  }
+
+  inline void ClearFlagUpdate() {
+    bit::clear(tim_.get<SR>(), sr::kUif);
+  }
+
+  inline bool IsActiveFlagUpdate() {
+    return (bit::read(tim_.get<SR>(), sr::kUif) == sr::kUif);
   }
 
  private:

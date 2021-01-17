@@ -16,6 +16,7 @@ namespace cr1 {
 constexpr auto kCen = Flag<0x1u, 0u>{};
 constexpr auto kUdis = Flag<0x1u, 1u>{};
 constexpr auto kUrs = Flag<0x1u, 2u>{};
+constexpr auto kOpm = Flag<0x1u, 3u>{};
 constexpr auto kDir = Flag<0x1u, 4u>{};
 constexpr auto kCms = Flag<0x3u, 5u>{};
 constexpr auto kArpe = Flag<0x1u, 7u>{};
@@ -28,6 +29,12 @@ namespace cr2 {
 constexpr auto kMms = Flag<0x7u, 4u>{};
 
 }  // namespace cr2
+
+namespace sr {
+
+constexpr auto kUif = Flag<0x1u, 0u>{};
+
+}  // namspace sr
 
 namespace egr {
 
