@@ -344,6 +344,8 @@ constexpr auto kApb1Grp2PeriphSysCfg = RegisterValue<APB2ENR>{apb2enr::kSysCfgCo
 constexpr auto kAhb1Grp1PeriphGpioA = RegisterValue<AHBENR>{ahbenr::kGpioAEn.value};
 constexpr auto kAhb1Grp1PeriphGpioB = RegisterValue<AHBENR>{ahbenr::kGpioBEn.value};
 constexpr auto kAhb1Grp1PeriphGpioC = RegisterValue<AHBENR>{ahbenr::kGpioCEn.value};
+constexpr auto kGrp1PeriphTim1 = RegisterValue<APB2ENR>{apb2enr::kTim1En.value};
+constexpr auto kGrp1PeriphTim3 = RegisterValue<APB1ENR>{apb1enr::kTim3En.value};
 
 constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
 constexpr uint32_t kPllCfgrPllM = Flag<0x7u, 4u>::value;

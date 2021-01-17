@@ -13,6 +13,10 @@ constexpr uint32_t kAhb2PeriphBaseAddress = kPeriphBaseAddress + 0x08000000ul;
 constexpr uint32_t kSystemControlSpaceBaseAddress = 0xE000E000ul;
 
 namespace address {
+namespace tim {
+constexpr uint32_t kT1 = kApb1PeriphBaseAddress + 0x00012C00;
+constexpr uint32_t kT3 = kApb1PeriphBaseAddress + 0x00000400;
+}  // namespace tim
 namespace gpio {
 constexpr uint32_t kPortA = kAhb2PeriphBaseAddress + 0x0000ul;
 constexpr uint32_t kPortB = kAhb2PeriphBaseAddress + 0x0400ul;
