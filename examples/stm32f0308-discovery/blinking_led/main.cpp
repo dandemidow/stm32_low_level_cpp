@@ -100,8 +100,11 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
 
   timer.EnableARRPreload();
   timer.SetClockSource(0x00);
+  timer.SetTriggerOutput(0x00);
   timer.DisableMasterSlaveMode();
 
+  timer.EnableItUpdate();
+  timer.EnableCounter();
 }
 
 int main() {
