@@ -53,6 +53,10 @@ static void _Error_Handler(const char *, int);
 
 using namespace std::chrono_literals;
 
+static ll::gpio::Output *error_led = nullptr;
+static ll::gpio::Output *timer_led = nullptr;
+static ll::tim::Timer *timer_ = nullptr;
+
 static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   /* Enable the timer peripheral clock */
   ll::bus::GrpEnableClock(ll::rcc::kGrp1PeriphTim3);
@@ -77,11 +81,11 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   timer.Init(0x00, 0x00);
 
   /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
-  auto InitialAutoreload = 64999;//ll::tim::CalcArr(timer.GetPrescaler(), 1);
+  auto InitialAutoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
 
   timer.SetAutoReload(InitialAutoreload);
 
-  timer.SetPrescaler(65000/*ll::tim::CalcPsc(10000u)*/);
+  timer.SetPrescaler(ll::tim::CalcPsc(10000u));
 
   timer.SetRepetitionCounter(0x00);
 
@@ -93,9 +97,13 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
 
   /* Force update generation */
   timer.GenerateEventUpdate();
+
+  timer.EnableARRPreload();
+  timer.SetClockSource(0x00);
+  timer.DisableMasterSlaveMode();
+
 }
 
-static ll::tim::Timer *timer_ = nullptr;
 int main() {
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
@@ -118,6 +126,8 @@ int main() {
 
   Configure_TIMTimeBase(timer);
   timer_ = &timer;
+  error_led = &led4;
+  timer_led = &led3;
 
   while (true) {
     ll::delay(1s);
@@ -126,8 +136,8 @@ int main() {
 }
 
 void TIM3_IRQHandler() {
-  //led3.toggle();
-    timer_->DisableCounter();
+  timer_led->toggle();
+//    timer_->DisableCounter();
 }
 
 static void LL_Init(void) {
@@ -192,5 +202,9 @@ void SystemClock_Config() {
   */
 void _Error_Handler([[maybe_unused]] const char *file, [[maybe_unused]] int line) {
   while(1) {
+    if (error_led) {
+      error_led->toggle();
+      ll::delay(5s);
+    }
   }
 }

@@ -29,9 +29,17 @@ constexpr auto kUg = Flag<0x1, 0u>{};
 
 namespace dier {
 
-constexpr auto kUie = Flag<1u, 0u>{};
+constexpr auto kUie = Flag<0x1u, 0u>{};
 
 }  // namespace dier
+
+namespace smcr {
+
+constexpr auto kSms = Flag<0x7u, 0u>{};
+constexpr auto kMsm = Flag<0x1u, 7u>{};
+constexpr auto kEce = Flag<0x1u, 14u>{};
+
+}  // namespace smcr
 
 enum : uint32_t {
   CR1,

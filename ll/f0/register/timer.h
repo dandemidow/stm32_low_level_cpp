@@ -81,6 +81,17 @@ class Timer {
     bit::clear(tim_.get<CR1>(), cr1::kArpe);
   }
 
+  inline void SetClockSource(uint32_t ClockSource) {
+    reg::modify(tim_.get<SMCR>(), smcr::kSms | smcr::kEce, ClockSource);
+  }
+
+  inline void EnableMasterSlaveMode() {
+    bit::set(tim_.get<SMCR>(), smcr::kMsm);
+  }
+
+  inline void DisableMasterSlaveMode() {
+    bit::clear(tim_.get<SMCR>(), smcr::kMsm);
+  }
 
  private:
   Tim &tim_;
