@@ -24,6 +24,8 @@ The complete command ex.:
 C:\cygwin64\bin\cmake.exe C:/cygwin64/home/dan/stm32llcpp20 -GNinja "-DCMAKE_BUILD_TYPE:STRING=Debug" "-DCMAKE_CXX_COMPILER:STRING=C:/Program Files (x86)/GNU Arm Embedded Toolchain/10 2020-q2-preview/bin/arm-none-eabi-g++.exe" "-DCMAKE_CXX_COMPILER_TARGET :STRING=arm-none-eabi" "-DCMAKE_C_COMPILER:STRING=C:/Program Files (x86)/GNU Arm Embedded Toolchain/10 2020-q2-preview/bin/arm-none-eabi-gcc-10.1.1.exe" "-DCMAKE_C_COMPILER_TARGET:STRING=arm-none-eabi" "-DCMAKE_MAKE_PROGRAM:FILEPATH=C:/cygwin64/bin/ninja.exe" "-DCMAKE_PREFIX_PATH:STRING=" "-DCMAKE_SYSROOT:STRING=C:/Program Files (x86)/GNU Tools Arm Embedded/9 2019-q4-major/arm-none-eabi" "-DCMAKE_TOOLCHAIN_FILE:INTERNAL=toolchain-gcc.cmake" "-DEXAMPLE_SOURCE_PATH:FILEPATH=C:/cygwin64/home/dan/stm32llcpp20/examples/nucleo-l452re/blinking_led"
 ```
 
+The c++ can be useful when we talk about code size. And I can show my measurement of the firmware size. 
+The first one is the moment when I just started the c code replacement. The last one is the final commit, which removed all c code. 
 The blinking led FW (stm32l4 board) size changes
 ```
 2020-10-28:
