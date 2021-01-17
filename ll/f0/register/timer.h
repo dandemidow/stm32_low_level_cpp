@@ -129,8 +129,8 @@ class Timer {
     bit::clear(tim_.get<SMCR>(), smcr::kMsm);
   }
 
-  inline void SetTriggerOutput(uint32_t TimerSynchronization) {
-    reg::modify(tim_.get<CR2>(), cr2::kMms, TimerSynchronization);
+  inline void SetTriggerOutput(TriggerOutput timer_synchronization) {
+    reg::modify(tim_.get<CR2>(), cr2::kMms, static_cast<uint32_t>(timer_synchronization));
   }
 
   inline void SetUpdateSource(UpdateSource update_source) {

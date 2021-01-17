@@ -53,7 +53,6 @@ static void _Error_Handler(const char *, int);
 
 using namespace std::chrono_literals;
 
-static ll::gpio::Output *error_led = nullptr;
 static ll::gpio::Output *timer_led = nullptr;
 static ll::tim::Timer *timer_ = nullptr;
 
@@ -80,14 +79,12 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   timer.DisableARRPreload();
   timer.SetClockSource(ll::tim::ClockSource::Internal);
   timer.SetUpdateSource(ll::tim::UpdateSource::Counter);
-//  timer.SetTriggerOutput(0x00);
 
   timer.EnableItUpdate();
   timer.EnableCounter();
 }
 
 int main() {
-
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   LL_Init();
 
@@ -107,7 +104,6 @@ int main() {
             ll::gpio::speed::VeryHigh);
 
   timer_ = &timer;
-  error_led = &led4;
   timer_led = &led3;
 
   Configure_TIMTimeBase(timer);
@@ -191,9 +187,5 @@ void SystemClock_Config() {
   */
 void _Error_Handler([[maybe_unused]] const char *file, [[maybe_unused]] int line) {
   while(1) {
-    if (error_led) {
-      error_led->toggle();
-      ll::delay(5s);
-    }
   }
 }
