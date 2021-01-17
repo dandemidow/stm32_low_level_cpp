@@ -65,13 +65,13 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   ll::nvic::set_priority(IRQn_Type::TIM3_IRQn);
   ll::nvic::enable_irq(IRQn_Type::TIM3_IRQn);
 
-  timer.Init(ll::tim::CounterMode::Up, 0x00);
+  timer.Init(ll::tim::CounterMode::Up, ll::tim::ClockDiv::Div1);
 
   timer.SetPrescaler(ll::tim::CalcPsc(10000u));
 
   /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
-  auto InitialAutoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
-  timer.SetAutoReload(InitialAutoreload);
+  auto init_autoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
+  timer.SetAutoReload(init_autoreload);
 
   timer.SetRepetitionCounter(0x00);
   /* Force update generation */

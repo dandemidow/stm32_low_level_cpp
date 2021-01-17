@@ -33,15 +33,21 @@ enum class CounterMode : uint32_t {
   CenterUpDown = cr1::kCms
 };
 
+enum class ClockDiv : uint32_t {
+  Div1 = 0x00,
+  Div2 = cr1::kCkd.Bit<0>(),
+  Div4 = cr1::kCkd.Bit<1>()
+};
+
 class Timer {
  public:
   Timer(index i) : tim_{*new (i) Tim{}} {
   }
 
-  auto Init(CounterMode counter_mode, uint32_t clock_div) {
+  auto Init(CounterMode counter_mode, ClockDiv clock_div) {
     uint32_t tmpcr1 = tim_.get<CR1>();
     reg::modify(tmpcr1, cr1::kDir | cr1::kCms, static_cast<uint32_t>(counter_mode));
-    reg::modify(tmpcr1, cr1::kCkd, clock_div);
+    reg::modify(tmpcr1, cr1::kCkd, static_cast<uint32_t>(clock_div));
     tim_.set<CR1>(tmpcr1);
   }
 
@@ -113,12 +119,16 @@ class Timer {
     return bit::read(tim_.get<CR1>(), cr1::kUrs);
   }
 
-  inline void SetOnePulseMode(uint32_t OnePulseMode) {
-    reg::modify(tim_.get<CR1>(), cr1::kOpm, OnePulseMode);
+  inline void EnableOnePulseMode() {
+    bit::set(tim_.get<CR1>(), cr1::kOpm);
   }
 
-  inline uint32_t GetOnePulseMode() {
-    return bit::read(tim_.get<CR1>(), cr1::kOpm);
+  inline void DisableOnePulseMode() {
+    bit::clear(tim_.get<CR1>(), cr1::kOpm);
+  }
+
+  inline bool IsOnePulseMode() {
+    return (bit::read(tim_.get<CR1>(), cr1::kOpm) != 0x00u);
   }
 
   inline void ClearFlagUpdate() {
