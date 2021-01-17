@@ -1,13 +1,21 @@
 # stm32_low_level_cpp
 
 This project is just a fantasy of how the ST low-level library can be implemented in pure C++.</br>
-The LED blinking project was taken as an example.</br>
-The main aim is to use the C++ techniques for critical places with minimum memory consumption.</br>
+The LED blinking project was taken as a base example.</br>
+I also will try to extend the example set for boards I have.</br>
+The main aim is to use the C++ techniques for critical places with minimum memory consumption, although usability is also essential.</br>
 Memory-mapped objects replaced the device registers structure, the free functions from the ll namespace replaced low-level library functions.
 The C++ startup file also replaced the assembler file.</br>
 The **C++20** standard is used.</br>
 
-For now, the two examples are available: blinking led for the nucleo-l452re board and the stm32f0308-discovery. You can find it in the examples folder.
+The examples are available for now: 
+ - nucleo-l452re board:
+   - blinking led
+ - stm32f0308-discovery board:
+   - blinking led
+   - base timer
+   
+You can find it in the examples folder.</br>
 For CMake build process the **EXAMPLE_SOURCE_PATH** option should be defined:</br>
 _-DEXAMPLE_SOURCE_PATH:FILEPATH=C:/stm32llcpp20/examples/nucleo-l452re/blinking_led_
 
