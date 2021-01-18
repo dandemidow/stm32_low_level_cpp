@@ -34,6 +34,10 @@ constexpr auto kTi1S = Flag<0x1u, 7u>{};
 constexpr auto kOis1 = Flag<0x1u, 8u>{};
 constexpr auto kOis1N = Flag<0x1u, 9u>{};
 constexpr auto kOis2 = Flag<0x1u, 10u>{};
+constexpr auto kOis2N = Flag<0x1u, 11u>{};
+constexpr auto kOis3 = Flag<0x1u, 12u>{};
+constexpr auto kOis3N = Flag<0x1u, 13u>{};
+constexpr auto kOis4 = Flag<0x1u, 14u>{};
 
 }  // namespace cr2
 
