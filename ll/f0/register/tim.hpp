@@ -26,7 +26,14 @@ constexpr auto kCkd = Flag<0x3u, 8u>{};
 
 namespace cr2 {
 
+constexpr auto kCcpc = Flag<0x1u, 0u>{};
+constexpr auto kCcus = Flag<0x1u, 2u>{};
+constexpr auto kCcds = Flag<0x1u, 3u>{};
 constexpr auto kMms = Flag<0x7u, 4u>{};
+constexpr auto kTi1S = Flag<0x1u, 7u>{};
+constexpr auto kOis1 = Flag<0x1u, 8u>{};
+constexpr auto kOis1N = Flag<0x1u, 9u>{};
+constexpr auto kOis2 = Flag<0x1u, 10u>{};
 
 }  // namespace cr2
 
