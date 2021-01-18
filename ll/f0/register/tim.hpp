@@ -41,6 +41,19 @@ constexpr auto kOis4 = Flag<0x1u, 14u>{};
 
 }  // namespace cr2
 
+namespace smcr {
+
+constexpr auto kSms = Flag<0x7u, 0u>{};
+constexpr auto kOccs = Flag<0x1u, 3u>{};
+constexpr auto kTs = Flag<0x7u, 4u>{};
+constexpr auto kMsm = Flag<0x1u, 7u>{};
+constexpr auto kEtf = Flag<0xfu, 8u>{};
+constexpr auto kEtps = Flag<0x3u, 12u>{};
+constexpr auto kEce = Flag<0x1u, 14u>{};
+constexpr auto kEtp = Flag<0x1u, 15u>{};
+
+}  // namespace smcr
+
 namespace sr {
 
 constexpr auto kUif = Flag<0x1u, 0u>{};
@@ -58,14 +71,6 @@ namespace dier {
 constexpr auto kUie = Flag<0x1u, 0u>{};
 
 }  // namespace dier
-
-namespace smcr {
-
-constexpr auto kSms = Flag<0x7u, 0u>{};
-constexpr auto kMsm = Flag<0x1u, 7u>{};
-constexpr auto kEce = Flag<0x1u, 14u>{};
-
-}  // namespace smcr
 
 enum : uint32_t {
   CR1,
