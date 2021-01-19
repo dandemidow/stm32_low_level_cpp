@@ -60,6 +60,17 @@ constexpr auto kUie = Flag<0x1u, 0u>{};
 constexpr auto kCc1Ie = Flag<0x1u, 1u>{};
 constexpr auto kCc2Ie = Flag<0x1u, 2u>{};
 constexpr auto kCc3Ie = Flag<0x1u, 3u>{};
+constexpr auto kCc4Ie = Flag<0x1u, 4u>{};
+constexpr auto kComIe = Flag<0x1u, 5u>{};
+constexpr auto kTie = Flag<0x1u, 6u>{};
+constexpr auto kBie = Flag<0x1u, 7u>{};
+constexpr auto kUde = Flag<0x1u, 8u>{};
+constexpr auto kCc1De = Flag<0x1u, 9u>{};
+constexpr auto kCc2De = Flag<0x1u, 10u>{};
+constexpr auto kCc3De = Flag<0x1u, 11u>{};
+constexpr auto kCc4De = Flag<0x1u, 12u>{};
+constexpr auto kComDe = Flag<0x1u, 13u>{};
+constexpr auto kTde = Flag<0x1u, 14u>{};
 
 }  // namespace dier
 
