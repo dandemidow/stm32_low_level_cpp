@@ -42,8 +42,9 @@
 #include "gpio/output.h"
 #include "hsi.h"
 #include "pll.h"
-#include "system.hpp"
 #include "spinlock.hpp"
+#include "system.hpp"
+#include "register/timer.h"
 #include "utils.hpp"
 
 static void SystemClock_Config();
@@ -52,8 +53,38 @@ static void _Error_Handler(const char *, int);
 
 using namespace std::chrono_literals;
 
-int main() {
+static ll::gpio::Output *timer_led = nullptr;
+static ll::tim::Timer *timer_ = nullptr;
 
+static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
+  /* Enable the timer peripheral clock */
+  ll::bus::GrpEnableClock(ll::rcc::kGrp1PeriphTim3);
+
+  /* Configure the NVIC to handle TIM3 update interrupt */
+  ll::nvic::set_priority(IRQn_Type::TIM3_IRQn);
+  ll::nvic::enable_irq(IRQn_Type::TIM3_IRQn);
+
+  timer.Init(ll::tim::CounterMode::Up, ll::tim::ClockDiv::Div1);
+
+  timer.SetPrescaler(ll::tim::CalcPsc(10000u));
+
+  /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
+  auto init_autoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
+  timer.SetAutoReload(init_autoreload);
+
+  timer.SetRepetitionCounter(0x00);
+  /* Force update generation */
+  timer.GenerateEventUpdate();
+
+  timer.DisableARRPreload();
+  timer.SetClockSource(ll::tim::ClockSource::Internal);
+  timer.SetUpdateSource(ll::tim::UpdateSource::Counter);
+
+  timer.EnableItUpdate();
+  timer.EnableCounter();
+}
+
+int main() {
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   LL_Init();
 
@@ -62,6 +93,7 @@ int main() {
 
   ll::gpio::Output led3 {ll::gpio::port::C, 9u};
   ll::gpio::Output led4 {ll::gpio::port::C, 8u};
+  ll::tim::Timer timer {ll::tim::index::T3};
 
   led3.init(ll::gpio::output::PushPull,
             ll::gpio::pull::Up,
@@ -71,11 +103,25 @@ int main() {
             ll::gpio::pull::Up,
             ll::gpio::speed::VeryHigh);
 
+  timer_ = &timer;
+  timer_led = &led3;
+
+  Configure_TIMTimeBase(timer);
+
+  led4.toggle();
+
   while (true) {
-    led3.toggle();
-    ll::delay(500ms);
+    ll::delay(1s);
     led4.toggle();
-    ll::delay(500ms);
+  }
+}
+
+void TIM3_IRQHandler() {
+  if (timer_ && timer_->IsActiveFlagUpdate()) {
+    timer_->ClearFlagUpdate();
+    if (timer_led) {
+      timer_led->toggle();
+    }
   }
 }
 
