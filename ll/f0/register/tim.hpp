@@ -54,6 +54,16 @@ constexpr auto kEtp = Flag<0x1u, 15u>{};
 
 }  // namespace smcr
 
+namespace dier {
+
+constexpr auto kUie = Flag<0x1u, 0u>{};
+constexpr auto kCc1Ie = Flag<0x1u, 1u>{};
+constexpr auto kCc2Ie = Flag<0x1u, 2u>{};
+constexpr auto kCc3Ie = Flag<0x1u, 3u>{};
+
+}  // namespace dier
+
+
 namespace sr {
 
 constexpr auto kUif = Flag<0x1u, 0u>{};
@@ -65,12 +75,6 @@ namespace egr {
 constexpr auto kUg = Flag<0x1, 0u>{};
 
 }  // namespace egr
-
-namespace dier {
-
-constexpr auto kUie = Flag<0x1u, 0u>{};
-
-}  // namespace dier
 
 enum : uint32_t {
   CR1,
