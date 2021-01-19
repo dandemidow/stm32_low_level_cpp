@@ -78,6 +78,18 @@ constexpr auto kTde = Flag<0x1u, 14u>{};
 namespace sr {
 
 constexpr auto kUif = Flag<0x1u, 0u>{};
+constexpr auto kCc1If = Flag<0x1u, 1u>{};
+constexpr auto kCc2If = Flag<0x1u, 2u>{};
+constexpr auto kCc3If = Flag<0x1u, 3u>{};
+constexpr auto kCc4If = Flag<0x1u, 4u>{};
+constexpr auto kComIf = Flag<0x1u, 5u>{};
+constexpr auto kTif = Flag<0x1u, 6u>{};
+constexpr auto kBif = Flag<0x1u, 7u>{};
+constexpr auto kUde = Flag<0x1u, 8u>{};
+constexpr auto kCc1Of = Flag<0x1u, 9u>{};
+constexpr auto kCc2Of = Flag<0x1u, 10u>{};
+constexpr auto kCc3Of = Flag<0x1u, 11u>{};
+constexpr auto kCc4Of = Flag<0x1u, 12u>{};
 
 }  // namspace sr
 
