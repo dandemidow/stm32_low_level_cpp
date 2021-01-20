@@ -8,6 +8,7 @@
 namespace ll::tim {
 enum class index : uint32_t {
   T1 = address::tim::kT1,
+  T2 = address::tim::kT2,
   T3 = address::tim::kT3
 };
 
@@ -127,7 +128,12 @@ enum : uint32_t {
   BDTR,
   DCR,
   DMAR,
-  OR
+  OR1,
+  CCMR3,
+  CCR5,
+  CCR6,
+  OR2,
+  OR3
 };
 
 }  // namespace ll::tim
@@ -153,7 +159,12 @@ Register,
 Register,
 Register,
 Register,
-Register
+Register,
+Register,
+Register,
+Register,
+Register,
+Registe [0P;r
 >;
 
 static_assert(std::is_standard_layout<Tim>::value);

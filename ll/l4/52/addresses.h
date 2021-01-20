@@ -7,6 +7,7 @@
 
 constexpr uint32_t kPeriphBaseAddress = 0x40000000UL;  // Peripheral base address
 constexpr uint32_t kApb1PeriphBaseAddress = kPeriphBaseAddress;
+constexpr uint32_t kApb2PeriphBaseAddress = kPeriphBaseAddress + 0x00010000ul;
 constexpr uint32_t kAhb1periphBaseAddress = kPeriphBaseAddress + 0x00020000ul;
 constexpr uint32_t kAhb2PeriphBaseAddress = kPeriphBaseAddress + 0x08000000ul;
 
@@ -75,6 +76,12 @@ enum class PriorityGroup {
 namespace ahb2 {
 constexpr uint32_t kGrp1PeriphGpioA = Flag<0x1u, 0u>::value;
 }  // namespace ahb2
+
+namespace tim {
+constexpr uint32_t kT1 = kApb2PeriphBaseAddress + 0x2c00ul;
+constexpr uint32_t kT2 = kApb1PeriphBaseAddress;
+constexpr uint32_t kT3 = kApb1PeriphBaseAddress + 0x0400ul;
+}  // namespace tim
 }  // namespace address
 
 #endif

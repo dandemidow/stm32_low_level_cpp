@@ -105,12 +105,11 @@ int main() {
   timer_led = &led;
 
   while (true) {
-    led.toggle();
     ll::delay(1000ms);
   }
 }
 
-void TIM3_IRQHandler() {
+void TIM1_UP_TIM16_IRQHandler() {
   if (timer_ && timer_->IsActiveFlagUpdate()) {
     timer_->ClearFlagUpdate();
     if (timer_led) {
