@@ -46,12 +46,44 @@
 #include "system.hpp"
 #include "spinlock.hpp"
 #include "utils.hpp"
+#include "register/timer.h"
 
 static void SystemClock_Config();
 static void LL_Init();
 static void _Error_Handler(const char *, int);
 
 using namespace std::chrono_literals;
+
+static ll::gpio::Output *timer_led = nullptr;
+static ll::tim::Timer *timer_ = nullptr;
+
+static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
+  /* Enable the timer peripheral clock */
+  ll::bus::GrpEnableClock(ll::rcc::kGrpPeriphTim1);
+
+  /* Configure the NVIC to handle TIM3 update interrupt */
+  ll::nvic::set_priority(IRQn_Type::TIM1_UP_TIM16_IRQn);
+  ll::nvic::enable_irq(IRQn_Type::TIM1_UP_TIM16_IRQn);
+
+  timer.Init(ll::tim::CounterMode::Up, ll::tim::ClockDiv::Div1);
+
+  timer.SetPrescaler(ll::tim::CalcPsc(10000u));
+
+  /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
+  auto init_autoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
+  timer.SetAutoReload(init_autoreload);
+
+  timer.SetRepetitionCounter(0x00);
+  /* Force update generation */
+  timer.GenerateEventUpdate();
+
+  timer.DisableARRPreload();
+  timer.SetClockSource(ll::tim::ClockSource::Internal);
+  timer.SetUpdateSource(ll::tim::UpdateSource::Counter);
+
+  timer.EnableItUpdate();
+  timer.EnableCounter();
+}
 
 int main() {
 
@@ -62,14 +94,28 @@ int main() {
   SystemClock_Config();
 
   ll::gpio::Output led {ll::gpio::port::A, 5u};
+  ll::tim::Timer timer {ll::tim::index::T1};
 
   led.init(ll::gpio::output::PushPull,
            ll::gpio::pull::Up,
            ll::gpio::speed::VeryHigh);
 
+  Configure_TIMTimeBase(timer);
+  timer_ = &timer;
+  timer_led = &led;
+
   while (true) {
     led.toggle();
     ll::delay(1000ms);
+  }
+}
+
+void TIM3_IRQHandler() {
+  if (timer_ && timer_->IsActiveFlagUpdate()) {
+    timer_->ClearFlagUpdate();
+    if (timer_led) {
+      timer_led->toggle();
+    }
   }
 }
 
