@@ -56,6 +56,7 @@ constexpr auto kEtf = Flag<0xfu, 8u>{};
 constexpr auto kEtps = Flag<0x3u, 12u>{};
 constexpr auto kEce = Flag<0x1u, 14u>{};
 constexpr auto kEtp = Flag<0x1u, 15u>{};
+constexpr auto kSms3 = Flag<0x1u, 16u>{};
 
 }  // namespace smcr
 
