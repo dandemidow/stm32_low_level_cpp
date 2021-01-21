@@ -112,6 +112,7 @@ constexpr auto kCc4G = Flag<0x1u, 4u>{};
 constexpr auto kComG = Flag<0x1u, 5u>{};
 constexpr auto kTg = Flag<0x1u, 6u>{};
 constexpr auto kBg = Flag<0x1u, 7u>{};
+constexpr auto kB2G = Flag<0x1u, 7u>{};
 
 }  // namespace egr
 
