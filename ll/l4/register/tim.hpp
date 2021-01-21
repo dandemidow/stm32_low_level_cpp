@@ -91,11 +91,14 @@ constexpr auto kCc4If = Flag<0x1u, 4u>{};
 constexpr auto kComIf = Flag<0x1u, 5u>{};
 constexpr auto kTif = Flag<0x1u, 6u>{};
 constexpr auto kBif = Flag<0x1u, 7u>{};
-constexpr auto kUde = Flag<0x1u, 8u>{};
+constexpr auto kB2If = Flag<0x1u, 8u>{};
 constexpr auto kCc1Of = Flag<0x1u, 9u>{};
 constexpr auto kCc2Of = Flag<0x1u, 10u>{};
 constexpr auto kCc3Of = Flag<0x1u, 11u>{};
 constexpr auto kCc4Of = Flag<0x1u, 12u>{};
+constexpr auto kSbif = Flag<0x1u, 13u>{};
+constexpr auto kCc5If = Flag<0x1u, 16u>{};
+constexpr auto kCc8If = Flag<0x1u, 17u>{};
 
 }  // namspace sr
 
