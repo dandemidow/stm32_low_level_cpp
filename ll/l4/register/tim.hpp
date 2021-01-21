@@ -22,6 +22,7 @@ constexpr auto kDir = Flag<0x1u, 4u>{};
 constexpr auto kCms = Flag<0x3u, 5u>{};
 constexpr auto kArpe = Flag<0x1u, 7u>{};
 constexpr auto kCkd = Flag<0x3u, 8u>{};
+constexpr auto kUifreMap = Flag<0x1u, 11u>{};
 
 }  // namespace cr1
 
@@ -164,7 +165,7 @@ Register,
 Register,
 Register,
 Register,
-Registe [0P;r
+Register
 >;
 
 static_assert(std::is_standard_layout<Tim>::value);
