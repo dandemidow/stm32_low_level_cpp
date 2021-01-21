@@ -61,7 +61,8 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   /* Enable the timer peripheral clock */
   ll::bus::GrpEnableClock(ll::rcc::kGrpPeriphTim1);
 
-  /* Configure the NVIC to handle TIM3 update interrupt */
+  /* Configure the NVIC to handle TIM3 upda
+   * te interrupt */
   ll::nvic::set_priority(IRQn_Type::TIM1_UP_TIM16_IRQn);
   ll::nvic::enable_irq(IRQn_Type::TIM1_UP_TIM16_IRQn);
 
