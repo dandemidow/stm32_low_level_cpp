@@ -40,6 +40,9 @@ constexpr auto kOis2N = Flag<0x1u, 11u>{};
 constexpr auto kOis3 = Flag<0x1u, 12u>{};
 constexpr auto kOis3N = Flag<0x1u, 13u>{};
 constexpr auto kOis4 = Flag<0x1u, 14u>{};
+constexpr auto kOis5 = Flag<0x1u, 16u>{};
+constexpr auto kOis6 = Flag<0x1u, 18u>{};
+constexpr auto kMms2 = Flag<0xful, 20u>{};
 
 }  // namespace cr2
 
