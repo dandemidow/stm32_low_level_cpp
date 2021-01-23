@@ -46,7 +46,7 @@
 #include "system.hpp"
 #include "spinlock.hpp"
 #include "utils.hpp"
-#include "register/timer.h"
+#include "timer.h"
 
 static void SystemClock_Config();
 static void LL_Init();
