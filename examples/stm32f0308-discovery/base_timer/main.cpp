@@ -44,7 +44,7 @@
 #include "pll.h"
 #include "spinlock.hpp"
 #include "system.hpp"
-#include "register/timer.h"
+#include "timer.h"
 #include "utils.hpp"
 
 static void SystemClock_Config();
