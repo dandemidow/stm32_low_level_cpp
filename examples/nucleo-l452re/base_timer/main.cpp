@@ -61,15 +61,13 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   /* Enable the timer peripheral clock */
   ll::bus::GrpEnableClock(ll::rcc::kGrpPeriphTim1);
 
-  /* Configure the NVIC to handle TIM3 upda
-   * te interrupt */
+  /* Configure the NVIC to handle TIM1 update interrupt */
   ll::nvic::set_priority(IRQn_Type::TIM1_UP_TIM16_IRQn);
   ll::nvic::enable_irq(IRQn_Type::TIM1_UP_TIM16_IRQn);
 
   timer.Init(ll::tim::CounterMode::Up, ll::tim::ClockDiv::Div1);
 
   timer.SetPrescaler(ll::tim::CalcPsc(10000u));
-
   /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
   auto init_autoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
   timer.SetAutoReload(init_autoreload);
@@ -101,12 +99,12 @@ int main() {
            ll::gpio::pull::Up,
            ll::gpio::speed::VeryHigh);
 
-  Configure_TIMTimeBase(timer);
   timer_ = &timer;
   timer_led = &led;
+  Configure_TIMTimeBase(timer);
 
   while (true) {
-    ll::delay(1000ms);
+    ll::delay(5s);
   }
 }
 
@@ -120,9 +118,6 @@ void TIM1_UP_TIM16_IRQHandler() {
 }
 
 static void LL_Init(void) {
-   // TODO check the correctness
-   // LL_APB2_GRP1_EnableClock(LL_APB2_GRP1_PERIPH_SYSCFG);
-   // LL_APB1_GRP1_EnableClock(LL_APB1_GRP1_PERIPH_PWR);
   ll::bus::GrpEnableClock(ll::rcc::kApb2EnrSysCfgEn);
   ll::bus::GrpEnableClock(ll::rcc::kApb1Enr1PwrEn);
 
