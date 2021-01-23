@@ -113,6 +113,12 @@ enum class SwsClk : uint32_t {
 
 }  // namespace cfgr
 
+namespace ahb1enr {
+
+constexpr auto kDma1En = Flag<0x1u, 0u>{};
+
+}  // namespace ahb1enr
+
 namespace apb2enr {
 
 constexpr auto kTim1En = Flag<0x1u, 11u>{};
