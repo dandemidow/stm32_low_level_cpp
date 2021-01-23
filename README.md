@@ -11,6 +11,7 @@ The **C++20** standard is used.</br>
 The examples are available for now: 
  - nucleo-l452re board:
    - blinking led
+   - base timer
  - stm32f0308-discovery board:
    - blinking led
    - base timer
