@@ -36,16 +36,17 @@
   ******************************************************************************
   */
 
+
 #include "bus.hpp"
 #include "core.h"
 #include "cortex.hpp"
 #include "gpio/output.h"
-#include "hsi.h"
-#include "pll.h"
-#include "spinlock.hpp"
+#include "msi.h"
+#include "power.hpp"
 #include "system.hpp"
-#include "timer.h"
+#include "spinlock.hpp"
 #include "utils.hpp"
+#include "timer.h"
 
 static void SystemClock_Config();
 static void LL_Init();
@@ -58,16 +59,15 @@ static ll::tim::Timer *timer_ = nullptr;
 
 static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   /* Enable the timer peripheral clock */
-  ll::bus::GrpEnableClock(ll::rcc::kGrp1PeriphTim3);
+  ll::bus::GrpEnableClock(ll::rcc::kGrpPeriphTim1);
 
-  /* Configure the NVIC to handle TIM3 update interrupt */
-  ll::nvic::set_priority(IRQn_Type::TIM3_IRQn);
-  ll::nvic::enable_irq(IRQn_Type::TIM3_IRQn);
+  /* Configure the NVIC to handle TIM1 update interrupt */
+  ll::nvic::set_priority(IRQn_Type::TIM1_UP_TIM16_IRQn);
+  ll::nvic::enable_irq(IRQn_Type::TIM1_UP_TIM16_IRQn);
 
   timer.Init(ll::tim::CounterMode::Up, ll::tim::ClockDiv::Div1);
 
   timer.SetPrescaler(ll::tim::CalcPsc(10000u));
-
   /* Set the auto-reload value to have an initial update event frequency of 1 Hz */
   auto init_autoreload = ll::tim::CalcArr(timer.GetPrescaler(), 1);
   timer.SetAutoReload(init_autoreload);
@@ -85,38 +85,30 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
 }
 
 int main() {
+
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   LL_Init();
 
   /* Configure the system clock */
   SystemClock_Config();
 
-  ll::gpio::Output led3 {ll::gpio::port::C, 9u};
-  ll::gpio::Output led4 {ll::gpio::port::C, 8u};
-  ll::tim::Timer timer {ll::tim::index::T3};
+  ll::gpio::Output led {ll::gpio::port::A, 5u};
+  ll::tim::Timer timer {ll::tim::index::T1};
 
-  led3.init(ll::gpio::output::PushPull,
-            ll::gpio::pull::Up,
-            ll::gpio::speed::VeryHigh);
-
-  led4.init(ll::gpio::output::PushPull,
-            ll::gpio::pull::Up,
-            ll::gpio::speed::VeryHigh);
+  led.init(ll::gpio::output::PushPull,
+           ll::gpio::pull::Up,
+           ll::gpio::speed::VeryHigh);
 
   timer_ = &timer;
-  timer_led = &led3;
-
+  timer_led = &led;
   Configure_TIMTimeBase(timer);
 
-  led4.toggle();
-
   while (true) {
-    ll::delay(1s);
-    led4.toggle();
+    ll::delay(5s);
   }
 }
 
-void TIM3_IRQHandler() {
+void TIM1_UP_TIM16_IRQHandler() {
   if (timer_ && timer_->IsActiveFlagUpdate()) {
     timer_->ClearFlagUpdate();
     if (timer_led) {
@@ -126,12 +118,23 @@ void TIM3_IRQHandler() {
 }
 
 static void LL_Init(void) {
-  ll::bus::GrpEnableClock(ll::rcc::kApb1Grp2PeriphSysCfg);
+  ll::bus::GrpEnableClock(ll::rcc::kApb2EnrSysCfgEn);
+  ll::bus::GrpEnableClock(ll::rcc::kApb1Enr1PwrEn);
+
+  ll::nvic::set_priority_grouping(ll::nvic::PriorityGroup::Gr4);
 
   /* System interrupt init*/
   /* MemoryManagement_IRQn interrupt configuration */
-  ll::nvic::set_priority(IRQn_Type::SVC_IRQn);
+  ll::nvic::set_priority(IRQn_Type::MemoryManagement_IRQn);
   /* BusFault_IRQn interrupt configuration */
+  ll::nvic::set_priority(IRQn_Type::BusFault_IRQn);
+  /* UsageFault_IRQn interrupt configuration */
+  ll::nvic::set_priority(IRQn_Type::UsageFault_IRQn);
+  /* SVCall_IRQn interrupt configuration */
+  ll::nvic::set_priority(IRQn_Type::SVCall_IRQn);
+  /* DebugMonitor_IRQn interrupt configuration */
+  ll::nvic::set_priority(IRQn_Type::DebugMonitor_IRQn);
+  /* PendSV_IRQn interrupt configuration */
   ll::nvic::set_priority(IRQn_Type::PendSV_IRQn);
   /* SysTick_IRQn interrupt configuration */
   ll::nvic::set_priority(IRQn_Type::SysTick_IRQn);
@@ -143,31 +146,32 @@ static void LL_Init(void) {
   */
 void SystemClock_Config() {
 
-  ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency1);
+  ll::flash::set_latency(ll::flash::AcrLatency::kAcrLatency0);
 
-  if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency1) {
+  if(ll::flash::get_latency() != ll::flash::AcrLatency::kAcrLatency0) {
     _Error_Handler(__FILE__, __LINE__);
   }
+  ll::power::set_regul_voltage_scaling(ll::power::ReguVoltage::kScale1);
 
-  ll::Hsi hsi{};
-  hsi.Enable();
-  SpinLock::Till([&]{return hsi.IsReady();});
+  ll::Msi msi{};
+  msi.Enable();
+  SpinLock::Till([&]{return msi.IsReady();});
 
-  hsi.SetCalibTrimming(ll::rcc::cr::HsiTrim::HsiTrim4);
-
-  ll::Pll pll {ll::rcc::cfgr::PllSrc::HsiDiv2, ll::rcc::cfgr::PllMul::PllMul12};
-  pll.Enable();
-  SpinLock::Till([&]{return pll.IsReady();});
+  msi.EnableRangeSelection();
+  msi.SetRange(ll::rcc::GetRccCrMsiRange<6>());
+  msi.SetCalibTrimming(0);
 
   ll::rcc::SystemClock sys_clock;
-  sys_clock << ll::rcc::cfgr::kHPreDiv<ll::rcc::cfgr::HPreDiv::Div1>
-            << ll::rcc::cfgr::kPPreDiv<ll::rcc::cfgr::PPreDiv::Div1>
-            << pll;
+  sys_clock << msi;
 
    /* Wait till System clock is ready */
-  SpinLock::Till([&]{return sys_clock.get_source() == pll;});
+  SpinLock::Till([&]{return sys_clock.get_source() == msi;});
 
-  constexpr auto kBaseFrequency = 48_MHz;
+  sys_clock << ll::rcc::cfgr::kHPreDiv<ll::rcc::cfgr::HPreDiv::Div1>
+            << ll::rcc::cfgr::kPPre1Div<ll::rcc::cfgr::PPre1Div::Div1>
+            << ll::rcc::cfgr::kPPre2Div<ll::rcc::cfgr::PPre2Div::Div1>;
+
+  constexpr auto kBaseFrequency = 4_MHz;
 
   ll::tick::init_1ms(kBaseFrequency);
 

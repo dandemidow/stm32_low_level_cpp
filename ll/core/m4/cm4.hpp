@@ -49,5 +49,10 @@ static inline void set_priority(IRQn_Type IRQn, uint32_t priority = encode_prior
   }
 }
 
+static inline void enable_irq(IRQn_Type IRQn) {
+  auto &nvic = *new NestedVectoredInterruptController{};
+  nvic.get<ISER>()[static_cast<uint32_t>(IRQn) >> 5ul] = static_cast<uint32_t>(1UL << (static_cast<uint32_t>(IRQn) & 0x1ful));
+}
+
 }  // namespace ll::nvic
 #endif

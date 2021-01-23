@@ -1,7 +1,7 @@
 #if !defined(TIMER_H_)
 #define TIMER_H_
 
-#include "tim.hpp"
+#include "register/tim.hpp"
 #include "bus.hpp"
 #include "frequency.h"
 
