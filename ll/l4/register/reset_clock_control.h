@@ -116,6 +116,10 @@ enum class SwsClk : uint32_t {
 namespace ahb1enr {
 
 constexpr auto kDma1En = Flag<0x1u, 0u>{};
+constexpr auto kDma2En = Flag<0x1u, 1u>{};
+constexpr auto kFlashEn = Flag<0x1u, 8u>{};
+constexpr auto kCrcEn = Flag<0x1u, 12u>{};
+constexpr auto kTscEn = Flag<0x1u, 16u>{};
 
 }  // namespace ahb1enr
 
