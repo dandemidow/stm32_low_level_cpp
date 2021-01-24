@@ -123,6 +123,19 @@ constexpr auto kTscEn = Flag<0x1u, 16u>{};
 
 }  // namespace ahb1enr
 
+namespace ahb2enr {
+
+constexpr auto kGpioAEn = Flag<0x1u, 0u>{};
+constexpr auto kGpioBEn = Flag<0x1u, 1u>{};
+constexpr auto kGpioCEn = Flag<0x1u, 2u>{};
+constexpr auto kGpioDEn = Flag<0x1u, 3u>{};
+constexpr auto kGpioEEn = Flag<0x1u, 4u>{};
+constexpr auto kGpioHEn = Flag<0x1u, 7u>{};
+constexpr auto kAdcEn = Flag<0x1u, 13u>{};
+constexpr auto kRngEn = Flag<0x1u, 18u>{};
+
+}  // namespace ahb2enr
+
 namespace apb2enr {
 
 constexpr auto kTim1En = Flag<0x1u, 11u>{};
