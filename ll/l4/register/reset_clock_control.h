@@ -136,6 +136,12 @@ constexpr auto kRngEn = Flag<0x1u, 18u>{};
 
 }  // namespace ahb2enr
 
+namespace ahb3enr {
+
+constexpr auto kQspiEn = Flag<0x1u, 8u>{};
+
+}  // namespace ahb3enr
+
 namespace apb2enr {
 
 constexpr auto kTim1En = Flag<0x1u, 11u>{};
