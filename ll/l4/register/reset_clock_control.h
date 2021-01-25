@@ -142,6 +142,31 @@ constexpr auto kQspiEn = Flag<0x1u, 8u>{};
 
 }  // namespace ahb3enr
 
+namespace apb1enr1 {
+
+constexpr auto kTim2En = Flag<0x1u, 0u>{};
+constexpr auto kTim3En = Flag<0x1u, 1u>{};
+constexpr auto kTim6En = Flag<0x1u, 4u>{};
+constexpr auto kRtcApbEn = Flag<0x1u, 10u>{};
+constexpr auto kWwdgEn = Flag<0x1u, 11u>{};
+constexpr auto kSpi2En = Flag<0x1u, 14u>{};
+constexpr auto kSpi3En = Flag<0x1u, 15u>{};
+constexpr auto kUsart2En = Flag<0x1u, 17u>{};
+constexpr auto kUsart3En = Flag<0x1u, 18u>{};
+constexpr auto kUart4En = Flag<0x1u, 19u>{};
+constexpr auto kI2C1En = Flag<0x1u, 21u>{};
+constexpr auto kI2C2En = Flag<0x1u, 22u>{};
+constexpr auto kI2C3En = Flag<0x1u, 23u>{};
+constexpr auto kCrsEn = Flag<0x1u, 24u>{};
+constexpr auto kCan1En = Flag<0x1u, 25u>{};
+constexpr auto kUsbFsEn = Flag<0x1u, 26u>{};
+constexpr auto kPwrEn = Flag<0x1u, 28u>{};
+constexpr auto kDac1En = Flag<0x1u, 29u>{};
+constexpr auto kOpampEn = Flag<0x1u, 30u>{};
+constexpr auto kLptim1En = Flag<0x1u, 31u>{};
+
+}  // namespace apb1enr1
+
 namespace apb2enr {
 
 constexpr auto kTim1En = Flag<0x1u, 11u>{};
