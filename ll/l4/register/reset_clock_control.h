@@ -163,9 +163,17 @@ constexpr auto kUsbFsEn = Flag<0x1u, 26u>{};
 constexpr auto kPwrEn = Flag<0x1u, 28u>{};
 constexpr auto kDac1En = Flag<0x1u, 29u>{};
 constexpr auto kOpampEn = Flag<0x1u, 30u>{};
-constexpr auto kLptim1En = Flag<0x1u, 31u>{};
+constexpr auto kLpTim1En = Flag<0x1u, 31u>{};
 
 }  // namespace apb1enr1
+
+namespace apb1rstr2 {
+
+constexpr auto kLpUart1En = Flag<0x1u, 0u>{};
+constexpr auto kI2C4En = Flag<0x1u, 1u>{};
+constexpr auto kLpTim2En = Flag<0x1u, 5u>{};
+
+}  // namespace apb1rstr2
 
 namespace apb2enr {
 
