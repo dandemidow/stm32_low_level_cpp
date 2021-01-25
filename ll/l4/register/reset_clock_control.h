@@ -189,10 +189,10 @@ constexpr auto kDfsdm1En = Flag<0x1u, 24u>{};
 
 }  // namespace apb2enr
 
-constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
+constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{apb2enr::kSysCfgEn};
 constexpr auto kApb2PeriphAll = RegisterValue<APB2ENR>{0xFFFFFFFFu};
-constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{Flag<0x1u, 28u>::value};
-constexpr auto kGrp1PeriphGpioA = RegisterValue<AHB2ENR>{address::ahb2::kGrp1PeriphGpioA};
+constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{apb1enr1::kPwrEn};
+constexpr auto kGrp1PeriphGpioA = RegisterValue<AHB2ENR>{ahb2enr::kGpioAEn};
 constexpr auto kGrpPeriphTim1 = RegisterValue<APB2ENR>{apb2enr::kTim1En};
 
 
