@@ -176,8 +176,16 @@ constexpr auto kLpTim2En = Flag<0x1u, 5u>{};
 }  // namespace apb1rstr2
 
 namespace apb2enr {
-
+constexpr auto kSysCfgEn = Flag<0x1u, 0u>{};
+constexpr auto kFwEn = Flag<0x1u, 7u>{};
+constexpr auto kSdmmc1En = Flag<0x1u, 10u>{};
 constexpr auto kTim1En = Flag<0x1u, 11u>{};
+constexpr auto kSpi1En = Flag<0x1u, 12u>{};
+constexpr auto kUsart1En = Flag<0x1u, 14u>{};
+constexpr auto kTim15En = Flag<0x1u, 16u>{};
+constexpr auto kTim16En = Flag<0x1u, 17u>{};
+constexpr auto kSai1En = Flag<0x1u, 21u>{};
+constexpr auto kDfsdm1En = Flag<0x1u, 24u>{};
 
 }  // namespace apb2enr
 
