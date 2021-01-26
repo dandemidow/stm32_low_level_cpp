@@ -189,6 +189,18 @@ constexpr auto kDfsdm1En = Flag<0x1u, 24u>{};
 
 }  // namespace apb2enr
 
+namespace ahb1smenr {
+
+constexpr auto kDma1SmEn = Flag<0x1u, 0u>{};
+constexpr auto kDma2SmEn = Flag<0x1u, 1u>{};
+constexpr auto kFlashSmEn = Flag<0x1u, 8u>{};
+constexpr auto kSram1SmEn = Flag<0x1u, 9u>{};
+constexpr auto kCrcSmEn = Flag<0x1u, 12u>{};
+constexpr auto kTscSmEn = Flag<0x1u, 16u>{};
+
+
+}  // namespace ahb1smenr
+
 constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{apb2enr::kSysCfgEn};
 constexpr auto kApb2PeriphAll = RegisterValue<APB2ENR>{0xFFFFFFFFu};
 constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{apb1enr1::kPwrEn};
