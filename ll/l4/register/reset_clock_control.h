@@ -198,8 +198,13 @@ constexpr auto kSram1SmEn = Flag<0x1u, 9u>{};
 constexpr auto kCrcSmEn = Flag<0x1u, 12u>{};
 constexpr auto kTscSmEn = Flag<0x1u, 16u>{};
 
-
 }  // namespace ahb1smenr
+
+namespace ahb2smenr {
+
+constexpr auto kGpioASmEn = Flag<0x1u, 0u>{};
+
+}  // namespace ahb2smenr
 
 constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{apb2enr::kSysCfgEn};
 constexpr auto kApb2PeriphAll = RegisterValue<APB2ENR>{0xFFFFFFFFu};
