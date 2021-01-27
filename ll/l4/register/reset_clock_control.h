@@ -214,6 +214,16 @@ constexpr auto kRngSmEn = Flag<0x1u, 18u>{};
 
 }  // namespace ahb2smenr
 
+namespace ahb3smenr {
+
+constexpr auto kQspiSmEn = Flag<0x1u, 8u>{};
+
+}  // namespace ahb3smenr
+
+namespace apb1smenr1 {
+
+}  // namespace apb1smenr1
+
 constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{apb2enr::kSysCfgEn};
 constexpr auto kApb2PeriphAll = RegisterValue<APB2ENR>{0xFFFFFFFFu};
 constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{apb1enr1::kPwrEn};
