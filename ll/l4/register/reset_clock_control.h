@@ -203,6 +203,14 @@ constexpr auto kTscSmEn = Flag<0x1u, 16u>{};
 namespace ahb2smenr {
 
 constexpr auto kGpioASmEn = Flag<0x1u, 0u>{};
+constexpr auto kGpioBSmEn = Flag<0x1u, 1u>{};
+constexpr auto kGpioCSmEn = Flag<0x1u, 2u>{};
+constexpr auto kGpioDSmEn = Flag<0x1u, 3u>{};
+constexpr auto kGpioESmEn = Flag<0x1u, 4u>{};
+constexpr auto kGpioHSmEn = Flag<0x1u, 7u>{};
+constexpr auto kSram2SmEn = Flag<0x1u, 9u>{};
+constexpr auto kAdcSmEn = Flag<0x1u, 13u>{};
+constexpr auto kRngSmEn = Flag<0x1u, 18u>{};
 
 }  // namespace ahb2smenr
 
