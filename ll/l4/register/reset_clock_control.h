@@ -222,6 +222,27 @@ constexpr auto kQspiSmEn = Flag<0x1u, 8u>{};
 
 namespace apb1smenr1 {
 
+constexpr auto kTim2SmEn = Flag<0x1u, 0u>{};
+constexpr auto kTim3SmEn = Flag<0x1u, 1u>{};
+constexpr auto kTim6SmEn = Flag<0x1u, 4u>{};
+constexpr auto kRtcApbSmEn = Flag<0x1u, 10u>{};
+constexpr auto kWwdgSmEn = Flag<0x1u, 11u>{};
+constexpr auto kSpi2SmEn = Flag<0x1u, 14u>{};
+constexpr auto kSpi3SmEn = Flag<0x1u, 15u>{};
+constexpr auto kUsart2SmEn = Flag<0x1u, 17u>{};
+constexpr auto kUsart3SmEn = Flag<0x1u, 18u>{};
+constexpr auto kUart4SmEn = Flag<0x1u, 19u>{};
+constexpr auto kI2C1SmEn = Flag<0x1u, 21u>{};
+constexpr auto kI2C2SmEn = Flag<0x1u, 22u>{};
+constexpr auto kI2C3SmEn = Flag<0x1u, 23u>{};
+constexpr auto kCrsSmEn = Flag<0x1u, 24u>{};
+constexpr auto kCan1SmEn = Flag<0x1u, 25u>{};
+constexpr auto kUsbFsSmEn = Flag<0x1u, 26u>{};
+constexpr auto kPwrSmEn = Flag<0x1u, 28u>{};
+constexpr auto kDac1SmEn = Flag<0x1u, 29u>{};
+constexpr auto kOpampSmEn = Flag<0x1u, 30u>{};
+constexpr auto kLpTim1SmEn = Flag<0x1u, 31u>{};
+
 }  // namespace apb1smenr1
 
 constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{apb2enr::kSysCfgEn};
