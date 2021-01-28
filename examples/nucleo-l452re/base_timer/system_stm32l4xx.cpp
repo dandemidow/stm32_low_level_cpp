@@ -147,7 +147,7 @@ hertz GetMsiRangeFrequency() {
   uint32_t msirange;
   auto &rcc = *new ResetClockControl {};
   /* Get MSI Range frequency--------------------------------------------------*/
-  if(rcc.And<CR>(cr::kMsiRgSel) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
+  if(rcc.And<CR>(cr::kMsiRgSel.value) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
     msirange = rcc.And<CSR>(kCsrMsiSRange) >> 8U;
   } else { /* MSIRANGE from RCC_CR applies */
     msirange = rcc.And<CR>(cr::kMsiRange.value) >> 4U;
