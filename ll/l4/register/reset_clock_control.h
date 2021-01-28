@@ -51,6 +51,15 @@ namespace ll::rcc {
   CCIPR2            /*!< RCC peripherals independent clock configuration register 2,              Address offset: 0x9C */
 };
 
+namespace cr {
+
+constexpr auto kMsiOn = Flag<0x1u, 0u>{};
+constexpr auto kMsiRdy = Flag<0x1u, 1u>{};
+constexpr auto kMsiPllEn = Flag<0x1u, 2u>{};
+constexpr auto kMsiRgSel = Flag<0x1u, 3u>{};
+
+}  // namespace cr
+
 namespace cfgr {
 constexpr auto kHPre = Flag<0xfu, 4u>{};
 enum class HPreDiv {
