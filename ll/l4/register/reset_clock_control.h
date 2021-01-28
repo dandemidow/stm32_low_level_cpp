@@ -58,6 +58,8 @@ constexpr auto kMsiRdy = Flag<0x1u, 1u>{};
 constexpr auto kMsiPllEn = Flag<0x1u, 2u>{};
 constexpr auto kMsiRgSel = Flag<0x1u, 3u>{};
 
+constexpr auto kMsiRange = Flag<0xful, 4u>{};
+
 }  // namespace cr
 
 namespace cfgr {
@@ -260,8 +262,6 @@ constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{apb1enr1::kPwrEn};
 constexpr auto kGrp1PeriphGpioA = RegisterValue<AHB2ENR>{ahb2enr::kGpioAEn};
 constexpr auto kGrpPeriphTim1 = RegisterValue<APB2ENR>{apb2enr::kTim1En};
 
-constexpr uint32_t kCrMsiRgSel = Flag<0x1u, 3u>::value;               /*!< Internal Multi Speed oscillator (MSI) range selection */
-constexpr auto kCrMsiRange = Flag<0xfu, 4u>{};               /*!< Internal Multi Speed oscillator (MSI) clock Range */
 constexpr uint32_t kCsrMsiSRange = Flag<0xfu, 8u>::value;
 
 constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
@@ -274,7 +274,7 @@ constexpr uint32_t GetRccCrMsiRange() {
   constexpr uint32_t Lower = 0x0u;
   constexpr uint32_t Upper = 0xbu;
   static_assert ((Index >= Lower) && (Index <= Upper));
-  return Flag<Index, kCrMsiRange.position>::value;
+  return Flag<Index, cr::kMsiRange.position>::value;
 }
 
 constexpr auto kIcsCrMsiTrim = Flag<0xffu, 8u>{};

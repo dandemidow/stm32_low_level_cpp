@@ -23,7 +23,7 @@ class Msi {
   }
 
   inline void SetRange(uint32_t range) {
-    reg::modify(rcc.get<rcc::CR>(), rcc::kCrMsiRange.value, range);
+    reg::modify(rcc.get<rcc::CR>(), rcc::cr::kMsiRange.value, range);
   }
 
   inline void SetCalibTrimming(uint32_t value) {
