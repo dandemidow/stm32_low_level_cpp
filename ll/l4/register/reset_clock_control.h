@@ -51,6 +51,17 @@ namespace ll::rcc {
   CCIPR2            /*!< RCC peripherals independent clock configuration register 2,              Address offset: 0x9C */
 };
 
+namespace cr {
+
+constexpr auto kMsiOn = Flag<0x1u, 0u>{};
+constexpr auto kMsiRdy = Flag<0x1u, 1u>{};
+constexpr auto kMsiPllEn = Flag<0x1u, 2u>{};
+constexpr auto kMsiRgSel = Flag<0x1u, 3u>{};
+
+constexpr auto kMsiRange = Flag<0xful, 4u>{};
+
+}  // namespace cr
+
 namespace cfgr {
 constexpr auto kHPre = Flag<0xfu, 4u>{};
 enum class HPreDiv {
@@ -116,27 +127,141 @@ enum class SwsClk : uint32_t {
 namespace ahb1enr {
 
 constexpr auto kDma1En = Flag<0x1u, 0u>{};
+constexpr auto kDma2En = Flag<0x1u, 1u>{};
+constexpr auto kFlashEn = Flag<0x1u, 8u>{};
+constexpr auto kCrcEn = Flag<0x1u, 12u>{};
+constexpr auto kTscEn = Flag<0x1u, 16u>{};
 
 }  // namespace ahb1enr
 
-namespace apb2enr {
+namespace ahb2enr {
 
+constexpr auto kGpioAEn = Flag<0x1u, 0u>{};
+constexpr auto kGpioBEn = Flag<0x1u, 1u>{};
+constexpr auto kGpioCEn = Flag<0x1u, 2u>{};
+constexpr auto kGpioDEn = Flag<0x1u, 3u>{};
+constexpr auto kGpioEEn = Flag<0x1u, 4u>{};
+constexpr auto kGpioHEn = Flag<0x1u, 7u>{};
+constexpr auto kAdcEn = Flag<0x1u, 13u>{};
+constexpr auto kRngEn = Flag<0x1u, 18u>{};
+
+}  // namespace ahb2enr
+
+namespace ahb3enr {
+
+constexpr auto kQspiEn = Flag<0x1u, 8u>{};
+
+}  // namespace ahb3enr
+
+namespace apb1enr1 {
+
+constexpr auto kTim2En = Flag<0x1u, 0u>{};
+constexpr auto kTim3En = Flag<0x1u, 1u>{};
+constexpr auto kTim6En = Flag<0x1u, 4u>{};
+constexpr auto kRtcApbEn = Flag<0x1u, 10u>{};
+constexpr auto kWwdgEn = Flag<0x1u, 11u>{};
+constexpr auto kSpi2En = Flag<0x1u, 14u>{};
+constexpr auto kSpi3En = Flag<0x1u, 15u>{};
+constexpr auto kUsart2En = Flag<0x1u, 17u>{};
+constexpr auto kUsart3En = Flag<0x1u, 18u>{};
+constexpr auto kUart4En = Flag<0x1u, 19u>{};
+constexpr auto kI2C1En = Flag<0x1u, 21u>{};
+constexpr auto kI2C2En = Flag<0x1u, 22u>{};
+constexpr auto kI2C3En = Flag<0x1u, 23u>{};
+constexpr auto kCrsEn = Flag<0x1u, 24u>{};
+constexpr auto kCan1En = Flag<0x1u, 25u>{};
+constexpr auto kUsbFsEn = Flag<0x1u, 26u>{};
+constexpr auto kPwrEn = Flag<0x1u, 28u>{};
+constexpr auto kDac1En = Flag<0x1u, 29u>{};
+constexpr auto kOpampEn = Flag<0x1u, 30u>{};
+constexpr auto kLpTim1En = Flag<0x1u, 31u>{};
+
+}  // namespace apb1enr1
+
+namespace apb1rstr2 {
+
+constexpr auto kLpUart1En = Flag<0x1u, 0u>{};
+constexpr auto kI2C4En = Flag<0x1u, 1u>{};
+constexpr auto kLpTim2En = Flag<0x1u, 5u>{};
+
+}  // namespace apb1rstr2
+
+namespace apb2enr {
+constexpr auto kSysCfgEn = Flag<0x1u, 0u>{};
+constexpr auto kFwEn = Flag<0x1u, 7u>{};
+constexpr auto kSdmmc1En = Flag<0x1u, 10u>{};
 constexpr auto kTim1En = Flag<0x1u, 11u>{};
+constexpr auto kSpi1En = Flag<0x1u, 12u>{};
+constexpr auto kUsart1En = Flag<0x1u, 14u>{};
+constexpr auto kTim15En = Flag<0x1u, 16u>{};
+constexpr auto kTim16En = Flag<0x1u, 17u>{};
+constexpr auto kSai1En = Flag<0x1u, 21u>{};
+constexpr auto kDfsdm1En = Flag<0x1u, 24u>{};
 
 }  // namespace apb2enr
 
-constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{Flag<0x1u, 0u>::value};
+namespace ahb1smenr {
+
+constexpr auto kDma1SmEn = Flag<0x1u, 0u>{};
+constexpr auto kDma2SmEn = Flag<0x1u, 1u>{};
+constexpr auto kFlashSmEn = Flag<0x1u, 8u>{};
+constexpr auto kSram1SmEn = Flag<0x1u, 9u>{};
+constexpr auto kCrcSmEn = Flag<0x1u, 12u>{};
+constexpr auto kTscSmEn = Flag<0x1u, 16u>{};
+
+}  // namespace ahb1smenr
+
+namespace ahb2smenr {
+
+constexpr auto kGpioASmEn = Flag<0x1u, 0u>{};
+constexpr auto kGpioBSmEn = Flag<0x1u, 1u>{};
+constexpr auto kGpioCSmEn = Flag<0x1u, 2u>{};
+constexpr auto kGpioDSmEn = Flag<0x1u, 3u>{};
+constexpr auto kGpioESmEn = Flag<0x1u, 4u>{};
+constexpr auto kGpioHSmEn = Flag<0x1u, 7u>{};
+constexpr auto kSram2SmEn = Flag<0x1u, 9u>{};
+constexpr auto kAdcSmEn = Flag<0x1u, 13u>{};
+constexpr auto kRngSmEn = Flag<0x1u, 18u>{};
+
+}  // namespace ahb2smenr
+
+namespace ahb3smenr {
+
+constexpr auto kQspiSmEn = Flag<0x1u, 8u>{};
+
+}  // namespace ahb3smenr
+
+namespace apb1smenr1 {
+
+constexpr auto kTim2SmEn = Flag<0x1u, 0u>{};
+constexpr auto kTim3SmEn = Flag<0x1u, 1u>{};
+constexpr auto kTim6SmEn = Flag<0x1u, 4u>{};
+constexpr auto kRtcApbSmEn = Flag<0x1u, 10u>{};
+constexpr auto kWwdgSmEn = Flag<0x1u, 11u>{};
+constexpr auto kSpi2SmEn = Flag<0x1u, 14u>{};
+constexpr auto kSpi3SmEn = Flag<0x1u, 15u>{};
+constexpr auto kUsart2SmEn = Flag<0x1u, 17u>{};
+constexpr auto kUsart3SmEn = Flag<0x1u, 18u>{};
+constexpr auto kUart4SmEn = Flag<0x1u, 19u>{};
+constexpr auto kI2C1SmEn = Flag<0x1u, 21u>{};
+constexpr auto kI2C2SmEn = Flag<0x1u, 22u>{};
+constexpr auto kI2C3SmEn = Flag<0x1u, 23u>{};
+constexpr auto kCrsSmEn = Flag<0x1u, 24u>{};
+constexpr auto kCan1SmEn = Flag<0x1u, 25u>{};
+constexpr auto kUsbFsSmEn = Flag<0x1u, 26u>{};
+constexpr auto kPwrSmEn = Flag<0x1u, 28u>{};
+constexpr auto kDac1SmEn = Flag<0x1u, 29u>{};
+constexpr auto kOpampSmEn = Flag<0x1u, 30u>{};
+constexpr auto kLpTim1SmEn = Flag<0x1u, 31u>{};
+
+}  // namespace apb1smenr1
+
+constexpr auto kApb2EnrSysCfgEn = RegisterValue<APB2ENR>{apb2enr::kSysCfgEn};
 constexpr auto kApb2PeriphAll = RegisterValue<APB2ENR>{0xFFFFFFFFu};
-constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{Flag<0x1u, 28u>::value};
-constexpr auto kGrp1PeriphGpioA = RegisterValue<AHB2ENR>{address::ahb2::kGrp1PeriphGpioA};
+constexpr auto kApb1Enr1PwrEn = RegisterValue<APB1ENR1>{apb1enr1::kPwrEn};
+constexpr auto kGrp1PeriphGpioA = RegisterValue<AHB2ENR>{ahb2enr::kGpioAEn};
 constexpr auto kGrpPeriphTim1 = RegisterValue<APB2ENR>{apb2enr::kTim1En};
 
-
-constexpr uint32_t kCrMsiOn = Flag<0x1u, 0u>::value;                  /*!< Internal Multi Speed oscillator (MSI) clock enable */
-constexpr uint32_t kCrMsiRdy = Flag<0x1u, 1u>::value;                 /*!< Internal Multi Speed oscillator (MSI) clock ready flag */
-constexpr uint32_t kCrMsiPllEn = Flag<0x1u, 2u>::value;               /*!< Internal Multi Speed oscillator (MSI) PLL enable */
-constexpr uint32_t kCrMsiRgSel = Flag<0x1u, 3u>::value;               /*!< Internal Multi Speed oscillator (MSI) range selection */
-constexpr auto kCrMsiRange = Flag<0xfu, 4u>{};               /*!< Internal Multi Speed oscillator (MSI) clock Range */
 constexpr uint32_t kCsrMsiSRange = Flag<0xfu, 8u>::value;
 
 constexpr uint32_t kPllCfgrPllSrc = Flag<0x3u, 0u>::value;
@@ -149,7 +274,7 @@ constexpr uint32_t GetRccCrMsiRange() {
   constexpr uint32_t Lower = 0x0u;
   constexpr uint32_t Upper = 0xbu;
   static_assert ((Index >= Lower) && (Index <= Upper));
-  return Flag<Index, kCrMsiRange.position>::value;
+  return Flag<Index, cr::kMsiRange.position>::value;
 }
 
 constexpr auto kIcsCrMsiTrim = Flag<0xffu, 8u>{};

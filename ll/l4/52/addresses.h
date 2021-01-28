@@ -73,10 +73,6 @@ enum class PriorityGroup {
 };
 }  // namespace nvic
 
-namespace ahb2 {
-constexpr uint32_t kGrp1PeriphGpioA = Flag<0x1u, 0u>::value;
-}  // namespace ahb2
-
 namespace tim {
 constexpr uint32_t kT1 = kApb2PeriphBaseAddress + 0x2c00ul;
 constexpr uint32_t kT2 = kApb1PeriphBaseAddress;
