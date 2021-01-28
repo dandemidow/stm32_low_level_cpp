@@ -147,7 +147,7 @@ hertz GetMsiRangeFrequency() {
   uint32_t msirange;
   auto &rcc = *new ResetClockControl {};
   /* Get MSI Range frequency--------------------------------------------------*/
-  if(rcc.And<CR>(kCrMsiRgSel) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
+  if(rcc.And<CR>(cr::kMsiRgSel) == bit::RESET) { /* MSISRANGE from RCC_CSR applies */
     msirange = rcc.And<CSR>(kCsrMsiSRange) >> 8U;
   } else { /* MSIRANGE from RCC_CR applies */
     msirange = rcc.And<CR>(kCrMsiRange.value) >> 4U;
@@ -225,7 +225,7 @@ void SystemInitialization() {
 
     /* Reset the RCC clock configuration to the default reset state ------------*/
     /* Set MSION bit */
-    rcc.get<CR>() |= kCrMsiOn;
+    rcc.get<CR>() |= cr::kMsiOn;
 
     /* Reset CFGR register */
     rcc.set<CFGR>(0x00000000U);

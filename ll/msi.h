@@ -11,15 +11,15 @@ class Msi {
   static constexpr auto kClk = rcc::cfgr::kSwClk<rcc::cfgr::SwClk::Msi>;
   Msi() : rcc {*new ResetClockControl{}} {}
   inline void Enable() {
-    bit::set(rcc.get<rcc::CR>(), rcc::kCrMsiOn);
+    bit::set(rcc.get<rcc::CR>(), rcc::cr::kMsiOn);
   }
 
   inline bool IsReady() const {
-    return ((bit::read(rcc.get<rcc::CR>(), rcc::kCrMsiRdy) == rcc::kCrMsiRdy) ? true : false);
+    return ((bit::read(rcc.get<rcc::CR>(), rcc::cr::kMsiRdy) == rcc::cr::kMsiRdy) ? true : false);
   }
 
   inline void EnableRangeSelection() {
-    bit::set(rcc.get<rcc::CR>(), rcc::kCrMsiRgSel);
+    bit::set(rcc.get<rcc::CR>(), rcc::cr::kMsiRgSel);
   }
 
   inline void SetRange(uint32_t range) {
