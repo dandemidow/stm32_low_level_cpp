@@ -30,7 +30,7 @@
 */
 
 /* Entry Point */
-ENTRY(Reset_Handler)
+ENTRY(_Z13Reset_Handlerv)
 
 /* Highest address of the user mode stack */
 _estack = 0x20028000;    /* end of RAM */

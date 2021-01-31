@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <cstring>
 
-extern void main  [[ noreturn ]] ();
+extern void main [[ noreturn ]] ();
 extern void SystemInit();
 
 extern "C" {
@@ -16,6 +16,8 @@ extern uint32_t _sdata;
 extern uint32_t _edata;
 extern uint32_t _sbss;
 extern uint32_t _ebss;
+}  // extern "C"
+
 [[noreturn]] void Reset_Handler() {
   SystemInit();
   auto data_size = static_cast<size_t>(&_edata - &_sdata);
@@ -28,7 +30,6 @@ extern uint32_t _ebss;
   }
   __libc_init_array();
   main();
-}
 }
 
 [[noreturn]] void Default_Handler() {

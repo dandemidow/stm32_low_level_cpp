@@ -84,7 +84,7 @@ static void Configure_TIMTimeBase(ll::tim::Timer &timer) {
   timer.EnableCounter();
 }
 
-[[noreturn]] auto main() -> void {
+[[noreturn]] void main() {
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   LL_Init();
