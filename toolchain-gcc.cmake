@@ -28,6 +28,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_CXX_FLAGS_INIT
   "-fdata-sections \
    -ffunction-sections \
+   -ffreestanding \
    -Wall \
    -Wextra \
    -Wno-volatile \

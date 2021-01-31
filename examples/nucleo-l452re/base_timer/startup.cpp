@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <cstring>
 
-extern int main ();
+extern void main  [[ noreturn ]] ();
 extern void SystemInit();
 
 extern "C" {
@@ -28,7 +28,6 @@ extern uint32_t _ebss;
   }
   __libc_init_array();
   main();
-  while(true) {}
 }
 }
 
