@@ -254,6 +254,7 @@ extern "C" {
 void SystemInit(void) {
   SystemInitialization();
 }
+} // extern "C"
 
 /**
   * @brief  Update SystemCoreClock variable according to Clock Register Values.
@@ -313,5 +314,4 @@ void SystemCoreClockUpdate(void) {
   /* HCLK clock frequency */
   SystemCoreClock = hertz{static_cast<uint32_t>(SystemCoreClock.count()) >> tmp};
 }
-} // extern "C"
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
