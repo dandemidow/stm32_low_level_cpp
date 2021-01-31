@@ -214,7 +214,7 @@ hertz GetSysClkSource(hertz msirange) {
   * @retval None
   */
 
-void SystemInitialization() {
+void SystemInit() {
     using namespace ll::rcc;
     auto &rcc = *new ResetClockControl {};
     auto &scb = *new SystemControlBlock {};
@@ -248,11 +248,6 @@ void SystemInitialization() {
   #else
     scb.set<scb::VTOR>(kFlashBase | kVectTabOffset); /* Vector Table Relocation in Internal FLASH */
   #endif
-}
-
-extern "C" {
-void SystemInit(void) {
-  SystemInitialization();
 }
 
 /**
@@ -313,5 +308,4 @@ void SystemCoreClockUpdate(void) {
   /* HCLK clock frequency */
   SystemCoreClock = hertz{static_cast<uint32_t>(SystemCoreClock.count()) >> tmp};
 }
-} // extern "C"
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
