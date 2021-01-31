@@ -6,9 +6,9 @@
 #include <cstring>
 
 extern int main ();
+extern void SystemInit();
 
 extern "C" {
-extern void SystemInit(void);
 extern void __libc_init_array(void);
 extern uint32_t _estack;
 extern uint32_t _sidata;
